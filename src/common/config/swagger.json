@@ -1,0 +1,686 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "API For Device Monitoring Cloud Report",
+      "description": "API For Device Monitoring Cloud Report",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:3003",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "Device-Monitoring",
+        "description": "API in the Report"
+      }
+    ],
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/instruct/alivecheck" : {
+        "post": {
+          "tags": [
+            "Alivecheck"
+          ],
+          "description": "Check alive of device",
+          "parameters": [
+            {
+              "name": "Alivecheck",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/Alivecheck"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Alivecheck",
+              "schema": {
+                "$ref": "#/definitions/Alivecheck"
+              }
+            }
+          }
+        }
+      },
+      "/instruct/screenshot": {
+        "post": {
+          "tags": [
+            "Screenshot"
+          ],
+          "description": "Screen shot LCD",
+          "parameters": [
+            {
+              "name": "Screenshot",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/Screenshot"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Screeenshot",
+              "schema": {
+                "$ref": "#/definitions/Screenshot"
+              }
+            }
+          }
+        }
+      }, 
+      "/instruct/notification": {
+        "post": {
+          "tags": [
+            "Notification"
+          ],
+          "description": "Notification cloud to Agent",
+          "parameters": [
+            {
+              "name": "NotificationObject",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/Notification"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Notification",
+              "schema": {
+                "$ref": "#/definitions/Notification"
+              }
+            }
+          }
+        }
+      },
+      "/instruct/setting/ecowatchman": {
+        "post": {
+          "tags": [
+            "EcoWatchman"
+          ],
+          "description": "Setting EcoWatchman",
+          "parameters": [
+            {
+              "name": "EcoWatchman",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/EcoWatchman"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "EcoWatchman",
+              "schema": {
+                "$ref": "#/definitions/EcoWatchman"
+              }
+            }
+          }
+        }
+      },
+      "/instruct/Emergency": {
+        "post": {
+          "tags": [
+            "Emergency"
+          ],
+          "description": "Setting Emergency",
+          "parameters": [
+            {
+              "name": "Emergency",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/Emergency"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Emergency",
+              "schema": {
+                "$ref": "#/definitions/Emergency"
+              }
+            }
+          }
+        }
+      },
+      "/instruct/setting/inputport": {
+        "post": {
+          "tags": [
+            "InputPort"
+          ],
+          "description": "Setting InputPort",
+          "parameters": [
+            {
+              "name": "InputPort",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/InputPort"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "InputPort",
+              "schema": {
+                "$ref": "#/definitions/InputPort"
+              }
+            }
+          }
+        }
+      },
+      "/instruct/setting/eventthreshold": {
+        "post": {
+          "tags": [
+            "EventThreshold"
+          ],
+          "description": "EventThreshold",
+          "parameters": [
+            {
+              "name": "EventThreshold",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/EventThreshold"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "EventThreshold",
+              "schema": {
+                "$ref": "#/definitions/EventThreshold"
+              }
+            }
+          }
+        }
+      },
+      "/instruct/setting/lcd": {
+        "post": {
+          "tags": [
+            "SettingLCD"
+          ],
+          "description": "SettingLCD",
+          "parameters": [
+            {
+              "name": "SettingLCD",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/SettingLCD"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "SettingLCD",
+              "schema": {
+                "$ref": "#/definitions/SettingLCD"
+              }
+            }
+          }
+        }
+      },
+      "/instruct/powersavingmode": {
+        "post": {
+          "tags": [
+            "PowerSavingMode"
+          ],
+          "description": "Power Saving Mode",
+          "parameters": [
+            {
+              "name": "PowerSavingMode",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/PowerSavingMode"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "PowerSavingMode",
+              "schema": {
+                "$ref": "#/definitions/PowerSavingMode"
+              }
+            }
+          }
+        }
+      },
+      "/instruct/defaultsetting": {
+        "post": {
+          "tags": [
+            "SetDefaultSetting"
+          ],
+          "description": "Setting default setting",
+          "parameters": [
+            {
+              "name": "SetDefaultSetting",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/SetDefaultSetting"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "SetDefaultSetting",
+              "schema": {
+                "$ref": "#/definitions/SetDefaultSetting"
+              }
+            }
+          }
+        }
+      },
+      "/device/defaultsetting/?applicationId={applicationId}": {
+        "get": {
+          "tags": [
+            "GetDefaultSetting"
+          ],
+          "description": "applicationId",
+          "parameters": [
+            {
+              "name": "applicationId",
+              "in": "path"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "{\"data\": {\"applicationId\": \"appname1\"\"enableAutoUpdate\": false\"cpuTemperatureThreshold\": 0\"cpuFanSpeedThreshold\": 0\"physicalMemoryAvailableThreshold\": 0\"virtualMemoryAvailableThreshold\": 0\"storageLogicalDriveAvailableThreshold\": 0\"systemTemperatureThreshold\": 0\"systemFanSpeedThreshold\": 0\"lcdBacklightThreshold\": 0\"intervalTimeInMiniSecond\": 0}}"
+            }
+          }
+        }
+      },
+      "/swlibrary/updateversion": {
+        "get": {
+          "tags": [
+            "GetUpdateVersion"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "{\"data\": [{}]}"
+            }
+          }
+        }
+      },
+      "/device/certificate?applicationId={applicationId}": {
+        "get": {
+          "tags": [
+            "GetCertificate"
+          ],
+          "description": "Create thing and Get Certificate ",
+          "parameters": [
+            {
+              "name": "applicationId",
+              "in": "path"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "\"data\": {\"certificateArn\": \"\",\"certificateId\": \"\",\"certificatePem\": \"\",\"keyPair\": {\"publicKey\": \"\",\"privateKey\": \"\"}}"
+            }
+          }
+        }
+      },
+      "/device/unregisterthing": {
+        "post": {
+          "tags": [
+            "UnRegisterThing"
+          ],
+          "description": "Unregister thing",
+          "parameters": [
+            {
+              "name": "applicationId",
+              "in": "body",
+              "schema": {
+                "$ref": "#/definitions/UnRegisterThing"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "UnRegisterThing",
+              "schema": {
+                "$ref": "#/definitions/UnRegisterThing"
+              }
+            }
+          }
+        }
+      },
+      "/notification?applicationId={applicationId}&pageNum={pageNum}&perPage={perPage}": {
+        "get": {
+          "tags": [
+            "AgentGetNotification"
+          ],
+          "description": "Agent get Notification from ElasticSearch by application_id",
+          "parameters": [
+            {
+              "name": "applicationId",
+              "in": "path"
+            },
+            {
+              "name": "pageNum",
+              "in": "path"
+            },
+            {
+              "name": "perPage",
+              "in": "path"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "{\"data\": [{ \"notificationID\": \"\", \"title\": \"aaa\", \"htmlcontent\": \"aaa\", \"sentFrom\": null, \"sentToAgent\": \"\", \"sentToUser\": null, \"status\": null, \"sentDate\":\"\", \"feedbackDate\": null}] }"
+            }
+          }
+        }
+      },
+      "/instruct/configuration": {
+        "get": {
+          "tags": [
+            "Configuration"
+          ],
+          "description": "Agent get configuration",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "{\"data\": {\"awsS3BucketName\": null, \"awsIoTDataEndPoint\": null, \"awsAccessKeyId\": null, \"awsSecretAccessKey\": null}}"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Alivecheck": {
+        "properties": {
+          "deviceId": {
+            "type": "string",
+            "$ref":"#/definitions/Alivecheck/properties/deviceId"
+          }
+        }
+      },
+      "Screenshot": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/Screenshot/properties/applicationId"
+          }
+        }
+      },
+      "Notification": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/Notification/properties/applicationId"
+          },
+          "notificationId": {
+            "type": "string",
+            "$ref":"#/definitions/Notification/properties/notificationId"
+          },
+          "title": {
+            "type": "string",
+            "$ref":"#/definitions/Notification/properties/title"
+          },
+          "htmlcontent": {
+            "type": "string",
+            "$ref":"#/definitions/Notification/properties/htmlcontent"
+          },
+          "sentFrom": {
+            "type": "string",
+            "$ref":"#/definitions/Notification/properties/sentFrom"
+          },
+          "sentToAgent": {
+            "type": "string",
+            "$ref":"#/definitions/Notification/properties/sentToAgent"
+          },
+          "sentToUser": {
+            "type": "string",
+            "$ref":"#/definitions/Notification/properties/sentToUser"
+          },
+          "status": {
+            "type": "string",
+            "$ref":"#/definitions/Notification/properties/status"
+          },
+          "sendDate": {
+            "type": "string",
+            "$ref":"#/definitions/Notification/properties/sendDate"
+          },
+          "feedbackDate": {
+            "type": "string",
+            "$ref":"#/definitions/Notification/properties/feedbackDate"
+          }
+        }
+      },
+      "EcoWatchman": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/EcoWatchman/properties/applicationId"
+          },
+          "serialNumber": {
+            "type": "string",
+            "$ref":"#/definitions/EcoWatchman/properties/serialNumber"
+          },
+          "brightnessValue": {
+            "type": "string",
+            "$ref":"#/definitions/EcoWatchman/properties/brightnessValue"
+          },
+          "time": {
+            "type": "string",
+            "$ref":"#/definitions/EcoWatchman/properties/time"
+          },
+          "enable": {
+            "type": "string",
+            "$ref":"#/definitions/EcoWatchman/properties/enable"
+          }
+        }
+      },
+      "Emergency": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/Emergency/properties/applicationId"
+          },
+          "backgroundColor": {
+            "type": "string",
+            "$ref":"#/definitions/Emergency/properties/backgroundColor"
+          },
+          "message": {
+            "type": "string",
+            "$ref":"#/definitions/Emergency/properties/message"
+          },
+          "fontSize": {
+            "type": "number",
+            "$ref":"#/definitions/Emergency/properties/fontSize"
+          },
+          "fontColor": {
+            "type": "string",
+            "$ref":"#/definitions/Emergency/properties/fontColor"
+          }
+        }
+      },
+      "InputPort": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/InputPort/properties/applicationId"
+          },
+          "serialNumber": {
+            "type": "string",
+            "$ref":"#/definitions/InputPort/properties/serialNumber"
+          },
+          "inputPort": {
+            "type": "string",
+            "$ref":"#/definitions/InputPort/properties/inputPort"
+          }
+        }
+      },
+      "EventThreshold": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/EventThreshold/properties/applicationId"
+          },
+          "cpuTemperature": {
+            "type": "number",
+            "$ref":"#/definitions/EventThreshold/properties/cpuTemperature"
+          },
+          "cpuFanSpeed": {
+            "type": "number",
+            "$ref":"#/definitions/EventThreshold/properties/cpuFanSpeed"
+          },
+          "physicalMemoryAvailable": {
+            "type": "number",
+            "$ref":"#/definitions/EventThreshold/properties/physicalMemoryAvailable"
+          },
+          "virtualMemoryAvailable": {
+            "type": "number",
+            "$ref":"#/definitions/EventThreshold/properties/virtualMemoryAvailable"
+          },
+          "storageLogicalDriveAvailable": {
+            "type": "number",
+            "$ref":"#/definitions/EventThreshold/properties/storageLogicalDriveAvailable"
+          },
+          "systemTemperature": {
+            "type": "number",
+            "$ref":"#/definitions/EventThreshold/properties/systemTemperature"
+          },
+          "systemFanSpeed": {
+            "type": "number",
+            "$ref":"#/definitions/EventThreshold/properties/systemFanSpeed"
+          },
+          "lcdBacklight": {
+            "type": "number",
+            "$ref":"#/definitions/EventThreshold/properties/lcdBacklight"
+          }
+        }
+      },
+      "SettingLCD": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/SettingLCD/properties/applicationId"
+          },
+          "serialNumber": {
+            "type": "number",
+            "$ref":"#/definitions/SettingLCD/properties/serialNumber"
+          },
+          "brightness": {
+            "type": "number",
+            "$ref":"#/definitions/SettingLCD/properties/brightness"
+          },
+          "contrast": {
+            "type": "number",
+            "$ref":"#/definitions/SettingLCD/properties/contrast"
+          },
+          "colorTemperature": {
+            "type": "number",
+            "$ref":"#/definitions/SettingLCD/properties/colorTemperature"
+          },
+          "volume": {
+            "type": "number",
+            "$ref":"#/definitions/SettingLCD/properties/volume"
+          }
+        }
+      },
+      "PowerSavingMode": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/PowerSavingMode/properties/applicationId"
+          },
+          "serialNumber": {
+            "type": "number",
+            "$ref":"#/definitions/PowerSavingMode/properties/serialNumber"
+          },
+          "enable": {
+            "type": "number",
+            "$ref":"#/definitions/PowerSavingMode/properties/enable"
+          }
+        }
+      },
+      "SetDefaultSetting": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/SetDefaultSetting/properties/applicationId"
+          },
+          "userId": {
+            "type": "string",
+            "$ref":"#/definitions/SetDefaultSetting/properties/userId"
+          },
+          "isAutoUpdate": {
+            "type": "boolean",
+            "$ref":"#/definitions/SetDefaultSetting/properties/isAutoUpdate"
+          }
+        }
+      },
+      "GetCertificate": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/GetCertificate/properties/applicationId"
+          }
+        }
+      },
+      "UnRegisterThing": {
+        "properties": {
+          "applicationId": {
+            "type": "string",
+            "$ref":"#/definitions/UnRegisterThing/properties/applicationId"
+          }
+        }
+      }
+    }
+  }

@@ -1,0 +1,28 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": ["./src/api/"],
+        "includePattern": ".+service\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "plugins": ["plugins/markdown"],
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "default": {
+            "outputSourceFiles": true,
+            "layoutFile": "./src/common/config/layout.tmpl"
+        }
+    },
+    "opts": {
+        "destination": "docs",
+        "encoding": "utf8",
+        "private": true,
+        "recurse": true,
+        "readme": "README.md",
+        "template": "./node_modules/jsdoc/templates/default",
+        "sysname": "IO DeviceMonitoring Cloud System"
+    }
+}

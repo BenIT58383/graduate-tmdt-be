@@ -66,97 +66,76 @@ const getDetailStore = async (id) => {
   return res
 }
 
-const getListProduct = async (page, size, name, categoryId, storeId) => {
+const getListStore = async (page, size, name, userId, isActive) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.code, pd.amount, pd.price, pd.name as productName, pd.image, 
-  pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
-  st.name as storeName,
-  c.name as categoryName,
-  u.name as unitName
-  FROM product pd
-  LEFT JOIN store st ON pd.store_id = st.id
-  LEFT JOIN category c ON pd.category_id = c.id
-  LEFT JOIN unit u ON pd.unit_id = u.id
+  let queryString = `SELECT st.id, st.user_id as userId, st.name as storeName, st.is_active as isActive, 
+  st.created_at as createdAt, st.created_by as createdBy, st.updated_at as updatedAt, st.updated_by as updatedBy,
+  us.full_name as userName
+  FROM store st
+  LEFT JOIN user us ON us.id = st.user_id
   WHERE true`
 
   if (name) {
-    queryString += ` and pd.name like '%${name}%' `
+    queryString += ` and st.name like '%${name}%' `
   }
 
-  if (categoryId) {
-    queryString += ` and pd.category_id = '${categoryId}' `
+  if (userId) {
+    queryString += ` and st.user_id = '${userId}' `
   }
 
-  if (storeId) {
-    queryString += ` and pd.store_id = '${storeId}' `
+  if (isActive) {
+    queryString += ` and st.is_active = '${isActive}' `
   }
 
-  queryString += ` order by pd.created_at desc`
+  queryString += ` order by st.created_at desc`
 
   const data = await Sequelize.query(queryString, {
     type: Sequelize.QueryTypes.SELECT,
   })
 
   res.total = data.length
-  res.products = data.slice(offset, offset + size)
+  res.stores = data.slice(offset, offset + size)
   return res
 }
 
-const updateProduct = async (
-  id,
-  storeId,
-  categoryId,
-  unitId,
-  code,
-  amount,
-  price,
-  name,
-  image
-) => {
+const updateStore = async (id, name, isActive, userId) => {
   let res = {}
 
-  const productExist = await ProductModel.findOne({ where: { id } })
-  if (!productExist) {
+  const storeExist = await StoreModel.findOne({ where: { id } })
+  if (!storeExist) {
     throw new APIError(
-      MESSAGE_THROW_ERROR.PRODUCT_NOTFOUND,
+      MESSAGE_THROW_ERROR.STORE_NOT_FOUND,
       httpStatus.NOT_FOUND
     )
   }
 
-  const data = await ProductModel.update(
+  const data = await StoreModel.update(
     {
-      storeId,
-      categoryId,
-      unitId,
-      code,
-      amount,
-      price,
       name,
-      image,
+      isActive,
+      updatedBy: userId,
     },
     { where: { id } }
   )
-
-  console.log(1111111, data)
 
   res.data = data
   return res
 }
 
-const deleteProduct = async (id) => {
+const deleteStore = async (id) => {
   const res = {}
 
-  const productExist = await ProductModel.findOne({ where: { id } })
-  if (!productExist) {
+  const storeExist = await StoreModel.findOne({ where: { id } })
+  if (!storeExist) {
     throw new APIError(
-      MESSAGE_THROW_ERROR.PRODUCT_NOTFOUND,
+      MESSAGE_THROW_ERROR.STORE_NOT_FOUND,
       httpStatus.NOT_FOUND
     )
   }
 
-  const data = await ProductModel.destroy({ where: { id } })
+  const data = await StoreModel.destroy({ where: { id } })
 
   res.user = data
   return res
@@ -165,4 +144,7 @@ const deleteProduct = async (id) => {
 export default {
   createStore,
   getDetailStore,
+  getListStore,
+  updateStore,
+  deleteStore,
 }

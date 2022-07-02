@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-const getListProduct = {
+const getListStore = {
   query: {
     page: Joi.number()
       .integer()
@@ -18,4 +18,4 @@ const getListProduct = {
   },
 }
 
-export default { getListProduct }
+export default { getListStore }

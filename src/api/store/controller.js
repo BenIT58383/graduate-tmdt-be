@@ -41,11 +41,11 @@ const getDetailStore = async (req, res, next) => {
     })
 }
 
-const getListProduct = async (req, res, next) => {
-  const { page, size, name, categoryId, storeId } = req.query
+const getListStore = async (req, res, next) => {
+  const { page, size, name, userId, isActive } = req.query
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .getListProduct(page, size, name, categoryId, storeId)
+    .getListStore(page, size, name, userId, isActive)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -56,22 +56,12 @@ const getListProduct = async (req, res, next) => {
     })
 }
 
-const updateProduct = async (req, res, next) => {
+const updateStore = async (req, res, next) => {
   const { id } = req.params
-  const { storeId, categoryId, unitId, code, amount, price, name, image } =
-    req.body
+  const { name, isActive } = req.body
+  const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateProduct(
-      id,
-      storeId,
-      categoryId,
-      unitId,
-      code,
-      amount,
-      price,
-      name,
-      image
-    )
+    .updateStore(id, name, isActive, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -82,10 +72,10 @@ const updateProduct = async (req, res, next) => {
     })
 }
 
-const deleteProduct = async (req, res, next) => {
+const deleteStore = async (req, res, next) => {
   const { id } = req.params
   service
-    .deleteProduct(id)
+    .deleteStore(id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -99,4 +89,7 @@ const deleteProduct = async (req, res, next) => {
 export default {
   createStore,
   getDetailStore,
+  getListStore,
+  updateStore,
+  deleteStore,
 }

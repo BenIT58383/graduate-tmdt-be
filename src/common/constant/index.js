@@ -20,6 +20,8 @@ export const MESSAGE_THROW_ERROR = {
   PRODUCT_CODE_CONFLICT: 'Mã sản phẩm này đã tồn tại',
   STORE_NAME_CONFLICT: 'Tên cửa hàng đã tồn tại',
   STORE_NOT_FOUND: 'Cửa hàng không tồn tại',
+  CATEGORY_NOT_FOUND: 'Không tìm thấy danh mục này',
+  CATEGORY_CONFLICT: 'Danh mục này đã tồn tại',
 }
 
 export const USER_TYPE = {

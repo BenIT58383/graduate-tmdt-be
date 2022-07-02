@@ -15,6 +15,7 @@ import checkAuth from '../../express/middleware/authority-check'
 const createProduct = async (req, res, next) => {
   const { storeId, categoryId, unitId, code, amount, price, name, image } =
     req.body
+  const user = await CommonHelper.getUserFromRequest(req)
   service
     .createProduct(
       storeId,
@@ -24,7 +25,8 @@ const createProduct = async (req, res, next) => {
       amount,
       price,
       name,
-      image
+      image,
+      user.id
     )
     .then((data) => {
       return new APISuccess(res, {
@@ -69,6 +71,7 @@ const updateProduct = async (req, res, next) => {
   const { id } = req.params
   const { storeId, categoryId, unitId, code, amount, price, name, image } =
     req.body
+  const user = await CommonHelper.getUserFromRequest(req)
   service
     .updateProduct(
       id,
@@ -79,7 +82,8 @@ const updateProduct = async (req, res, next) => {
       amount,
       price,
       name,
-      image
+      image,
+      user.id
     )
     .then((data) => {
       return new APISuccess(res, {
@@ -105,10 +109,89 @@ const deleteProduct = async (req, res, next) => {
     })
 }
 
+const createCategory = async (req, res, next) => {
+  const { name } = req.body
+  const user = await CommonHelper.getUserFromRequest(req)
+  service
+    .createCategory(name, user.id)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
+const getDetailCategory = async (req, res, next) => {
+  const { id } = req.params
+  service
+    .getDetailCategory(id)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
+const getListCategory = async (req, res, next) => {
+  const { page, size, name } = req.query
+  const user = await CommonHelper.getUserFromRequest(req)
+  service
+    .getListCategory(page, size, name)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
+const updateCategory = async (req, res, next) => {
+  const { id } = req.params
+  const { name } = req.body
+  const user = await CommonHelper.getUserFromRequest(req)
+  service
+    .updateCategory(id, name, user.id)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
+const deleteCategory = async (req, res, next) => {
+  const { id } = req.params
+  service
+    .deleteCategory(id)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
 export default {
   createProduct,
   getDetailProduct,
   getListProduct,
   updateProduct,
   deleteProduct,
+  createCategory,
+  getDetailCategory,
+  getListCategory,
+  updateCategory,
+  deleteCategory,
 }

@@ -14,6 +14,7 @@ import { masterDb as Sequelize } from '../../sequelize/index'
 import { MESSAGE_THROW_ERROR, USER_TYPE } from '../../common/constant/index'
 import UserModel from '../../sequelize/models/user'
 import ProductModel from '../../sequelize/models/product'
+import CategoryModel from '../../sequelize/models/category'
 import config from '../../common/config'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
@@ -27,7 +28,8 @@ const createProduct = async (
   amount,
   price,
   name,
-  image
+  image,
+  userId
 ) => {
   const res = {}
 
@@ -48,6 +50,7 @@ const createProduct = async (
     price,
     name,
     image,
+    createdBy: userId,
   })
 
   res.user = data
@@ -90,7 +93,7 @@ const getDetailProduct = async (id) => {
     )
   }
 
-  res.user = data[0]
+  res.product = data[0]
   return res
 }
 
@@ -141,7 +144,8 @@ const updateProduct = async (
   amount,
   price,
   name,
-  image
+  image,
+  userId
 ) => {
   let res = {}
 
@@ -163,11 +167,10 @@ const updateProduct = async (
       price,
       name,
       image,
+      updatedBy: userId,
     },
     { where: { id } }
   )
-
-  console.log(1111111, data)
 
   res.data = data
   return res
@@ -190,10 +193,122 @@ const deleteProduct = async (id) => {
   return res
 }
 
+const createCategory = async (name, userId) => {
+  const res = {}
+
+  const categoryExist = await CategoryModel.findOne({ where: { name } })
+  if (categoryExist) {
+    throw new APIError(
+      MESSAGE_THROW_ERROR.CATEGORY_CONFLICT,
+      httpStatus.CONFLICT
+    )
+  }
+
+  const data = await CategoryModel.create({
+    name,
+    createdBy: userId,
+  })
+
+  res.user = data
+  return res
+}
+
+const getDetailCategory = async (id) => {
+  let res = {}
+
+  let queryString = `SELECT ct.id, ct.name, 
+  ct.created_at as createdAt, ct.created_by as createdBy, ct.updated_at as updatedAt, ct.updated_by as updatedBy
+  FROM category ct
+  WHERE ct.id = '${id}'`
+
+  const data = await Sequelize.query(queryString, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+  if (!data) {
+    throw new APIError(
+      MESSAGE_THROW_ERROR.CATEGORY_NOT_FOUND,
+      httpStatus.NOT_FOUND
+    )
+  }
+
+  res.category = data[0]
+  return res
+}
+
+const getListCategory = async (page, size, name) => {
+  let res = {}
+  let offset = (page - 1) * size
+
+  let queryString = `SELECT ct.id, ct.name, 
+  ct.created_at as createdAt, ct.created_by as createdBy, ct.updated_at as updatedAt, ct.updated_by as updatedBy
+  FROM category ct
+  WHERE true `
+
+  if (name) {
+    queryString += ` and ct.name like '%${name}%' `
+  }
+
+  queryString += ` order by ct.created_at desc`
+
+  const data = await Sequelize.query(queryString, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+  res.total = data.length
+  res.categories = data.slice(offset, offset + size)
+  return res
+}
+
+const updateCategory = async (id, name, userId) => {
+  let res = {}
+
+  const categoryExist = await CategoryModel.findOne({ where: { id } })
+  if (!categoryExist) {
+    throw new APIError(
+      MESSAGE_THROW_ERROR.CATEGORY_NOT_FOUND,
+      httpStatus.NOT_FOUND
+    )
+  }
+
+  const data = await CategoryModel.update(
+    {
+      name,
+      updatedBy: userId,
+    },
+    { where: { id } }
+  )
+
+  res.data = data
+  return res
+}
+
+const deleteCategory = async (id) => {
+  const res = {}
+
+  const categoryExist = await CategoryModel.findOne({ where: { id } })
+  if (!categoryExist) {
+    throw new APIError(
+      MESSAGE_THROW_ERROR.CATEGORY_NOT_FOUND,
+      httpStatus.NOT_FOUND
+    )
+  }
+
+  const data = await CategoryModel.destroy({ where: { id } })
+
+  res.user = data
+  return res
+}
+
 export default {
   createProduct,
   getDetailProduct,
   getListProduct,
   updateProduct,
   deleteProduct,
+  createCategory,
+  getDetailCategory,
+  getListCategory,
+  updateCategory,
+  deleteCategory,
 }

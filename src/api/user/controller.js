@@ -13,9 +13,9 @@ import config from '../../common/config'
 import checkAuth from '../../express/middleware/authority-check'
 
 const register = async (req, res, next) => {
-  const { phone, password } = req.body
+  const { fullName, phone, password } = req.body
   service
-    .register(phone, password)
+    .register(fullName, phone, password)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -40,83 +40,11 @@ const login = async (req, res, next) => {
     })
 }
 
-const createNewToken = async (req, res, next) => {
-  const refreshTokenAuth = req.body
-  service
-    .createNewToken(refreshTokenAuth)
-    .then((data) => {
-      return new APISuccess(res, {
-        data: data,
-      })
-    })
-    .catch((err) => {
-      next(err)
-    })
-}
-
 const createUser = async (req, res, next) => {
-  const {
-    code,
-    phone,
-    password,
-    fsIdCard,
-    bsIdCard,
-    avatar,
-    fullName,
-    birthDay,
-    idCardNo,
-    job,
-    address,
-    salary,
-    education,
-    marriage,
-    bankNo,
-    bankName,
-    cardHolder,
-  } = req.body
-  const refreshToken = jwtHelper.jwtEncode({}, config.ACCESS_TOKEN_SECRET)
+  const { phone, password, role, avatar, fullName, dateOfBirth } = req.body
   service
-    .createUser(
-      code,
-      phone,
-      password,
-      fsIdCard,
-      bsIdCard,
-      avatar,
-      fullName,
-      birthDay,
-      idCardNo,
-      job,
-      address,
-      salary,
-      education,
-      marriage,
-      bankNo,
-      bankName,
-      cardHolder,
-      refreshToken
-    )
+    .createUser(phone, password, role, avatar, fullName, dateOfBirth)
     .then((data) => {
-      const dataForAccessToken = {
-        userId: data.user.id,
-        email: data.user.email,
-        phone: data.user.phone,
-        type: data.user.type,
-        refreshToken: refreshToken,
-      }
-      const token = jwtHelper.jwtEncode(
-        { data: dataForAccessToken },
-        config.ACCESS_TOKEN_SECRET
-      )
-
-      const dataForUser = {
-        userId: data.user.userId,
-        fullName: data.user.fullName,
-        gender: data.user.gender,
-        avatar: data.user.url,
-        birthday: data.user.birthday,
-      }
-
       return new APISuccess(res, {
         data: data,
       })
@@ -127,47 +55,10 @@ const createUser = async (req, res, next) => {
 }
 
 const updateUser = async (req, res, next) => {
-  const { phone } = req.params
-  const {
-    code,
-    password,
-    type,
-    fsIdCard,
-    bsIdCard,
-    avatar,
-    fullName,
-    birthDay,
-    idCardNo,
-    job,
-    address,
-    salary,
-    education,
-    marriage,
-    bankNo,
-    bankName,
-    cardHolder,
-  } = req.body
+  const { id } = req.params
+  const { password, role, avatar, fullName, dateOfBirth } = req.body
   service
-    .updateUser(
-      phone,
-      code,
-      password,
-      type,
-      fsIdCard,
-      bsIdCard,
-      avatar,
-      fullName,
-      birthDay,
-      idCardNo,
-      job,
-      address,
-      salary,
-      education,
-      marriage,
-      bankNo,
-      bankName,
-      cardHolder
-    )
+    .updateUser(id, password, role, avatar, fullName, dateOfBirth)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -221,10 +112,23 @@ const deleteUser = async (req, res, next) => {
     })
 }
 
+const createAddress = async (req, res, next) => {
+  const { userId, storeId, userName, phone, location } = req.params
+  service
+    .deleteUser(id)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
 export default {
   register,
   login,
-  createNewToken,
   createUser,
   updateUser,
   getDetailUser,

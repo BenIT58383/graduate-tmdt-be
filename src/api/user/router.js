@@ -20,6 +20,9 @@ const router = Router()
  *            schema:
  *              type: object
  *              properties:
+ *                fullName:
+ *                  type: string
+ *                  in: body
  *                phone:
  *                  type: string
  *                  in: body
@@ -35,7 +38,7 @@ const router = Router()
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: '#/components/schemas/addresses'
+ *              $ref: '#/components/schemas/user'
  */
 router.route('/register').post(validateContentType, controller.register)
 
@@ -68,41 +71,9 @@ router.route('/register').post(validateContentType, controller.register)
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: '#/components/schemas/addresses'
+ *              $ref: '#/components/schemas/user'
  */
 router.route('/login').post(validateContentType, controller.login)
-
-/**
- * @swagger
- * /refresh-token:
- *   post:
- *     description: register
- *     tags:
- *     - User
- *     requestBody:
- *       description: update user
- *       content:
- *         application/json:
- *            schema:
- *              type: object
- *              properties:
- *                refreshTokenAuth:
- *                  type: string
- *                  in: body
- *     responses:
- *       allOf:
- *         - $ref: '#/components/responses/CommonChartErrorResponse'
- *       200:
- *         description: register
- *         content:
- *          application/json:
- *            schema:
- *              type: object
- *              $ref: '#/components/schemas/addresses'
- */
-router
-  .route('/refresh-token')
-  .post(validateContentType, controller.createNewToken)
 
 /**
  * @swagger
@@ -112,26 +83,20 @@ router
  *     tags:
  *     - User
  *     requestBody:
- *       description: update user
+ *       description: create user
  *       content:
  *         application/json:
  *            schema:
  *              type: object
  *              properties:
- *                code:
- *                  type: string
- *                  in: body
  *                phone:
  *                  type: string
  *                  in: body
  *                password:
  *                  type: string
  *                  in: body
- *                fsIdCard:
- *                  type: string
- *                  in: body
- *                bsIdCard:
- *                  type: string
+ *                role:
+ *                  type: number
  *                  in: body
  *                avatar:
  *                  type: string
@@ -139,34 +104,7 @@ router
  *                fullName:
  *                  type: string
  *                  in: body
- *                birthDay:
- *                  type: string
- *                  in: body
- *                idCardNo:
- *                  type: string
- *                  in: body
- *                job:
- *                  type: string
- *                  in: body
- *                address:
- *                  type: string
- *                  in: body
- *                salary:
- *                  type: number
- *                  in: body
- *                education:
- *                  type: string
- *                  in: body
- *                marriage:
- *                  type: number
- *                  in: body
- *                bankNo:
- *                  type: string
- *                  in: body
- *                bankName:
- *                  type: string
- *                  in: body
- *                cardHolder:
+ *                dateOfBirth:
  *                  type: string
  *                  in: body
  *     responses:
@@ -178,7 +116,7 @@ router
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: '#/components/schemas/addresses'
+ *              $ref: '#/components/schemas/user'
  */
 router.route('/users').post(validateContentType, controller.createUser)
 
@@ -256,13 +194,13 @@ router
 
 /**
  * @swagger
- * /users/{phone}:
+ * /users/{id}:
  *   put:
  *     description: update user
  *     tags:
  *     - User
  *     parameters:
- *      - name: phone
+ *      - name: id
  *        in: path
  *        schema:
  *          type: string
@@ -274,17 +212,11 @@ router
  *            schema:
  *              type: object
  *              properties:
- *                code:
- *                  type: string
- *                  in: body
  *                password:
  *                  type: string
  *                  in: body
- *                fsIdCard:
- *                  type: string
- *                  in: body
- *                bsIdCard:
- *                  type: string
+ *                role:
+ *                  type: number
  *                  in: body
  *                avatar:
  *                  type: string
@@ -292,48 +224,21 @@ router
  *                fullName:
  *                  type: string
  *                  in: body
- *                birthDay:
- *                  type: string
- *                  in: body
- *                idCardNo:
- *                  type: string
- *                  in: body
- *                job:
- *                  type: string
- *                  in: body
- *                address:
- *                  type: string
- *                  in: body
- *                salary:
- *                  type: number
- *                  in: body
- *                education:
- *                  type: string
- *                  in: body
- *                marriage:
- *                  type: number
- *                  in: body
- *                bankNo:
- *                  type: string
- *                  in: body
- *                bankName:
- *                  type: string
- *                  in: body
- *                cardHolder:
+ *                dateOfBirth:
  *                  type: string
  *                  in: body
  *     responses:
  *       allOf:
  *         - $ref: '#/components/responses/CommonChartErrorResponse'
  *       200:
- *         description: address info.
+ *         description: user info.
  *         content:
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: '#/components/schemas/addresses'
+ *              $ref: '#/components/schemas/user'
  */
-router.route('/users/:phone').put(validateContentType, controller.updateUser)
+router.route('/users/:id').put(validateContentType, controller.updateUser)
 
 /**
  * @swagger
@@ -357,7 +262,7 @@ router.route('/users/:phone').put(validateContentType, controller.updateUser)
  *          application/json:
  *            schema:
  *              type: object
- *              $ref: '#/components/schemas/addresses'
+ *              $ref: '#/components/schemas/user'
  */
 router.route('/users/:id').delete(validateContentType, controller.deleteUser)
 

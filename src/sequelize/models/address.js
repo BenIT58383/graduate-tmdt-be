@@ -4,8 +4,8 @@ import sequelize from 'sequelize'
 import { masterDb as sequelizeInstance } from '..'
 import { ORDER_CODE_LENGTH } from '../../common/constant'
 
-const User = sequelizeInstance.define(
-  'user',
+const Address = sequelizeInstance.define(
+  'address',
   {
     id: {
       type: sequelize.UUIDV4(36),
@@ -14,59 +14,59 @@ const User = sequelizeInstance.define(
       primaryKey: true,
       field: 'id',
     },
-    code: {
+    userId: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'code',
+      field: 'user_id',
+    },
+    storeId: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'store_id',
+    },
+    userName: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'user_name',
     },
     phone: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'phone',
     },
-    password: {
+    location: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'password',
+      field: 'location',
     },
-    role: {
+    default: {
       type: sequelize.TINYINT(1),
       allowNull: true,
-      field: 'role',
-    },
-    refreshToken: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'refresh_token',
-    },
-    avatar: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'avatar',
-    },
-    fullName: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'full_name',
-    },
-    dateOfBirth: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'date_of_birth',
+      field: 'default',
     },
     createdAt: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'created_at',
     },
+    createdBy: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'created_by',
+    },
     updatedAt: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'updated_at',
     },
+    updatedBy: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'updated_by',
+    },
   },
   {
-    tableName: 'user',
+    tableName: 'address',
   }
 )
-export default User
+export default Address

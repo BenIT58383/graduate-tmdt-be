@@ -4,8 +4,8 @@ import sequelize from 'sequelize'
 import { masterDb as sequelizeInstance } from '..'
 import { ORDER_CODE_LENGTH } from '../../common/constant'
 
-const User = sequelizeInstance.define(
-  'user',
+const Order = sequelizeInstance.define(
+  'order',
   {
     id: {
       type: sequelize.UUIDV4(36),
@@ -19,54 +19,34 @@ const User = sequelizeInstance.define(
       allowNull: true,
       field: 'code',
     },
-    phone: {
+    status: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'phone',
-    },
-    password: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'password',
-    },
-    role: {
-      type: sequelize.TINYINT(1),
-      allowNull: true,
-      field: 'role',
-    },
-    refreshToken: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'refresh_token',
-    },
-    avatar: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'avatar',
-    },
-    fullName: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'full_name',
-    },
-    dateOfBirth: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'date_of_birth',
+      field: 'status',
     },
     createdAt: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'created_at',
     },
+    createdBy: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'created_by',
+    },
     updatedAt: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'updated_at',
     },
+    updatedBy: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'updated_by',
+    },
   },
   {
-    tableName: 'user',
+    tableName: 'order',
   }
 )
-export default User
+export default Order

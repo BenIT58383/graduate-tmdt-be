@@ -8,7 +8,7 @@ const masterDb = new Sequelize(null, null, null, {
   port: '3306',
   username: 'admin',
   password: 'Benit789',
-  database: 'loan',
+  database: 'graduate',
   define: {
     underscored: false,
     freezeTableName: true,

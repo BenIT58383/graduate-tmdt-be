@@ -36,11 +36,8 @@ const authorityCheck = (req, res, next) => {
     token = token.substring(7, token.length)
   }
   // Check authentization
-  if (path === '/payments/shopee-pay/notify-transaction') {
-    const whiteList = config.IP_WHITE_LIST.split(',')
-    if (!checkWhiteList(res, ip, whiteList)) return
-    next()
-    return
+  if (path == '/login' || path == '/register') {
+    return next()
   }
 
   checkAuthorization(method, token, path)

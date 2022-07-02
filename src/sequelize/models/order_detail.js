@@ -4,8 +4,8 @@ import sequelize from 'sequelize'
 import { masterDb as sequelizeInstance } from '..'
 import { ORDER_CODE_LENGTH } from '../../common/constant'
 
-const User = sequelizeInstance.define(
-  'user',
+const Order = sequelizeInstance.define(
+  'order',
   {
     id: {
       type: sequelize.UUIDV4(36),
@@ -14,59 +14,64 @@ const User = sequelizeInstance.define(
       primaryKey: true,
       field: 'id',
     },
-    code: {
+    storeId: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'code',
+      field: 'store_id',
     },
-    phone: {
+    categoryId: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'phone',
+      field: 'category_id',
     },
-    password: {
+    unitId: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'password',
+      field: 'unit_id',
     },
-    role: {
-      type: sequelize.TINYINT(1),
+    amount: {
+      type: sequelize.FLOAT(),
       allowNull: true,
-      field: 'role',
+      field: 'amount',
     },
-    refreshToken: {
+    price: {
+      type: sequelize.FLOAT(),
+      allowNull: true,
+      field: 'price',
+    },
+    name: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'refresh_token',
+      field: 'name',
     },
-    avatar: {
+    image: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'avatar',
-    },
-    fullName: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'full_name',
-    },
-    dateOfBirth: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'date_of_birth',
+      field: 'status',
     },
     createdAt: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'created_at',
     },
+    createdBy: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'created_by',
+    },
     updatedAt: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'updated_at',
     },
+    updatedBy: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'updated_by',
+    },
   },
   {
-    tableName: 'user',
+    tableName: 'order',
   }
 )
-export default User
+export default Order

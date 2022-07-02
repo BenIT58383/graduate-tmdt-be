@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import httpStatus from 'http-status'
 import user from './user/router'
+import order from './order/router'
+import product from './product/router'
 
 const router = Router()
 router.use(user)

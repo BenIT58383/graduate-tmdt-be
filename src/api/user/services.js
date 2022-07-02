@@ -3,7 +3,6 @@ import httpStatus from 'http-status'
 import { Op } from 'sequelize'
 import CryptoJS from 'crypto-js'
 import app from '../../index'
-// import jwtHelper from '../../common/helpers/jwt-helper'
 import {
   APIError,
   APIErrorV2,
@@ -18,7 +17,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import jwtHelper from '../../common/helpers/jwt-helper'
 
-const register = async (phone, password) => {
+const register = async (fullName, phone, password) => {
   const res = {}
 
   const phoneExist = await UserModel.findOne({ where: { phone } })
@@ -29,6 +28,7 @@ const register = async (phone, password) => {
   const pass = bcrypt.hashSync(password, 10)
 
   const data = await UserModel.create({
+    fullName,
     phone,
     password: pass,
     type: 1,
@@ -41,30 +41,18 @@ const register = async (phone, password) => {
 const login = async (phone, password) => {
   const user = await UserModel.findOne({ where: { phone } })
 
-  const isPasswordValid = bcrypt.compareSync(password, user.password)
-
-  if (!isPasswordValid) {
+  if (!user || !bcrypt.compareSync(password, user.password)) {
     throw new APIError(
       MESSAGE_THROW_ERROR.ERR_PHONE_OR_PASSWORD,
-      httpStatus.BAD_REQUEST
+      httpStatus.NOT_FOUND
     )
   }
-
-  const refreshToken = jwt.sign({ phone }, config.REFRESH_TOKEN_SECRET, {
-    // expiresIn: "10h" // it will be expired after 10 hours
-    expiresIn: '30d', // it will be expired after 20 days
-    //expiresIn: 120 // it will be expired after 120ms
-    //expiresIn: "120s" // it will be expired after 120s
-  })
-
-  await UserModel.update({ refreshToken: refreshToken }, { where: { phone } })
 
   const dataForAccessToken = {
     id: user.id,
     code: user.code,
     phone: user.phone,
-    type: user.type,
-    refreshToken: refreshToken,
+    role: user.role,
   }
 
   const token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
@@ -83,95 +71,44 @@ const login = async (phone, password) => {
   return { user: dataForUser, token: token }
 }
 
-const createNewToken = async (refreshTokenAuth) => {
-  let res = {}
-
-  if (!refreshTokenAuth) {
-    throw new UnauthorizedError()
-  }
-
-  const decode = jwt.decode(refreshTokenAuth.refreshTokenAuth)
-
-  const user = await UserModel.findOne({ where: { phone: decode.phone } })
-
-  let rfToken = user.refreshToken
-
-  if (rfToken != refreshTokenAuth.refreshTokenAuth) {
-    throw new ForbiddenError()
-  }
-
-  jwt.verify(rfToken, config.REFRESH_TOKEN_SECRET, (err, data) => {
-    if (err) throw new ForbiddenError()
-    const dataForAccessToken = {
-      id: user.id,
-      code: user.code,
-      phone: user.phone,
-      type: user.type,
-    }
-
-    res.token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
-      expiresIn: '1d',
-    })
-  })
-
-  return res
-}
-
 const createUser = async (
-  code,
   phone,
   password,
-  fsIdCard,
-  bsIdCard,
+  role,
   avatar,
   fullName,
-  birthDay,
-  idCardNo,
-  job,
-  address,
-  salary,
-  education,
-  marriage,
-  bankNo,
-  bankName,
-  cardHolder
+  dateOfBirth
 ) => {
   const res = {}
+  const userCode = 'desau'
 
-  // const phoneExist = await UserModel.findOne({ where: { phone } })
-  // if (phoneExist) {
-  //   throw new APIError(MESSAGE_THROW_ERROR.PHONE_CONFLICT, httpStatus.CONFLICT)
-  // }
+  const phoneExist = await UserModel.findOne({ where: { phone } })
+  if (phoneExist) {
+    throw new APIError(MESSAGE_THROW_ERROR.PHONE_CONFLICT, httpStatus.CONFLICT)
+  }
 
-  // const data = await UserModel.create({
-  //   code,
-  //   phone,
-  //   password,
-  //   fsIdCard,
-  //   bsIdCard,
-  //   avatar,
-  //   fullName,
-  //   birthDay,
-  //   idCardNo,
-  //   job,
-  //   address,
-  //   salary,
-  //   education,
-  //   marriage,
-  //   bankNo,
-  //   bankName,
-  //   cardHolder,
-  // })
+  const hashPassword = bcrypt.hashSync(password, 10)
 
-  // res.user = data
+  const data = await UserModel.create({
+    phone,
+    password: hashPassword,
+    code: userCode,
+    role,
+    avatar,
+    fullName,
+    dateOfBirth,
+  })
+
+  res.user = data
   return res
 }
 
 const getDetailUser = async (id) => {
   let res = {}
 
-  let queryString = `SELECT id, code, phone, password, fs_id_card as fsIdCard , bs_id_card as bsIdCard , avatar, full_name as fullName ,birth_day as birthDay , 
-  id_card_no as idCardNo, job, address, salary, education, marriage, bank_no as bankNo, bank_name as bankName, card_holder as cardHolder 
+  let queryString = `SELECT id, code, phone, avatar, full_name as fullName,
+  date_of_birth as dateOfBirth, role,
+  created_at as createdAt, updated_at as updatedAt
   from user where id = '${id}'`
 
   const data = await Sequelize.query(queryString, {
@@ -202,8 +139,9 @@ const getListUsers = async (page, size, code, name, phone, user) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT id, code, phone, fs_id_card as fsIdCard , bs_id_card as bsIdCard , avatar, full_name as fullName ,birth_day as birthDay , 
-  id_card_no as idCardNo, job, address, salary, education, marriage, bank_no as bankNo, bank_name as bankName, card_holder as cardHolder 
+  let queryString = `SELECT id, code, phone, avatar, full_name as fullName,
+  date_of_birth as dateOfBirth, role,
+  created_at as createdAt, updated_at as updatedAt
   from user
   where true `
 
@@ -231,35 +169,21 @@ const getListUsers = async (page, size, code, name, phone, user) => {
 }
 
 const updateUser = async (
-  phone,
-  code,
+  id,
   password,
-  type,
-  fsIdCard,
-  bsIdCard,
+  role,
   avatar,
   fullName,
-  birthDay,
-  idCardNo,
-  job,
-  address,
-  salary,
-  education,
-  marriage,
-  bankNo,
-  bankName,
-  cardHolder
+  dateOfBirth
 ) => {
   let res = {}
   let pass = ''
 
-  const phoneExist = await UserModel.findOne({ where: { phone } })
-  if (!phoneExist) {
-    throw new APIError(
-      MESSAGE_THROW_ERROR.PHONE_NOT_FOUND,
-      httpStatus.NOT_FOUND
-    )
+  const userExist = await UserModel.findOne({ where: { id } })
+  if (!userExist) {
+    throw new APIError(MESSAGE_THROW_ERROR.USER_NOT_FOUND, httpStatus.NOT_FOUND)
   }
+  console.log(1111111, password)
 
   if (password) {
     pass = bcrypt.hashSync(password, 10)
@@ -267,25 +191,13 @@ const updateUser = async (
 
   const data = await UserModel.update(
     {
-      code,
       password: pass,
-      type,
-      fsIdCard,
-      bsIdCard,
+      role,
       avatar,
       fullName,
-      birthDay,
-      idCardNo,
-      job,
-      address,
-      salary,
-      education,
-      marriage,
-      bankNo,
-      bankName,
-      cardHolder,
+      dateOfBirth,
     },
-    { where: { phone } }
+    { where: { id } }
   )
 
   res.data = data
@@ -309,7 +221,6 @@ const deleteUser = async (id) => {
 export default {
   register,
   login,
-  createNewToken,
   createUser,
   updateUser,
   getDetailUser,

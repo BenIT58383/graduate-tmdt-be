@@ -113,9 +113,25 @@ const deleteUser = async (req, res, next) => {
 }
 
 const createAddress = async (req, res, next) => {
-  const { userId, storeId, userName, phone, location } = req.params
+  const { storeId, customerName, phone, location, type } = req.body
+  const user = await CommonHelper.getUserFromRequest(req)
+
   service
-    .deleteUser(id)
+    .createAddress(storeId, customerName, phone, location, type, user.id)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
+const getDetailAddress = async (req, res, next) => {
+  const { id } = req.params
+  service
+    .getDetailAddress(id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -134,4 +150,6 @@ export default {
   getDetailUser,
   getListUsers,
   deleteUser,
+  createAddress,
+  getDetailAddress,
 }

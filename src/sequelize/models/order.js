@@ -19,6 +19,26 @@ const Order = sequelizeInstance.define(
       allowNull: true,
       field: 'code',
     },
+    userId: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'user_id',
+    },
+    productId: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'product_id',
+    },
+    amount: {
+      type: sequelize.FLOAT(),
+      allowNull: true,
+      field: 'amount',
+    },
+    totalPrice: {
+      type: sequelize.FLOAT(),
+      allowNull: true,
+      field: 'total_price',
+    },
     status: {
       type: sequelize.STRING(),
       allowNull: true,

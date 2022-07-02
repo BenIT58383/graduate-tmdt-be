@@ -14,25 +14,10 @@ const OrderDetail = sequelizeInstance.define(
       primaryKey: true,
       field: 'id',
     },
-    productId: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'product_id',
-    },
     orderId: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'order_id',
-    },
-    amount: {
-      type: sequelize.FLOAT(),
-      allowNull: true,
-      field: 'amount',
-    },
-    totalPrice: {
-      type: sequelize.FLOAT(),
-      allowNull: true,
-      field: 'total_price',
     },
     createdAt: {
       type: sequelize.STRING(),

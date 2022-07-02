@@ -12,6 +12,7 @@ import {
 import { masterDb as Sequelize } from '../../sequelize/index'
 import { MESSAGE_THROW_ERROR, USER_TYPE } from '../../common/constant/index'
 import UserModel from '../../sequelize/models/user'
+import AddressModel from '../../sequelize/models/address'
 import config from '../../common/config'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
@@ -217,6 +218,57 @@ const deleteUser = async (id) => {
   return res
 }
 
+const createAddress = async (
+  storeId,
+  customerName,
+  phone,
+  location,
+  type,
+  userId
+) => {
+  const res = {}
+
+  const data = await AddressModel.create({
+    userId: userId,
+    storeId,
+    customerName,
+    phone,
+    location,
+    type,
+    createdBy: userId,
+  })
+
+  res.address = data
+  return res
+}
+
+const getDetailAddress = async (id) => {
+  let res = {}
+
+  let queryString = `SELECT ad.id, ad.user_id as userId, ad.store_id as storeId, ad.customer_name as customerName, ad.phone, ad.location, ad.default, ad.type,
+  ad.created_at as createdAt, ad.created_by as createdBy, ad.updated_at as updatedAt, ad.updated_by as updatedBy,
+  us.full_name as userName,
+  st.name as storeName
+  FROM address ad
+  LEFT JOIN user us ON us.id = ad.user_id
+  LEFT JOIN store st ON st.id = ad.store_id
+  WHERE ad.id = '${id}'`
+
+  const data = await Sequelize.query(queryString, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+  if (!data) {
+    throw new APIError(
+      MESSAGE_THROW_ERROR.ADDRESS_NOT_FOUND,
+      httpStatus.NOT_FOUND
+    )
+  }
+
+  res.address = data[0]
+  return res
+}
+
 export default {
   register,
   login,
@@ -225,4 +277,6 @@ export default {
   getDetailUser,
   getListUsers,
   deleteUser,
+  createAddress,
+  getDetailAddress,
 }

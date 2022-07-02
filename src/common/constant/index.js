@@ -22,6 +22,8 @@ export const MESSAGE_THROW_ERROR = {
   STORE_NOT_FOUND: 'Cửa hàng không tồn tại',
   CATEGORY_NOT_FOUND: 'Không tìm thấy danh mục này',
   CATEGORY_CONFLICT: 'Danh mục này đã tồn tại',
+  ADDRESS_NOT_FOUND: 'Không tìm thấy danh mục này',
+  ADDRESS_CONFLICT: 'Danh mục này đã tồn tại',
 }
 
 export const USER_TYPE = {

@@ -266,4 +266,76 @@ router.route('/users/:id').put(validateContentType, controller.updateUser)
  */
 router.route('/users/:id').delete(validateContentType, controller.deleteUser)
 
+/**
+ * @swagger
+ * /addresses:
+ *   post:
+ *     description: create address
+ *     tags:
+ *     - Address
+ *     requestBody:
+ *       description: create address
+ *       content:
+ *         application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                storeId:
+ *                  type: string
+ *                  in: body
+ *                customerName:
+ *                  type: string
+ *                  in: body
+ *                phone:
+ *                  type: string
+ *                  in: body
+ *                location:
+ *                  type: string
+ *                  in: body
+ *                default:
+ *                  type: number
+ *                  in: body
+ *                type:
+ *                  type: number
+ *                  in: body
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: create address
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/user'
+ */
+router.route('/addresses').post(validateContentType, controller.createAddress)
+
+/**
+ * @swagger
+ * /addresses/{id}:
+ *   get:
+ *     description: Get detail address.
+ *     tags:
+ *     - Address
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         schema:
+ *           type: string
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: Get detail.
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/banners'
+ */
+router
+  .route('/addresses/:id')
+  .get(validateContentType, controller.getDetailAddress)
+
 export default router

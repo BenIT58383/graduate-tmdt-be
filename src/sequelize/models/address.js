@@ -24,10 +24,10 @@ const Address = sequelizeInstance.define(
       allowNull: true,
       field: 'store_id',
     },
-    userName: {
+    customerName: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'user_name',
+      field: 'customer_name',
     },
     phone: {
       type: sequelize.STRING(),
@@ -43,6 +43,11 @@ const Address = sequelizeInstance.define(
       type: sequelize.TINYINT(1),
       allowNull: true,
       field: 'default',
+    },
+    type: {
+      type: sequelize.TINYINT(1),
+      allowNull: true,
+      field: 'type',
     },
     createdAt: {
       type: sequelize.STRING(),

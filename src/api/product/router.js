@@ -102,15 +102,15 @@ router
  *         in: query
  *         schema:
  *           type: number
- *       - name: code
- *         in: query
- *         schema:
- *           type: string
  *       - name: name
  *         in: query
  *         schema:
  *           type: string
- *       - name: phone
+ *       - name: categoryId
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: storeId
  *         in: query
  *         schema:
  *           type: string

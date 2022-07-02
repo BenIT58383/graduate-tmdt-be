@@ -18,6 +18,8 @@ export const MESSAGE_THROW_ERROR = {
   AUTH: 'không có quyền truy cập!',
   PRODUCT_NOTFOUND: 'Không tìm thấy sản phẩm này',
   PRODUCT_CODE_CONFLICT: 'Mã sản phẩm này đã tồn tại',
+  STORE_NAME_CONFLICT: 'Tên cửa hàng đã tồn tại',
+  STORE_NOT_FOUND: 'Cửa hàng không tồn tại',
 }
 
 export const USER_TYPE = {

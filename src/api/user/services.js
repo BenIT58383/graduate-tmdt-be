@@ -56,7 +56,7 @@ const login = async (phone, password) => {
   }
 
   const token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
-    expiresIn: '10d',
+    expiresIn: '120d',
   })
 
   const dataForUser = {
@@ -150,7 +150,7 @@ const getListUsers = async (page, size, code, name, phone, user) => {
   }
 
   if (name) {
-    queryString += ` and id like '%${name}%' `
+    queryString += ` and full_name like '%${name}%' `
   }
 
   if (phone) {
@@ -183,7 +183,6 @@ const updateUser = async (
   if (!userExist) {
     throw new APIError(MESSAGE_THROW_ERROR.USER_NOT_FOUND, httpStatus.NOT_FOUND)
   }
-  console.log(1111111, password)
 
   if (password) {
     pass = bcrypt.hashSync(password, 10)

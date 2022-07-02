@@ -16,6 +16,8 @@ export const MESSAGE_THROW_ERROR = {
   ERR_PHONE_OR_PASSWORD: 'sai tài khoản hoặc mật khẩu!',
   LOGIN: 'mời bạn đăng nhập!',
   AUTH: 'không có quyền truy cập!',
+  PRODUCT_NOTFOUND: 'Không tìm thấy sản phẩm này',
+  PRODUCT_CODE_CONFLICT: 'Mã sản phẩm này đã tồn tại',
 }
 
 export const USER_TYPE = {

@@ -4,8 +4,8 @@ import sequelize from 'sequelize'
 import { masterDb as sequelizeInstance } from '..'
 import { ORDER_CODE_LENGTH } from '../../common/constant'
 
-const OrderDetail = sequelizeInstance.define(
-  'order_detail',
+const Product = sequelizeInstance.define(
+  'product',
   {
     id: {
       type: sequelize.UUIDV4(36),
@@ -14,25 +14,45 @@ const OrderDetail = sequelizeInstance.define(
       primaryKey: true,
       field: 'id',
     },
-    productId: {
+    storeId: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'product_id',
+      field: 'store_id',
     },
-    orderId: {
+    categoryId: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'order_id',
+      field: 'category_id',
+    },
+    unitId: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'unit_id',
+    },
+    code: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'code',
     },
     amount: {
       type: sequelize.FLOAT(),
       allowNull: true,
       field: 'amount',
     },
-    totalPrice: {
+    price: {
       type: sequelize.FLOAT(),
       allowNull: true,
-      field: 'total_price',
+      field: 'price',
+    },
+    name: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'name',
+    },
+    image: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image',
     },
     createdAt: {
       type: sequelize.STRING(),
@@ -56,7 +76,7 @@ const OrderDetail = sequelizeInstance.define(
     },
   },
   {
-    tableName: 'order_detail',
+    tableName: 'product',
   }
 )
-export default OrderDetail
+export default Product

@@ -124,7 +124,7 @@ router.route('/users').post(validateContentType, controller.createUser)
  * @swagger
  * /users/{id}:
  *   get:
- *     description: Get detail banner.
+ *     description: Get detail user.
  *     tags:
  *     - User
  *     parameters:
@@ -136,7 +136,7 @@ router.route('/users').post(validateContentType, controller.createUser)
  *       allOf:
  *         - $ref: '#/components/responses/CommonChartErrorResponse'
  *       200:
- *         description: Get list.
+ *         description: Get detail.
  *         content:
  *          application/json:
  *            schema:
@@ -149,7 +149,7 @@ router.route('/users/:id').get(validateContentType, controller.getDetailUser)
  * @swagger
  * /users:
  *   get:
- *     description: Get list banner.
+ *     description: Get list user.
  *     tags:
  *     - User
  *     parameters:

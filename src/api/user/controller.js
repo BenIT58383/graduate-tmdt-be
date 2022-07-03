@@ -113,11 +113,19 @@ const deleteUser = async (req, res, next) => {
 }
 
 const createAddress = async (req, res, next) => {
-  const { storeId, customerName, phone, location, type } = req.body
+  const { storeId, customerName, phone, location, isDefault, type } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
 
   service
-    .createAddress(storeId, customerName, phone, location, type, user.id)
+    .createAddress(
+      storeId,
+      customerName,
+      phone,
+      location,
+      isDefault,
+      type,
+      user.id
+    )
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -142,6 +150,60 @@ const getDetailAddress = async (req, res, next) => {
     })
 }
 
+const getListAddress = async (req, res, next) => {
+  const { page, size, userId, storeId, isDefault, type } = req.query
+  const user = await CommonHelper.getUserFromRequest(req)
+  service
+    .getListAddress(page, size, userId, storeId, isDefault, type)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
+const updateAddress = async (req, res, next) => {
+  const { id } = req.params
+  const { storeId, customerName, phone, location, isDefault, type } = req.body
+  const user = await CommonHelper.getUserFromRequest(req)
+  service
+    .updateAddress(
+      id,
+      storeId,
+      customerName,
+      phone,
+      location,
+      isDefault,
+      type,
+      user.id
+    )
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
+const deleteAddress = async (req, res, next) => {
+  const { id } = req.params
+  service
+    .deleteAddress(id)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
 export default {
   register,
   login,
@@ -152,4 +214,7 @@ export default {
   deleteUser,
   createAddress,
   getDetailAddress,
+  getListAddress,
+  updateAddress,
+  deleteAddress,
 }

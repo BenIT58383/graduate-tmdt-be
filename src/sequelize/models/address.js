@@ -39,10 +39,10 @@ const Address = sequelizeInstance.define(
       allowNull: true,
       field: 'location',
     },
-    default: {
+    isDefault: {
       type: sequelize.TINYINT(1),
       allowNull: true,
-      field: 'default',
+      field: 'is_default',
     },
     type: {
       type: sequelize.TINYINT(1),

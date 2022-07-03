@@ -245,7 +245,7 @@ const createAddress = async (
 const getDetailAddress = async (id) => {
   let res = {}
 
-  let queryString = `SELECT ad.id, ad.user_id as userId, ad.store_id as storeId, ad.customer_name as customerName, ad.phone, ad.location, ad.default, ad.type,
+  let queryString = `SELECT ad.id, ad.user_id as userId, ad.store_id as storeId, ad.customer_name as customerName, ad.phone, ad.location, ad.is_default as isDefault, ad.type,
   ad.created_at as createdAt, ad.created_by as createdBy, ad.updated_at as updatedAt, ad.updated_by as updatedBy,
   us.full_name as userName,
   st.name as storeName
@@ -269,6 +269,98 @@ const getDetailAddress = async (id) => {
   return res
 }
 
+const getListAddress = async (page, size, userId, storeId, isDefault, type) => {
+  let res = {}
+  let offset = (page - 1) * size
+
+  let queryString = `SELECT ad.id, ad.user_id as userId, ad.store_id as storeId, ad.customer_name as customerName, ad.phone, ad.location, ad.is_default as isDefault, ad.type,  
+  ad.created_at as createdAt, ad.created_by as createdBy, ad.updated_at as updatedAt, ad.updated_by as updatedBy,
+  us.full_name as userName,
+  st.name as storeName
+  FROM address ad
+  JOIN user us ON us.id = ad.user_id
+  LEFT JOIN store st ON st.id = ad.store_id
+  WHERE true`
+
+  if (userId) {
+    queryString += ` and ad.user_id = '${userId}' `
+  }
+  if (storeId) {
+    queryString += ` and ad.store_id = '${storeId}' `
+  }
+  if (type) {
+    queryString += ` and ad.type = '${type}' `
+  }
+
+  if (isDefault) {
+    queryString += ` and ad.is_default = '${isDefault}' `
+  }
+
+  queryString += ` order by ad.created_at desc`
+
+  const data = await Sequelize.query(queryString, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+  res.total = data.length
+  res.addresses = data.slice(offset, offset + size)
+  return res
+}
+
+const updateAddress = async (
+  id,
+  storeId,
+  customerName,
+  phone,
+  location,
+  isDefault,
+  type,
+  userId
+) => {
+  let res = {}
+
+  const addressExist = await AddressModel.findOne({ where: { id } })
+  if (!addressExist) {
+    throw new APIError(
+      MESSAGE_THROW_ERROR.ADDRESS_NOT_FOUND,
+      httpStatus.NOT_FOUND
+    )
+  }
+
+  const data = await AddressModel.update(
+    {
+      storeId,
+      customerName,
+      phone,
+      location,
+      isDefault,
+      type,
+      updatedBy: userId,
+    },
+    { where: { id } }
+  )
+
+  res.data = data
+  return res
+}
+
+const deleteAddress = async (id) => {
+  const res = {}
+
+  const addressExist = await AddressModel.findOne({ where: { id } })
+  if (!addressExist) {
+    throw new APIError(
+      MESSAGE_THROW_ERROR.ADDRESS_NOT_FOUND,
+      httpStatus.NOT_FOUND
+    )
+  }
+
+  const data = await AddressModel.destroy({ where: { id } })
+
+  res.user = data
+  return res
+}
+
 export default {
   register,
   login,
@@ -279,4 +371,7 @@ export default {
   deleteUser,
   createAddress,
   getDetailAddress,
+  getListAddress,
+  updateAddress,
+  deleteAddress,
 }

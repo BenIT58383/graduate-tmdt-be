@@ -292,7 +292,7 @@ router.route('/users/:id').delete(validateContentType, controller.deleteUser)
  *                location:
  *                  type: string
  *                  in: body
- *                default:
+ *                isDefault:
  *                  type: number
  *                  in: body
  *                type:
@@ -337,5 +337,137 @@ router.route('/addresses').post(validateContentType, controller.createAddress)
 router
   .route('/addresses/:id')
   .get(validateContentType, controller.getDetailAddress)
+
+/**
+ * @swagger
+ * /addresses:
+ *   get:
+ *     description: Get list address.
+ *     tags:
+ *     - Address
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         schema:
+ *           type: number
+ *       - name: size
+ *         in: query
+ *         schema:
+ *           type: number
+ *       - name: userId
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: storeId
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: isDefault
+ *         in: query
+ *         schema:
+ *           type: number
+ *       - name: type
+ *         in: query
+ *         schema:
+ *           type: number
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: Get list.
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/banners'
+ */
+router
+  .route('/addresses')
+  .get(
+    validateContentType,
+    validate(validation.getListAddress),
+    controller.getListAddress
+  )
+
+/**
+ * @swagger
+ * /addresses/{id}:
+ *   put:
+ *     description: update address
+ *     tags:
+ *     - Address
+ *     parameters:
+ *      - name: id
+ *        in: path
+ *        schema:
+ *          type: string
+ *        required: true
+ *     requestBody:
+ *       description: update address
+ *       content:
+ *         application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                storeId:
+ *                  type: string
+ *                  in: body
+ *                customerName:
+ *                  type: string
+ *                  in: body
+ *                phone:
+ *                  type: string
+ *                  in: body
+ *                location:
+ *                  type: string
+ *                  in: body
+ *                isDefault:
+ *                  type: number
+ *                  in: body
+ *                type:
+ *                  type: number
+ *                  in: body
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: update address
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/user'
+ */
+router
+  .route('/addresses/:id')
+  .put(validateContentType, controller.updateAddress)
+
+/**
+ * @swagger
+ * /addresses/{id}:
+ *   delete:
+ *     description: update address
+ *     tags:
+ *     - Address
+ *     parameters:
+ *      - name: id
+ *        in: path
+ *        schema:
+ *          type: string
+ *        required: true
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: update address
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/user'
+ */
+router
+  .route('/addresses/:id')
+  .delete(validateContentType, controller.deleteAddress)
 
 export default router

@@ -15,6 +15,7 @@ import { MESSAGE_THROW_ERROR, USER_TYPE } from '../../common/constant/index'
 import UserModel from '../../sequelize/models/user'
 import ProductModel from '../../sequelize/models/product'
 import CategoryModel from '../../sequelize/models/category'
+import UnitModel from '../../sequelize/models/unit'
 import config from '../../common/config'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
@@ -300,6 +301,61 @@ const deleteCategory = async (id) => {
   return res
 }
 
+const createUnit = async (userId, name) => {
+  const res = {}
+
+  const unitExist = await UnitModel.findOne({ where: { name } })
+  if (unitExist) {
+    throw new APIError(MESSAGE_THROW_ERROR.UNIT_CONFLICT, httpStatus.CONFLICT)
+  }
+
+  const data = await UnitModel.create({
+    name,
+    createdBy: userId,
+  })
+
+  res.user = data
+  return res
+}
+
+const getListUnit = async (page, size, name, userId, isActive) => {
+  let res = {}
+  let offset = (page - 1) * size
+
+  let queryString = `SELECT u.id, u.name,
+  u.created_at as createdAt, u.created_by as createdBy, u.updated_at as updatedAt, u.updated_by as updatedBy
+  FROM unit u
+  WHERE true`
+
+  if (name) {
+    queryString += ` and u.name like '%${name}%' `
+  }
+
+  queryString += ` order by u.created_at desc`
+
+  const data = await Sequelize.query(queryString, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+  res.total = data.length
+  res.units = data.slice(offset, offset + size)
+  return res
+}
+
+const deleteUnit = async (id) => {
+  const res = {}
+
+  const unitExist = await UnitModel.findOne({ where: { id } })
+  if (!unitExist) {
+    throw new APIError(MESSAGE_THROW_ERROR.UNIT_NOT_FOUND, httpStatus.NOT_FOUND)
+  }
+
+  const data = await UnitModel.destroy({ where: { id } })
+
+  res.user = data
+  return res
+}
+
 export default {
   createProduct,
   getDetailProduct,
@@ -311,4 +367,7 @@ export default {
   getListCategory,
   updateCategory,
   deleteCategory,
+  createUnit,
+  getListUnit,
+  deleteUnit,
 }

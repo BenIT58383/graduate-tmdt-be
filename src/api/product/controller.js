@@ -183,6 +183,49 @@ const deleteCategory = async (req, res, next) => {
     })
 }
 
+const createUnit = async (req, res, next) => {
+  const { name } = req.body
+  const user = await CommonHelper.getUserFromRequest(req)
+  service
+    .createUnit(user.id, name)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
+const getListUnit = async (req, res, next) => {
+  const { page, size, name } = req.query
+  service
+    .getListUnit(page, size, name)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
+const deleteUnit = async (req, res, next) => {
+  const { id } = req.params
+  service
+    .deleteUnit(id)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
 export default {
   createProduct,
   getDetailProduct,
@@ -194,4 +237,7 @@ export default {
   getListCategory,
   updateCategory,
   deleteCategory,
+  createUnit,
+  getListUnit,
+  deleteUnit,
 }

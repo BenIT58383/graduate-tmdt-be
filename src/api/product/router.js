@@ -382,4 +382,99 @@ router
   .route('/categories/:id')
   .delete(validateContentType, controller.deleteCategory)
 
+/**
+ * @swagger
+ * /units:
+ *   post:
+ *     description: create units
+ *     tags:
+ *     - Unit
+ *     requestBody:
+ *       description: create units
+ *       content:
+ *         application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                name:
+ *                  type: string
+ *                  in: body
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: create units
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/user'
+ */
+router.route('/units').post(validateContentType, controller.createUnit)
+
+/**
+ * @swagger
+ * /units:
+ *   get:
+ *     description: Get list unit.
+ *     tags:
+ *     - Unit
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         schema:
+ *           type: number
+ *       - name: size
+ *         in: query
+ *         schema:
+ *           type: number
+ *       - name: name
+ *         in: query
+ *         schema:
+ *           type: string
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: Get list.
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/banners'
+ */
+router
+  .route('/units')
+  .get(
+    validateContentType,
+    validate(validation.getListUnit),
+    controller.getListUnit
+  )
+
+/**
+ * @swagger
+ * /units/{id}:
+ *   delete:
+ *     description: update unit
+ *     tags:
+ *     - Unit
+ *     parameters:
+ *      - name: id
+ *        in: path
+ *        schema:
+ *          type: string
+ *        required: true
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: update unit
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/user'
+ */
+router.route('/units/:id').delete(validateContentType, controller.deleteUnit)
+
 export default router

@@ -30,12 +30,12 @@ const OrderDetail = sequelizeInstance.define(
       field: 'product_id',
     },
     quantity: {
-      type: sequelize.STRING(),
+      type: sequelize.FLOAT(),
       allowNull: true,
       field: 'quantity',
     },
     price: {
-      type: sequelize.STRING(),
+      type: sequelize.FLOAT(),
       allowNull: true,
       field: 'price',
     },

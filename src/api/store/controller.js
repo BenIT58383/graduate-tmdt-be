@@ -74,8 +74,9 @@ const updateStore = async (req, res, next) => {
 
 const deleteStore = async (req, res, next) => {
   const { id } = req.params
+  const user = await CommonHelper.getUserFromRequest(req)
   service
-    .deleteStore(id)
+    .deleteStore(id, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

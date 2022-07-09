@@ -11,7 +11,11 @@ import {
   ForbiddenError,
 } from '../../common/helpers/api-error'
 import { masterDb as Sequelize } from '../../sequelize/index'
-import { MESSAGE_THROW_ERROR, USER_TYPE } from '../../common/constant/index'
+import {
+  MESSAGE_THROW_ERROR,
+  ACTIVE_STATUS,
+  USER_ROLE,
+} from '../../common/constant/index'
 import UserModel from '../../sequelize/models/user'
 import ProductModel from '../../sequelize/models/product'
 import StoreModel from '../../sequelize/models/store'
@@ -102,29 +106,40 @@ const getListStore = async (page, size, name, userId, isActive) => {
 
 const updateStore = async (id, name, isActive, userId) => {
   let res = {}
+  let tran = await Sequelize.transaction()
 
-  const storeExist = await StoreModel.findOne({ where: { id } })
-  if (!storeExist) {
-    throw new APIError(
-      MESSAGE_THROW_ERROR.STORE_NOT_FOUND,
-      httpStatus.NOT_FOUND
+  try {
+    const storeExist = await StoreModel.findOne({ where: { id } })
+    if (!storeExist) {
+      return MESSAGE_THROW_ERROR.STORE_NOT_FOUND
+    }
+
+    const data = await StoreModel.update(
+      {
+        name,
+        isActive,
+        updatedBy: userId,
+      },
+      { where: { id: id }, transaction: tran }
     )
+
+    if (isActive === ACTIVE_STATUS.ACTIVE) {
+      await UserModel.update(
+        { role: USER_ROLE.STORE },
+        { where: { id: userId }, transaction: tran }
+      )
+    }
+
+    res.data = data
+    await tran.commit()
+    return res
+  } catch (error) {
+    await tran.rollback()
+    throw new APIError(error, httpStatus.BAD_REQUEST)
   }
-
-  const data = await StoreModel.update(
-    {
-      name,
-      isActive,
-      updatedBy: userId,
-    },
-    { where: { id } }
-  )
-
-  res.data = data
-  return res
 }
 
-const deleteStore = async (id) => {
+const deleteStore = async (id, userId) => {
   const res = {}
 
   const storeExist = await StoreModel.findOne({ where: { id } })
@@ -136,6 +151,18 @@ const deleteStore = async (id) => {
   }
 
   const data = await StoreModel.destroy({ where: { id } })
+
+  //handle update role for user
+  const storeOfUserExist = await StoreModel.findAll({
+    where: { userId: userId },
+  })
+
+  if (storeOfUserExist.length === 0) {
+    await UserModel.update(
+      { role: USER_ROLE.CUSTOMER },
+      { where: { id: userId } }
+    )
+  }
 
   res.user = data
   return res

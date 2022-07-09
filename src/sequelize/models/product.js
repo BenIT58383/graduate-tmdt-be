@@ -34,10 +34,10 @@ const Product = sequelizeInstance.define(
       allowNull: true,
       field: 'code',
     },
-    amount: {
+    quantity: {
       type: sequelize.FLOAT(),
       allowNull: true,
-      field: 'amount',
+      field: 'quantity',
     },
     price: {
       type: sequelize.FLOAT(),

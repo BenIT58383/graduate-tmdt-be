@@ -21,4 +21,28 @@ export const MESSAGE_THROW_ERROR = {
   ADDRESS_CONFLICT: 'Danh mục này đã tồn tại',
   UNIT_NOT_FOUND: 'Không tìm thấy đơn vị này',
   UNIT_CONFLICT: 'Đơn vị này đã tồn tại',
+  PRODUCT_NOT_EMPTY: 'Sản phẩm không được để trống',
+  ORDER_NOT_FOUND: 'Không tìm thấy đơn hàng',
+  QUANTITY_PRODUCT_AND_ORDER:
+    'Số lượng sản phẩm trong cửa hàng phải lớn hơn số lượng mua',
+  ORDER_NOT_FOUND: 'Không tìm thấy đơn hàng này',
+  ORDER_DO_NOT_HANDLE: 'Không thể xử lí đơn hàng đang trong trạng thái này',
+}
+
+export const CONFIG_ORDER_STATUS = {
+  CANCEL: 0,
+  NEW: 1,
+  PROCESSING: 2,
+  FINISHED: 3,
+}
+
+export const USER_ROLE = {
+  CUSTOMER: 1,
+  STORE: 2,
+  ADMIN: 3,
+}
+
+export const ACTIVE_STATUS = {
+  IN_ACTIVE: 0,
+  ACTIVE: 1,
 }

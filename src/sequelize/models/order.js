@@ -24,28 +24,23 @@ const Order = sequelizeInstance.define(
       allowNull: true,
       field: 'user_id',
     },
-    productId: {
+    addressId: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'product_id',
-    },
-    amount: {
-      type: sequelize.FLOAT(),
-      allowNull: true,
-      field: 'amount',
-    },
-    totalPrice: {
-      type: sequelize.FLOAT(),
-      allowNull: true,
-      field: 'total_price',
+      field: 'address_id',
     },
     status: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'status',
     },
-    createdAt: {
+    note: {
       type: sequelize.STRING(),
+      allowNull: true,
+      field: 'note',
+    },
+    createdAt: {
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'created_at',
     },
@@ -55,7 +50,7 @@ const Order = sequelizeInstance.define(
       field: 'created_by',
     },
     updatedAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'updated_at',
     },

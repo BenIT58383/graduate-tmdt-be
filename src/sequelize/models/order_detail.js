@@ -19,6 +19,26 @@ const OrderDetail = sequelizeInstance.define(
       allowNull: true,
       field: 'order_id',
     },
+    storeId: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'store_id',
+    },
+    productId: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'product_id',
+    },
+    quantity: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'quantity',
+    },
+    price: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'price',
+    },
     createdAt: {
       type: sequelize.STRING(),
       allowNull: true,

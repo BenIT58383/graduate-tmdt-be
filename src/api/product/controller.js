@@ -13,16 +13,14 @@ import config from '../../common/config'
 import checkAuth from '../../express/middleware/authority-check'
 
 const createProduct = async (req, res, next) => {
-  const { storeId, categoryId, unitId, code, amount, price, name, image } =
-    req.body
+  const { storeId, categoryId, unitId, quantity, price, name, image } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
     .createProduct(
       storeId,
       categoryId,
       unitId,
-      code,
-      amount,
+      quantity,
       price,
       name,
       image,
@@ -184,10 +182,10 @@ const deleteCategory = async (req, res, next) => {
 }
 
 const createUnit = async (req, res, next) => {
-  const { name } = req.body
+  const { name, description } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .createUnit(user.id, name)
+    .createUnit(user.id, name, description)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -199,9 +197,9 @@ const createUnit = async (req, res, next) => {
 }
 
 const getListUnit = async (req, res, next) => {
-  const { page, size, name } = req.query
+  const { page, size, name, description } = req.query
   service
-    .getListUnit(page, size, name)
+    .getListUnit(page, size, name, description)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

@@ -27,12 +27,9 @@ const router = Router()
  *                  type: string
  *                  in: body
  *                unitId:
- *                  type: number
- *                  in: body
- *                code:
  *                  type: string
  *                  in: body
- *                amount:
+ *                quantity:
  *                  type: number
  *                  in: body
  *                price:
@@ -161,9 +158,6 @@ router
  *                  in: body
  *                unitId:
  *                  type: number
- *                  in: body
- *                code:
- *                  type: string
  *                  in: body
  *                amount:
  *                  type: number
@@ -399,6 +393,9 @@ router
  *                name:
  *                  type: string
  *                  in: body
+ *                description:
+ *                  type: string
+ *                  in: body
  *     responses:
  *       allOf:
  *         - $ref: '#/components/responses/CommonChartErrorResponse'
@@ -429,6 +426,10 @@ router.route('/units').post(validateContentType, controller.createUnit)
  *         schema:
  *           type: number
  *       - name: name
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: description
  *         in: query
  *         schema:
  *           type: string

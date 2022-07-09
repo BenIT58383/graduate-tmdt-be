@@ -19,6 +19,11 @@ const Unit = sequelizeInstance.define(
       allowNull: true,
       field: 'name',
     },
+    description: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'description',
+    },
     createdAt: {
       type: sequelize.STRING(),
       allowNull: true,

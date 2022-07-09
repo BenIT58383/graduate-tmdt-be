@@ -223,6 +223,7 @@ const createAddress = async (
   customerName,
   phone,
   location,
+  isDefault,
   type,
   userId
 ) => {
@@ -234,6 +235,7 @@ const createAddress = async (
     customerName,
     phone,
     location,
+    isDefault,
     type,
     createdBy: userId,
   })

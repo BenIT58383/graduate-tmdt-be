@@ -25,8 +25,7 @@ const createProduct = async (
   storeId,
   categoryId,
   unitId,
-  code,
-  amount,
+  quantity,
   price,
   name,
   image,
@@ -34,20 +33,11 @@ const createProduct = async (
 ) => {
   const res = {}
 
-  const codeExist = await ProductModel.findOne({ where: { code } })
-  if (codeExist) {
-    throw new APIError(
-      MESSAGE_THROW_ERROR.PRODUCT_CODE_CONFLICT,
-      httpStatus.CONFLICT
-    )
-  }
-
   const data = await ProductModel.create({
     storeId,
     categoryId,
     unitId,
-    code,
-    amount,
+    quantity,
     price,
     name,
     image,
@@ -61,26 +51,15 @@ const createProduct = async (
 const getDetailProduct = async (id) => {
   let res = {}
 
-  // let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.code, pd.amount, pd.price, pd.name, pd.image,
-  // pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
-  // st.name as storeName,
-  // c.name as categoryName,
-  // u.name as unitName
-  // FROM product pd
-  // JOIN store st ON pd.store_id = st.id
-  // JOIN category c ON pd.category_id = c.id
-  // JOIN unit u ON pd.unit_id = u.id
-  // WHERE pd.id = '${id}'`
-
-  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.code, pd.amount, pd.price, pd.name, pd.image, 
+  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.amount, pd.price, pd.name, pd.image, 
   pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
   st.name as storeName,
   c.name as categoryName,
   u.name as unitName
   FROM product pd
-  LEFT JOIN store st ON pd.store_id = st.id
-  LEFT JOIN category c ON pd.category_id = c.id
-  LEFT JOIN unit u ON pd.unit_id = u.id
+  JOIN store st ON pd.store_id = st.id
+  JOIN category c ON pd.category_id = c.id
+  JOIN unit u ON pd.unit_id = u.id
   WHERE pd.id = '${id}'`
 
   const data = await Sequelize.query(queryString, {
@@ -102,7 +81,7 @@ const getListProduct = async (page, size, name, categoryId, storeId) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.code, pd.amount, pd.price, pd.name as productName, pd.image, 
+  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.amount, pd.price, pd.name as productName, pd.image, 
   pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
   st.name as storeName,
   c.name as categoryName,
@@ -141,7 +120,6 @@ const updateProduct = async (
   storeId,
   categoryId,
   unitId,
-  code,
   amount,
   price,
   name,
@@ -163,7 +141,6 @@ const updateProduct = async (
       storeId,
       categoryId,
       unitId,
-      code,
       amount,
       price,
       name,
@@ -301,7 +278,7 @@ const deleteCategory = async (id) => {
   return res
 }
 
-const createUnit = async (userId, name) => {
+const createUnit = async (userId, name, description) => {
   const res = {}
 
   const unitExist = await UnitModel.findOne({ where: { name } })
@@ -311,6 +288,7 @@ const createUnit = async (userId, name) => {
 
   const data = await UnitModel.create({
     name,
+    description,
     createdBy: userId,
   })
 
@@ -318,17 +296,21 @@ const createUnit = async (userId, name) => {
   return res
 }
 
-const getListUnit = async (page, size, name, userId, isActive) => {
+const getListUnit = async (page, size, name, description) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT u.id, u.name,
+  let queryString = `SELECT u.id, u.name, u.description,
   u.created_at as createdAt, u.created_by as createdBy, u.updated_at as updatedAt, u.updated_by as updatedBy
   FROM unit u
   WHERE true`
 
   if (name) {
     queryString += ` and u.name like '%${name}%' `
+  }
+
+  if (description) {
+    queryString += ` and u.description like '%${description}%' `
   }
 
   queryString += ` order by u.created_at desc`

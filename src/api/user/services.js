@@ -68,9 +68,10 @@ const login = async (phone, password) => {
       avatar: user.avatar,
       fullName: user.fullName,
       birthDay: user.birthDay,
+      token: token
     }
 
-    return { user: dataForUser, token: token }
+    return { user: dataForUser }
   } catch (error) {
     return error
   }

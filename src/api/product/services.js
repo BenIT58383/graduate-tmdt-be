@@ -51,7 +51,7 @@ const createProduct = async (
 const getDetailProduct = async (id) => {
   let res = {}
 
-  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.amount, pd.price, pd.name, pd.image, 
+  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.quantity, pd.price, pd.name, pd.image, 
   pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
   st.name as storeName,
   c.name as categoryName,
@@ -81,7 +81,7 @@ const getListProduct = async (page, size, name, categoryId, storeId) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.amount, pd.price, pd.name as productName, pd.image, 
+  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.quantity, pd.price, pd.name as productName, pd.image, 
   pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
   st.name as storeName,
   c.name as categoryName,

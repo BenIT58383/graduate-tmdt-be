@@ -71,7 +71,7 @@ const login = async (phone, password) => {
       token: token
     }
 
-    return { user: dataForUser }
+    return user
   } catch (error) {
     return error
   }

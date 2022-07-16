@@ -40,41 +40,37 @@ const register = async (fullName, phone, password) => {
 }
 
 const login = async (phone, password) => {
-  try {
-    const user = await UserModel.findOne({ where: { phone } })
+  const user = await UserModel.findOne({ where: { phone } })
 
-    if (!user || !bcrypt.compareSync(password, user.password)) {
-      throw new APIError(
-        MESSAGE_THROW_ERROR.ERR_PHONE_OR_PASSWORD,
-        httpStatus.NOT_FOUND
-      )
-    }
-
-    const dataForAccessToken = {
-      id: user.id,
-      code: user.code,
-      phone: user.phone,
-      role: user.role,
-    }
-
-    const token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
-      expiresIn: '120d',
-    })
-
-    const dataForUser = {
-      id: user.id,
-      code: user.code,
-      phone: user.phone,
-      avatar: user.avatar,
-      fullName: user.fullName,
-      birthDay: user.birthDay,
-      token: token
-    }
-
-    return user
-  } catch (error) {
-    return error
+  if (!user || !bcrypt.compareSync(password, user.password)) {
+    throw new APIError(
+      MESSAGE_THROW_ERROR.ERR_PHONE_OR_PASSWORD,
+      httpStatus.NOT_FOUND
+    )
   }
+
+  const dataForAccessToken = {
+    id: user.id,
+    code: user.code,
+    phone: user.phone,
+    role: user.role,
+  }
+
+  const token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
+    expiresIn: '120d',
+  })
+
+  const dataForUser = {
+    id: user.id,
+    code: user.code,
+    phone: user.phone,
+    avatar: user.avatar,
+    fullName: user.fullName,
+    birthDay: user.birthDay,
+    token: token
+  }
+
+  return user
 }
 
 const createUser = async (

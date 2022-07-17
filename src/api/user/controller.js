@@ -30,11 +30,9 @@ const login = async (req, res, next) => {
   const { phone, password } = req.body
   service
     .login(phone, password)
-    .then((data) => {
-      const result = data
-      console.log(6666, result);
+    .then((result) => {
       return new APISuccess(res, {
-        ben: "1",
+        ben: "2",
         data: result,
       })
     })

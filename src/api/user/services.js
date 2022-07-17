@@ -40,54 +40,38 @@ const register = async (fullName, phone, password) => {
 }
 
 const login = async (phone, password) => {
-  try {
-    const user = await UserModel.findOne({ where: { phone } })
+  const user = await UserModel.findOne({ where: { phone } })
 
-    if (!user || !bcrypt.compareSync(password, user.password)) {
-      throw new APIError(
-        MESSAGE_THROW_ERROR.ERR_PHONE_OR_PASSWORD,
-        httpStatus.NOT_FOUND
-      )
-    }
+  if (!user || !bcrypt.compareSync(password, user.password)) {
+    throw new APIError(
+      MESSAGE_THROW_ERROR.ERR_PHONE_OR_PASSWORD,
+      httpStatus.NOT_FOUND
+    )
+  }
 
-    const dataForAccessToken = {
-      id: user.id,
-      code: user.code,
-      phone: user.phone,
-      role: user.role,
-    }
+  const dataForAccessToken = {
+    id: user.id,
+    code: user.code,
+    phone: user.phone,
+    role: user.role,
+  }
 
-    const token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
-      expiresIn: '120d',
-    })
+  const token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
+    expiresIn: '120d',
+  })
 
-    const dataForUser = {
-      id: user.id,
-      code: user.code,
-      phone: user.phone,
-      avatar: user.avatar,
-      fullName: user.fullName,
-      birthDay: user.birthDay,
-      token: token
-    }
+  const dataForUser = {
+    id: user.id,
+    code: user.code,
+    phone: user.phone,
+    avatar: user.avatar,
+    fullName: user.fullName,
+    birthDay: user.birthDay,
+    token: token
+  }
 
-    const data = {
-      ben: "i love you 3000"
-    }
-
-    return {
-      ben: "i love you 3000"
-    }
-    // return {
-    //   "id": "1b7b2b8e-96bb-4866-81f6-0331bb06dc44",
-    //   "code": null,
-    //   "phone": "string",
-    //   "avatar": null,
-    //   "fullName": "string",
-    //   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiN2IyYjhlLTk2YmItNDg2Ni04MWY2LTAzMzFiYjA2ZGM0NCIsImNvZGUiOm51bGwsInBob25lIjoic3RyaW5nIiwicm9sZSI6bnVsbCwiaWF0IjoxNjU4MDMyNjcwLCJleHAiOjE2Njg0MDA2NzB9.tY05zRmJENpHpc-jZ_eo7PZksha9YQ_cW6jicL2Bc-Y"
-    // }
-  } catch (error) {
-    return error
+  return {
+    ben: "i love you 3000"
   }
 
 }

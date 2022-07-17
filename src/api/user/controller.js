@@ -32,8 +32,12 @@ const login = async (req, res, next) => {
     .login(phone, password)
     .then((result) => {
       return new APISuccess(res, {
-        ben: "6",
-        data: { result: result },
+        ben: "7",
+        data: {
+          result: {
+            ben: "i love you 3000"
+          }
+        },
       })
     })
     .catch((err) => {

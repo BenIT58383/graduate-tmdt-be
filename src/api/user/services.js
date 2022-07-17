@@ -72,8 +72,7 @@ const login = async (phone, password) => {
     }
 
     const data = {
-      "id": "1b7b2b8e-96bb-4866-81f6-0331bb06dc44",
-      "code": null,
+      "id": "1b7b2b8e-96bb-4866-81f6-0331bb06dc44"
     }
 
     return data

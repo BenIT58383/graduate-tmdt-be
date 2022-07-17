@@ -59,10 +59,7 @@ router.route('/register').post(validateContentType, controller.register)
  *            schema:
  *              type: object
  *              properties:
- *                userName:
- *                  type: string
- *                  in: body
- *                phone:
+ *                userNamePhone:
  *                  type: string
  *                  in: body
  *                email:

@@ -27,9 +27,9 @@ const register = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
-  const { userName, phone, email, password } = req.body
+  const { userNamePhone, email, password } = req.body
   service
-    .login(userName, phone, email, password)
+    .login(userNamePhone, email, password)
     .then((data) => {
       return new APISuccess(res, {
         data: data

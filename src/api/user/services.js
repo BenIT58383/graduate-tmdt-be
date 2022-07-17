@@ -50,14 +50,14 @@ const register = async (userName, phone, email, password) => {
   return res
 }
 
-const login = async (userName, phone, email, password) => {
-  const userUserName = await UserModel.findOne({ where: { userName } })
-  const userPhone = await UserModel.findOne({ where: { phone } })
+const login = async (userNamePhone, email, password) => {
+  const userName = await UserModel.findOne({ where: { userName: userNamePhone } })
+  const userPhone = await UserModel.findOne({ where: { phone: userNamePhone } })
   const userEmail = await UserModel.findOne({ where: { email } })
   const user = {}
 
-  if (userUserName && bcrypt.compareSync(password, userUserName.password)) {
-    user = userUserName
+  if (userName && bcrypt.compareSync(password, userName.password)) {
+    user = userName
   } else if (userPhone || bcrypt.compareSync(password, userPhone.password)) {
     user = userPhone
   } else if (userEmail || bcrypt.compareSync(password, userEmail.password)) {

@@ -71,7 +71,13 @@ const login = async (phone, password) => {
       token: token
     }
 
-    return dataForUser
+    const data = {
+      id: user.id
+    }
+
+    console.log(444444, data);
+
+    return data
     // return { "ben": "1000" }
   } catch (error) {
     return error

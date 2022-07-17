@@ -59,6 +59,9 @@ const login = async (phone, password) => {
   // const token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
   //   expiresIn: '120d',
   // })
+  const token = jwt.sign(dataForAccessToken, 'ben$author', {
+    expiresIn: '120d',
+  })
 
   const dataForUser = {
     id: user.id,

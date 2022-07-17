@@ -4,13 +4,16 @@ export const CONFIG_TIME = {
 }
 
 export const MESSAGE_THROW_ERROR = {
-  PHONE_CONFLICT: 'số điện thoại này đã tồn tại',
-  PHONE_NOT_FOUND: 'không tìm thấy số điện thoại này',
-  USER_CONFLICT: 'người dùng này đã tồn tại',
+  PHONE_CONFLICT: 'Số điện thoại này đã tồn tại',
+  USER_NAME_CONFLICT: 'Tên đăng nhập đã tồn tại',
+  EMAIL_CONFLICT: 'Tên đăng nhập đã tồn tại',
+  PHONE_CONFLICT: 'Số điện thoại này đã tồn tại',
+  PHONE_NOT_FOUND: 'Không tìm thấy số điện thoại này',
+  USER_CONFLICT: 'Người dùng này đã tồn tại',
   USER_NOT_FOUND: 'Không tìm thấy người dùng này',
-  ERR_PHONE_OR_PASSWORD: 'sai tài khoản hoặc mật khẩu!',
-  LOGIN: 'mời bạn đăng nhập!',
-  AUTH: 'không có quyền truy cập!',
+  ERR_USER_NAME_PHONE_EMAIL_OR_PASSWORD: 'Sai tài khoản hoặc mật khẩu!',
+  LOGIN: 'Mời bạn đăng nhập!',
+  AUTH: 'Không có quyền truy cập!',
   PRODUCT_NOTFOUND: 'Không tìm thấy sản phẩm này',
   PRODUCT_CODE_CONFLICT: 'Mã sản phẩm này đã tồn tại',
   STORE_NAME_CONFLICT: 'Tên cửa hàng đã tồn tại',

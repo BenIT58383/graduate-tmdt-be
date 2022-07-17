@@ -18,7 +18,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import jwtHelper from '../../common/helpers/jwt-helper'
 
-const register = async (fullName, phone, password) => {
+const register = async (userName, phone, email, password) => {
   const res = {}
 
   const phoneExist = await UserModel.findOne({ where: { phone } })
@@ -26,11 +26,22 @@ const register = async (fullName, phone, password) => {
     throw new APIError(MESSAGE_THROW_ERROR.PHONE_CONFLICT, httpStatus.CONFLICT)
   }
 
+  const userNameExist = await UserModel.findOne({ where: { userName } })
+  if (userNameExist) {
+    throw new APIError(MESSAGE_THROW_ERROR.USER_NAME_CONFLICT, httpStatus.CONFLICT)
+  }
+
+  const emailExist = await UserModel.findOne({ where: { email } })
+  if (emailExist) {
+    throw new APIError(MESSAGE_THROW_ERROR.EMAIL_CONFLICT, httpStatus.CONFLICT)
+  }
+
   const pass = bcrypt.hashSync(password, 10)
 
   const data = await UserModel.create({
-    fullName,
+    userName,
     phone,
+    email,
     password: pass,
     type: 1,
   })
@@ -39,12 +50,21 @@ const register = async (fullName, phone, password) => {
   return res
 }
 
-const login = async (phone, password) => {
-  const user = await UserModel.findOne({ where: { phone } })
+const login = async (userName, phone, email, password) => {
+  const userUserName = await UserModel.findOne({ where: { userName } })
+  const userPhone = await UserModel.findOne({ where: { phone } })
+  const userEmail = await UserModel.findOne({ where: { email } })
+  const user = {}
 
-  if (!user || !bcrypt.compareSync(password, user.password)) {
+  if (userUserName && bcrypt.compareSync(password, userUserName.password)) {
+    user = userUserName
+  } else if (userPhone || bcrypt.compareSync(password, userPhone.password)) {
+    user = userPhone
+  } else if (userEmail || bcrypt.compareSync(password, userEmail.password)) {
+    user = userEmail
+  } else {
     throw new APIError(
-      MESSAGE_THROW_ERROR.ERR_PHONE_OR_PASSWORD,
+      MESSAGE_THROW_ERROR.ERR_USER_NAME_PHONE_EMAIL_OR_PASSWORD,
       httpStatus.NOT_FOUND
     )
   }
@@ -74,15 +94,16 @@ const login = async (phone, password) => {
 }
 
 const createUser = async (
+  userName,
   phone,
+  email,
   password,
   role,
   avatar,
-  fullName,
+  name,
   dateOfBirth
 ) => {
   const res = {}
-  const userCode = 'desau'
 
   const phoneExist = await UserModel.findOne({ where: { phone } })
   if (phoneExist) {
@@ -92,13 +113,14 @@ const createUser = async (
   const hashPassword = bcrypt.hashSync(password, 10)
 
   const data = await UserModel.create({
+    userName,
     phone,
+    email,
     password: hashPassword,
-    code: userCode,
     role,
     avatar,
-    fullName,
-    dateOfBirth,
+    name,
+    dateOfBirth
   })
 
   res.user = data
@@ -108,8 +130,8 @@ const createUser = async (
 const getDetailUser = async (id) => {
   let res = {}
 
-  let queryString = `SELECT id, code, phone, avatar, full_name as fullName,
-  date_of_birth as dateOfBirth, role,
+  let queryString = `SELECT id, user_name as userName, phone, email, role, avatar, name,
+  date_of_birth as dateOfBirth, status, is_online as isOnline,
   created_at as createdAt, updated_at as updatedAt
   from user where id = '${id}'`
 
@@ -125,7 +147,7 @@ const getDetailUser = async (id) => {
   return res
 }
 
-const getListUsers = async (page, size, code, name, phone, user) => {
+const getListUsers = async (page, size, code, name, phone, email, userName) => {
   // if (user == '') {
   //   throw new APIError(MESSAGE_THROW_ERROR.LOGIN, httpStatus.FORBIDDEN)
   // }
@@ -152,11 +174,19 @@ const getListUsers = async (page, size, code, name, phone, user) => {
   }
 
   if (name) {
-    queryString += ` and full_name like '%${name}%' `
+    queryString += ` and name like '%${name}%' `
   }
 
   if (phone) {
     queryString += ` and phone like '%${phone}%' `
+  }
+
+  if (email) {
+    queryString += ` and email like '%${email}%' `
+  }
+
+  if (userName) {
+    queryString += ` and user_name like '%${userName}%' `
   }
 
   queryString += ` order by created_at desc`
@@ -171,12 +201,7 @@ const getListUsers = async (page, size, code, name, phone, user) => {
 }
 
 const updateUser = async (
-  id,
-  password,
-  role,
-  avatar,
-  fullName,
-  dateOfBirth
+  id, userName, phone, email, password, role, avatar, name, dateOfBirth, status, isOnline, userId
 ) => {
   let res = {}
   let pass = ''
@@ -192,11 +217,17 @@ const updateUser = async (
 
   const data = await UserModel.update(
     {
+      userName,
+      phone,
+      email,
       password: pass,
       role,
       avatar,
-      fullName,
+      name,
       dateOfBirth,
+      status,
+      isOnline,
+      updatedBy: userId,
     },
     { where: { id } }
   )

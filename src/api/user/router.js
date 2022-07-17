@@ -20,10 +20,13 @@ const router = Router()
  *            schema:
  *              type: object
  *              properties:
- *                fullName:
+ *                userName:
  *                  type: string
  *                  in: body
  *                phone:
+ *                  type: string
+ *                  in: body
+ *                email:
  *                  type: string
  *                  in: body
  *                password:
@@ -56,7 +59,13 @@ router.route('/register').post(validateContentType, controller.register)
  *            schema:
  *              type: object
  *              properties:
+ *                userName:
+ *                  type: string
+ *                  in: body
  *                phone:
+ *                  type: string
+ *                  in: body
+ *                email:
  *                  type: string
  *                  in: body
  *                password:
@@ -89,7 +98,13 @@ router.route('/login').post(validateContentType, controller.login)
  *            schema:
  *              type: object
  *              properties:
+ *                userName:
+ *                  type: string
+ *                  in: body
  *                phone:
+ *                  type: string
+ *                  in: body
+ *                email:
  *                  type: string
  *                  in: body
  *                password:
@@ -101,7 +116,7 @@ router.route('/login').post(validateContentType, controller.login)
  *                avatar:
  *                  type: string
  *                  in: body
- *                fullName:
+ *                name:
  *                  type: string
  *                  in: body
  *                dateOfBirth:
@@ -169,7 +184,15 @@ router.route('/users/:id').get(validateContentType, controller.getDetailUser)
  *         in: query
  *         schema:
  *           type: string
+ *       - name: userName
+ *         in: query
+ *         schema:
+ *           type: string
  *       - name: phone
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: email
  *         in: query
  *         schema:
  *           type: string
@@ -212,6 +235,15 @@ router
  *            schema:
  *              type: object
  *              properties:
+ *                userName:
+ *                  type: string
+ *                  in: body
+ *                phone:
+ *                  type: string
+ *                  in: body
+ *                email:
+ *                  type: string
+ *                  in: body
  *                password:
  *                  type: string
  *                  in: body
@@ -221,11 +253,17 @@ router
  *                avatar:
  *                  type: string
  *                  in: body
- *                fullName:
+ *                name:
  *                  type: string
  *                  in: body
  *                dateOfBirth:
  *                  type: string
+ *                  in: body
+ *                status:
+ *                  type: number
+ *                  in: body
+ *                isOnline:
+ *                  type: number
  *                  in: body
  *     responses:
  *       allOf:

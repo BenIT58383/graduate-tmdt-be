@@ -13,9 +13,9 @@ import config from '../../common/config'
 import checkAuth from '../../express/middleware/authority-check'
 
 const register = async (req, res, next) => {
-  const { fullName, phone, password } = req.body
+  const { userName, phone, email, password } = req.body
   service
-    .register(fullName, phone, password)
+    .register(userName, phone, email, password)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -27,9 +27,9 @@ const register = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
-  const { phone, password } = req.body
+  const { userName, phone, email, password } = req.body
   service
-    .login(phone, password)
+    .login(userName, phone, email, password)
     .then((data) => {
       return new APISuccess(res, {
         data: data
@@ -41,9 +41,9 @@ const login = async (req, res, next) => {
 }
 
 const createUser = async (req, res, next) => {
-  const { phone, password, role, avatar, fullName, dateOfBirth } = req.body
+  const { userName, phone, email, password, role, avatar, name, dateOfBirth } = req.body
   service
-    .createUser(phone, password, role, avatar, fullName, dateOfBirth)
+    .createUser(userName, phone, email, password, role, avatar, name, dateOfBirth)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -56,9 +56,10 @@ const createUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   const { id } = req.params
-  const { password, role, avatar, fullName, dateOfBirth } = req.body
+  const { userName, phone, email, password, role, avatar, name, dateOfBirth, status, isOnline } = req.body
+  const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateUser(id, password, role, avatar, fullName, dateOfBirth)
+    .updateUser(id, userName, phone, email, password, role, avatar, name, dateOfBirth, status, isOnline, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -84,10 +85,9 @@ const getDetailUser = async (req, res, next) => {
 }
 
 const getListUsers = async (req, res, next) => {
-  const { page, size, code, name, phone } = req.query
-  const user = await CommonHelper.getUserFromRequest(req)
+  const { page, size, code, name, phone, email, userName } = req.query
   service
-    .getListUsers(page, size, code, name, phone, user)
+    .getListUsers(page, size, code, name, phone, email, userName)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

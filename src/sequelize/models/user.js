@@ -14,15 +14,25 @@ const User = sequelizeInstance.define(
       primaryKey: true,
       field: 'id',
     },
-    code: {
+    refreshToken: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'code',
+      field: 'refresh_token',
+    },
+    userName: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'user_name',
     },
     phone: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'phone',
+    },
+    email: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'email',
     },
     password: {
       type: sequelize.STRING(),
@@ -34,17 +44,12 @@ const User = sequelizeInstance.define(
       allowNull: true,
       field: 'role',
     },
-    refreshToken: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'refresh_token',
-    },
     avatar: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'avatar',
     },
-    fullName: {
+    name: {
       type: sequelize.STRING(),
       allowNull: true,
       field: 'full_name',
@@ -53,6 +58,16 @@ const User = sequelizeInstance.define(
       type: sequelize.STRING(),
       allowNull: true,
       field: 'date_of_birth',
+    },
+    status: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'status',
+    },
+    isOnline: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'is_online',
     },
     createdAt: {
       type: sequelize.STRING(),

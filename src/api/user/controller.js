@@ -33,7 +33,14 @@ const login = async (req, res, next) => {
     .then((data) => {
       const result = data
       return new APISuccess(res, {
-        data: result,
+        data: {
+          "id": "1b7b2b8e-96bb-4866-81f6-0331bb06dc44",
+          "code": null,
+          "phone": "string",
+          "avatar": null,
+          "fullName": "string",
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiN2IyYjhlLTk2YmItNDg2Ni04MWY2LTAzMzFiYjA2ZGM0NCIsImNvZGUiOm51bGwsInBob25lIjoic3RyaW5nIiwicm9sZSI6bnVsbCwiaWF0IjoxNjU4MDMyNjcwLCJleHAiOjE2Njg0MDA2NzB9.tY05zRmJENpHpc-jZ_eo7PZksha9YQ_cW6jicL2Bc-Y"
+        },
       })
     })
     .catch((err) => {

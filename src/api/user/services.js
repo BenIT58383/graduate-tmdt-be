@@ -49,30 +49,28 @@ const login = async (phone, password) => {
     )
   }
 
-  // const dataForAccessToken = {
-  //   id: user.id,
-  //   code: user.code,
-  //   phone: user.phone,
-  //   role: user.role,
-  // }
+  const dataForAccessToken = {
+    id: user.id,
+    code: user.code,
+    phone: user.phone,
+    role: user.role,
+  }
 
   // const token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
   //   expiresIn: '120d',
   // })
 
-  // const dataForUser = {
-  //   id: user.id,
-  //   code: user.code,
-  //   phone: user.phone,
-  //   avatar: user.avatar,
-  //   fullName: user.fullName,
-  //   birthDay: user.birthDay,
-  //   token: token
-  // }
-
-  return {
-    ben: "i love you 3000"
+  const dataForUser = {
+    id: user.id,
+    code: user.code,
+    phone: user.phone,
+    avatar: user.avatar,
+    fullName: user.fullName,
+    birthDay: user.birthDay,
+    token: token
   }
+
+  return dataForUser
 
 }
 

@@ -72,7 +72,7 @@ const login = async (phone, password) => {
     }
 
     const data = {
-      "id": "1b7b2b8e-96bb-4866-81f6-0331bb06dc44"
+      ben: "i love you 3000"
     }
 
     return data

@@ -56,9 +56,6 @@ const login = async (phone, password) => {
     role: user.role,
   }
 
-  // const token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
-  //   expiresIn: '120d',
-  // })
   const token = jwt.sign(dataForAccessToken, 'ben$author', {
     expiresIn: '120d',
   })
@@ -74,7 +71,6 @@ const login = async (phone, password) => {
   }
 
   return dataForUser
-
 }
 
 const createUser = async (

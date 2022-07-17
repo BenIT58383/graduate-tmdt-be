@@ -87,9 +87,9 @@ const getListProduct = async (page, size, name, categoryId, storeId) => {
   c.name as categoryName,
   u.name as unitName
   FROM product pd
-  LEFT JOIN store st ON pd.store_id = st.id
-  LEFT JOIN category c ON pd.category_id = c.id
-  LEFT JOIN unit u ON pd.unit_id = u.id
+  JOIN store st ON pd.store_id = st.id
+  JOIN category c ON pd.category_id = c.id
+  JOIN unit u ON pd.unit_id = u.id
   WHERE true`
 
   if (name) {

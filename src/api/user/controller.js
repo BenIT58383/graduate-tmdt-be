@@ -32,7 +32,7 @@ const login = async (req, res, next) => {
     .login(phone, password)
     .then((result) => {
       return new APISuccess(res, {
-        ben: "2",
+        ben: "3",
         data: result,
       })
     })

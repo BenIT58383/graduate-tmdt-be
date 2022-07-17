@@ -70,7 +70,7 @@ const login = async (phone, password) => {
     avatar: user.avatar,
     fullName: user.fullName,
     birthDay: user.birthDay,
-    // token: token
+    token: token
   }
 
   return dataForUser

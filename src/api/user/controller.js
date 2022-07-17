@@ -31,7 +31,7 @@ const login = async (req, res, next) => {
   service
     .login(phone, password)
     .then((data) => {
-      const result = { ben: "ben10" }
+      const result = data
       return new APISuccess(res, {
         data: result,
       })

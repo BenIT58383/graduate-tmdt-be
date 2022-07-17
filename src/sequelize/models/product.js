@@ -14,6 +14,11 @@ const Product = sequelizeInstance.define(
       primaryKey: true,
       field: 'id',
     },
+    code: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'code',
+    },
     storeId: {
       type: sequelize.STRING(),
       allowNull: true,
@@ -28,11 +33,6 @@ const Product = sequelizeInstance.define(
       type: sequelize.STRING(),
       allowNull: true,
       field: 'unit_id',
-    },
-    code: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'code',
     },
     quantity: {
       type: sequelize.FLOAT(),
@@ -53,6 +53,21 @@ const Product = sequelizeInstance.define(
       type: sequelize.STRING(),
       allowNull: true,
       field: 'image',
+    },
+    image: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image',
+    },
+    description: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'description',
+    },
+    status: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'status',
     },
     createdAt: {
       type: sequelize.STRING(),

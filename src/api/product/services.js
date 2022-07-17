@@ -11,7 +11,7 @@ import {
   ForbiddenError,
 } from '../../common/helpers/api-error'
 import { masterDb as Sequelize } from '../../sequelize/index'
-import { MESSAGE_THROW_ERROR, USER_TYPE } from '../../common/constant/index'
+import { MESSAGE_THROW_ERROR, USER_TYPE, ACTIVE_STATUS } from '../../common/constant/index'
 import UserModel from '../../sequelize/models/user'
 import ProductModel from '../../sequelize/models/product'
 import CategoryModel from '../../sequelize/models/category'
@@ -29,6 +29,7 @@ const createProduct = async (
   price,
   name,
   image,
+  description,
   userId
 ) => {
   const res = {}
@@ -41,6 +42,8 @@ const createProduct = async (
     price,
     name,
     image,
+    description,
+    status: ACTIVE_STATUS.ACTIVE,
     createdBy: userId,
   })
 
@@ -51,7 +54,8 @@ const createProduct = async (
 const getDetailProduct = async (id) => {
   let res = {}
 
-  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.quantity, pd.price, pd.name, pd.image, 
+  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.quantity, 
+  pd.price, pd.name, pd.image, pd.description, pd.status,
   pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
   st.name as storeName,
   c.name as categoryName,
@@ -77,11 +81,12 @@ const getDetailProduct = async (id) => {
   return res
 }
 
-const getListProduct = async (page, size, name, categoryId, storeId) => {
+const getListProduct = async (page, size, name, categoryId, storeId, description) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.quantity, pd.price, pd.name as productName, pd.image, 
+  let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.quantity, 
+  pd.price, pd.name as productName, pd.image, pd.description, pd.status,
   pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
   st.name as storeName,
   c.name as categoryName,
@@ -104,6 +109,10 @@ const getListProduct = async (page, size, name, categoryId, storeId) => {
     queryString += ` and pd.store_id = '${storeId}' `
   }
 
+  if (description) {
+    queryString += ` and pd.description = '${description}' `
+  }
+
   queryString += ` order by pd.created_at desc`
 
   const data = await Sequelize.query(queryString, {
@@ -124,6 +133,8 @@ const updateProduct = async (
   price,
   name,
   image,
+  description,
+  status,
   userId
 ) => {
   let res = {}
@@ -145,6 +156,8 @@ const updateProduct = async (
       price,
       name,
       image,
+      description,
+      status,
       updatedBy: userId,
     },
     { where: { id } }
@@ -171,7 +184,7 @@ const deleteProduct = async (id) => {
   return res
 }
 
-const createCategory = async (name, userId) => {
+const createCategory = async (name, image, userId) => {
   const res = {}
 
   const categoryExist = await CategoryModel.findOne({ where: { name } })
@@ -184,6 +197,7 @@ const createCategory = async (name, userId) => {
 
   const data = await CategoryModel.create({
     name,
+    image,
     createdBy: userId,
   })
 
@@ -194,7 +208,7 @@ const createCategory = async (name, userId) => {
 const getDetailCategory = async (id) => {
   let res = {}
 
-  let queryString = `SELECT ct.id, ct.name, 
+  let queryString = `SELECT ct.id, ct.name, ct.image,
   ct.created_at as createdAt, ct.created_by as createdBy, ct.updated_at as updatedAt, ct.updated_by as updatedBy
   FROM category ct
   WHERE ct.id = '${id}'`
@@ -218,7 +232,7 @@ const getListCategory = async (page, size, name) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT ct.id, ct.name, 
+  let queryString = `SELECT ct.id, ct.name, ct.image,
   ct.created_at as createdAt, ct.created_by as createdBy, ct.updated_at as updatedAt, ct.updated_by as updatedBy
   FROM category ct
   WHERE true `
@@ -238,7 +252,7 @@ const getListCategory = async (page, size, name) => {
   return res
 }
 
-const updateCategory = async (id, name, userId) => {
+const updateCategory = async (id, name, image, userId) => {
   let res = {}
 
   const categoryExist = await CategoryModel.findOne({ where: { id } })
@@ -252,6 +266,7 @@ const updateCategory = async (id, name, userId) => {
   const data = await CategoryModel.update(
     {
       name,
+      image,
       updatedBy: userId,
     },
     { where: { id } }

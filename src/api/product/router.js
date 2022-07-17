@@ -41,6 +41,9 @@ const router = Router()
  *                image:
  *                  type: string
  *                  in: body
+ *                description:
+ *                  type: string
+ *                  in: body
  *     responses:
  *       allOf:
  *         - $ref: '#/components/responses/CommonChartErrorResponse'
@@ -111,6 +114,10 @@ router
  *         in: query
  *         schema:
  *           type: string
+ *       - name: description
+ *         in: query
+ *         schema:
+ *           type: string
  *     responses:
  *       allOf:
  *         - $ref: '#/components/responses/CommonChartErrorResponse'
@@ -171,6 +178,12 @@ router
  *                image:
  *                  type: string
  *                  in: body
+ *                description:
+ *                  type: string
+ *                  in: body
+ *                status:
+ *                  type: string
+ *                  in: body
  *     responses:
  *       allOf:
  *         - $ref: '#/components/responses/CommonChartErrorResponse'
@@ -229,6 +242,9 @@ router
  *              type: object
  *              properties:
  *                name:
+ *                  type: string
+ *                  in: body
+ *                image:
  *                  type: string
  *                  in: body
  *     responses:
@@ -331,6 +347,9 @@ router
  *              type: object
  *              properties:
  *                name:
+ *                  type: string
+ *                  in: body
+ *                image:
  *                  type: string
  *                  in: body
  *     responses:

@@ -19,6 +19,11 @@ const Category = sequelizeInstance.define(
       allowNull: true,
       field: 'name',
     },
+    image: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image',
+    },
     createdAt: {
       type: sequelize.STRING(),
       allowNull: true,

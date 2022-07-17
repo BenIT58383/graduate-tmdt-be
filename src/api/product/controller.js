@@ -13,7 +13,7 @@ import config from '../../common/config'
 import checkAuth from '../../express/middleware/authority-check'
 
 const createProduct = async (req, res, next) => {
-  const { storeId, categoryId, unitId, quantity, price, name, image } = req.body
+  const { storeId, categoryId, unitId, quantity, price, name, image, description } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
     .createProduct(
@@ -24,6 +24,7 @@ const createProduct = async (req, res, next) => {
       price,
       name,
       image,
+      description,
       user.id
     )
     .then((data) => {
@@ -51,10 +52,10 @@ const getDetailProduct = async (req, res, next) => {
 }
 
 const getListProduct = async (req, res, next) => {
-  const { page, size, name, categoryId, storeId } = req.query
+  const { page, size, name, categoryId, storeId, description } = req.query
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .getListProduct(page, size, name, categoryId, storeId)
+    .getListProduct(page, size, name, categoryId, storeId, description)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -67,7 +68,7 @@ const getListProduct = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
   const { id } = req.params
-  const { storeId, categoryId, unitId, code, amount, price, name, image } =
+  const { storeId, categoryId, unitId, code, amount, price, name, image, description, status } =
     req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
@@ -81,6 +82,8 @@ const updateProduct = async (req, res, next) => {
       price,
       name,
       image,
+      description,
+      status,
       user.id
     )
     .then((data) => {
@@ -108,10 +111,10 @@ const deleteProduct = async (req, res, next) => {
 }
 
 const createCategory = async (req, res, next) => {
-  const { name } = req.body
+  const { name, image } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .createCategory(name, user.id)
+    .createCategory(name, image, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -153,10 +156,10 @@ const getListCategory = async (req, res, next) => {
 
 const updateCategory = async (req, res, next) => {
   const { id } = req.params
-  const { name } = req.body
+  const { name, image } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateCategory(id, name, user.id)
+    .updateCategory(id, name, image, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

@@ -22,6 +22,7 @@ import bcrypt from 'bcrypt'
 import jwtHelper from '../../common/helpers/jwt-helper'
 
 const createProduct = async (
+  files,
   storeId,
   categoryId,
   unitId,
@@ -34,6 +35,12 @@ const createProduct = async (
 ) => {
   const res = {}
 
+  const thumbnailImg = files[0] ? `http://localhost:8081/${files[0].path}` : null;
+  // const productImg1 = files[1] ? `http://localhost:4000/${files[1].path}` : null;
+  // const productImg2 = files[2] ? `http://localhost:4000/${files[2].path}` : null;
+  // const productImg3 = files[3] ? `http://localhost:4000/${files[3].path}` : null;
+  // const productImg4 = files[4] ? `http://localhost:4000/${files[4].path}` : null;
+
   const data = await ProductModel.create({
     storeId,
     categoryId,
@@ -41,7 +48,7 @@ const createProduct = async (
     quantity,
     price,
     name,
-    image,
+    image: thumbnailImg,
     description,
     status: ACTIVE_STATUS.ACTIVE,
     createdBy: userId,

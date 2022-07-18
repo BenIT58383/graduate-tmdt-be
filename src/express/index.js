@@ -11,8 +11,12 @@ import config from '../common/config/index'
 import authorityCheck from '../express/middleware/authority-check'
 import expressWinston from 'express-winston'
 import logger from '../common/utils/logger'
+const path = require('path');
 
 const app = express()
+
+const publicPath = path.join(__dirname, "../../public");
+app.use("/public", express.static(publicPath));
 
 // Check environment
 // const dev = config.NODE_ENV !== 'production'

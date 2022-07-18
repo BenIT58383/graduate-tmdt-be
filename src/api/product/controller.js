@@ -15,8 +15,10 @@ import checkAuth from '../../express/middleware/authority-check'
 const createProduct = async (req, res, next) => {
   const { storeId, categoryId, unitId, quantity, price, name, image, description } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
+  const {files} = req;
   service
     .createProduct(
+      files,
       storeId,
       categoryId,
       unitId,

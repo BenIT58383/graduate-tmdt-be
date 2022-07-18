@@ -58,7 +58,7 @@ const router = Router()
  */
 router
   .route('/stores/products')
-  .post(validateContentType, uploadImage("productsImg", "array"), controller.createProduct)
+  .post(uploadImage("productsImg", "array"), controller.createProduct)
 
 /**
  * @swagger

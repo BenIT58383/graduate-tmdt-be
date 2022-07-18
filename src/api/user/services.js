@@ -163,8 +163,8 @@ const getListUsers = async (page, size, code, name, phone, email, userName) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT id, code, phone, avatar, full_name as fullName,
-  date_of_birth as dateOfBirth, role,
+  let queryString = `SELECT id, user_name as userName, phone, email, role, avatar, name,
+  date_of_birth as dateOfBirth, status, is_online as isOnline,
   created_at as createdAt, updated_at as updatedAt
   from user
   where true `

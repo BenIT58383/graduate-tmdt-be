@@ -3,6 +3,7 @@ import controller from './controller'
 import validate from 'express-validation'
 import validateContentType from '../../express/middleware/validateContentType'
 import validation from './validation'
+const { uploadImage } = require("../../express/middleware/upload-img");
 
 const router = Router()
 
@@ -57,7 +58,7 @@ const router = Router()
  */
 router
   .route('/stores/products')
-  .post(validateContentType, controller.createProduct)
+  .post(validateContentType, uploadImage("productsImg", "array"), controller.createProduct)
 
 /**
  * @swagger

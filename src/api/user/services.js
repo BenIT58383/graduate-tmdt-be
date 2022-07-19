@@ -21,20 +21,23 @@ import jwtHelper from '../../common/helpers/jwt-helper'
 const register = async (userName, phone, email, password) => {
   const res = {}
 
-  const phoneExist = await UserModel.findOne({ where: { phone } })
-  if (phoneExist) {
-    throw new APIError(MESSAGE_THROW_ERROR.PHONE_CONFLICT, httpStatus.CONFLICT)
+  if (email) {
+    const phoneExist = await UserModel.findOne({ where: { phone } })
+    if (phoneExist) {
+      throw new APIError(MESSAGE_THROW_ERROR.PHONE_CONFLICT, httpStatus.CONFLICT)
+    }
   }
 
-  const userNameExist = await UserModel.findOne({ where: { userName } })
+  if (userName && phone) {
+    const userNameExist = await UserModel.findOne({ where: { userName } })
+    if (userNameExist) {
+      throw new APIError(MESSAGE_THROW_ERROR.USER_NAME_CONFLICT, httpStatus.CONFLICT)
+    }
 
-  if (userNameExist) {
-    throw new APIError(MESSAGE_THROW_ERROR.USER_NAME_CONFLICT, httpStatus.CONFLICT)
-  }
-
-  const emailExist = await UserModel.findOne({ where: { email } })
-  if (emailExist) {
-    throw new APIError(MESSAGE_THROW_ERROR.EMAIL_CONFLICT, httpStatus.CONFLICT)
+    const emailExist = await UserModel.findOne({ where: { email } })
+    if (emailExist) {
+      throw new APIError(MESSAGE_THROW_ERROR.EMAIL_CONFLICT, httpStatus.CONFLICT)
+    }
   }
 
   const pass = bcrypt.hashSync(password, 10)

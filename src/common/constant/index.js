@@ -6,7 +6,7 @@ export const CONFIG_TIME = {
 export const MESSAGE_THROW_ERROR = {
   PHONE_CONFLICT: 'Số điện thoại này đã tồn tại',
   USER_NAME_CONFLICT: 'Tên đăng nhập đã tồn tại',
-  EMAIL_CONFLICT: 'Tên đăng nhập đã tồn tại',
+  EMAIL_CONFLICT: 'Email đã tồn tại',
   PHONE_CONFLICT: 'Số điện thoại này đã tồn tại',
   PHONE_NOT_FOUND: 'Không tìm thấy số điện thoại này',
   USER_CONFLICT: 'Người dùng này đã tồn tại',

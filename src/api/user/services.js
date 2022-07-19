@@ -27,6 +27,7 @@ const register = async (userName, phone, email, password) => {
   }
 
   const userNameExist = await UserModel.findOne({ where: { userName } })
+
   if (userNameExist) {
     throw new APIError(MESSAGE_THROW_ERROR.USER_NAME_CONFLICT, httpStatus.CONFLICT)
   }

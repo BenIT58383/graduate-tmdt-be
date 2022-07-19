@@ -26,7 +26,6 @@ const register = async (userName, phone, email, password) => {
     if (emailExist) {
       throw new APIError(MESSAGE_THROW_ERROR.EMAIL_CONFLICT, httpStatus.CONFLICT)
     }
-
   } else {
     email = null
   }
@@ -61,10 +60,19 @@ const register = async (userName, phone, email, password) => {
 }
 
 const login = async (userNamePhone, email, password) => {
-  const userName = await UserModel.findOne({ where: { userName: userNamePhone } })
-  const userPhone = await UserModel.findOne({ where: { phone: userNamePhone } })
-  const userEmail = await UserModel.findOne({ where: { email } })
-  const user = {}
+  let userName
+  let userPhone
+  let userEmail
+  let user = {}
+
+  if (userNamePhone) {
+    userName = await UserModel.findOne({ where: { userName: userNamePhone } })
+    userPhone = await UserModel.findOne({ where: { phone: userNamePhone } })
+  }
+
+  if (email) {
+    userEmail = await UserModel.findOne({ where: { email } })
+  }
 
   if (userName && bcrypt.compareSync(password, userName.password)) {
     user = userName
@@ -83,6 +91,7 @@ const login = async (userNamePhone, email, password) => {
     id: user.id,
     code: user.code,
     phone: user.phone,
+    userName: user.userName,
     role: user.role,
   }
 
@@ -94,8 +103,9 @@ const login = async (userNamePhone, email, password) => {
     id: user.id,
     code: user.code,
     phone: user.phone,
+    userName: user.userName,
     avatar: user.avatar,
-    fullName: user.fullName,
+    name: user.name,
     birthDay: user.birthDay,
     token: token
   }

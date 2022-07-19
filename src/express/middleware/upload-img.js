@@ -6,7 +6,9 @@ const uploadImage = (type, kind) => {
   const made = mkdirp.sync(`./public/images/${type}`);
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
+      console.log(6666666, kind);
       cb(null, `./public/images/${type}`); // setup chổ cần lưu file
+      console.log(555555555555, type);
     },
     filename: function (req, file, cb) {
       cb(null, Date.now() + "_" + file.originalname); // đặt lại tên cho file

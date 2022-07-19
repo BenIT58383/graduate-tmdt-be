@@ -2,6 +2,7 @@ const mkdirp = require("mkdirp");
 const multer = require("multer");
 
 const uploadImage = (type, kind) => {
+  console.log(77777777, type);
   const made = mkdirp.sync(`./public/images/${type}`);
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {

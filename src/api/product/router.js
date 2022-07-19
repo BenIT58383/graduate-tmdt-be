@@ -198,7 +198,7 @@ router
  */
 router
   .route('/stores/products/:id')
-  .put(validateContentType, controller.updateProduct)
+  .put(uploadImage("productsImg", "array"), controller.updateProduct)
 
 /**
  * @swagger

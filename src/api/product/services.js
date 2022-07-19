@@ -29,17 +29,16 @@ const createProduct = async (
   quantity,
   price,
   name,
-  image,
   description,
   userId
 ) => {
   const res = {}
 
-  const thumbnailImg = files[0] ? `http://localhost:8081/${files[0].path}` : null;
-  // const productImg1 = files[1] ? `http://localhost:4000/${files[1].path}` : null;
-  // const productImg2 = files[2] ? `http://localhost:4000/${files[2].path}` : null;
-  // const productImg3 = files[3] ? `http://localhost:4000/${files[3].path}` : null;
-  // const productImg4 = files[4] ? `http://localhost:4000/${files[4].path}` : null;
+  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
+  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
+  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
+  const image4 = files[3] ? `https://graduate-tmdt-be.herokuapp.com/${files[3].path}` : null;
+  const image5 = files[4] ? `https://graduate-tmdt-be.herokuapp.com/${files[4].path}` : null;
 
   const data = await ProductModel.create({
     storeId,
@@ -48,7 +47,11 @@ const createProduct = async (
     quantity,
     price,
     name,
-    image: thumbnailImg,
+    image1: image1,
+    image2: image2,
+    image3: image3,
+    image4: image4,
+    image5: image5,
     description,
     status: ACTIVE_STATUS.ACTIVE,
     createdBy: userId,
@@ -62,7 +65,7 @@ const getDetailProduct = async (id) => {
   let res = {}
 
   let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.quantity, 
-  pd.price, pd.name, pd.image, pd.description, pd.status,
+  pd.price, pd.name, pd.image1, pd.image2, pd.image3, pd.image4, pd.image5, pd.description, pd.status,
   pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
   st.name as storeName,
   c.name as categoryName,
@@ -93,7 +96,7 @@ const getListProduct = async (page, size, name, categoryId, storeId, description
   let offset = (page - 1) * size
 
   let queryString = `SELECT pd.id, pd.store_id as storeId, pd.category_id as categoryId, pd.unit_id as unitId, pd.quantity, 
-  pd.price, pd.name as productName, pd.image, pd.description, pd.status,
+  pd.price, pd.name as productName, pd.image1, pd.image2, pd.image3, pd.image4, pd.image5, pd.description, pd.status,
   pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
   st.name as storeName,
   c.name as categoryName,
@@ -132,19 +135,26 @@ const getListProduct = async (page, size, name, categoryId, storeId, description
 }
 
 const updateProduct = async (
+  files,
   id,
   storeId,
   categoryId,
   unitId,
-  amount,
+  code,
+  quantity,
   price,
   name,
-  image,
   description,
   status,
   userId
 ) => {
   let res = {}
+
+  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
+  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
+  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
+  const image4 = files[3] ? `https://graduate-tmdt-be.herokuapp.com/${files[3].path}` : null;
+  const image5 = files[4] ? `https://graduate-tmdt-be.herokuapp.com/${files[4].path}` : null;
 
   const productExist = await ProductModel.findOne({ where: { id } })
   if (!productExist) {
@@ -159,10 +169,15 @@ const updateProduct = async (
       storeId,
       categoryId,
       unitId,
-      amount,
+      code,
+      quantity,
       price,
       name,
-      image,
+      image1: image1,
+      image2: image2,
+      image3: image3,
+      image4: image4,
+      image5: image5,
       description,
       status,
       updatedBy: userId,

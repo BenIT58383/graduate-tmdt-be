@@ -49,15 +49,30 @@ const Product = sequelizeInstance.define(
       allowNull: true,
       field: 'name',
     },
-    image: {
+    image1: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'image',
+      field: 'image1',
     },
-    image: {
+    image2: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'image',
+      field: 'image2',
+    },
+    image3: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image3',
+    },
+    image4: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image4',
+    },
+    image5: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image5',
     },
     description: {
       type: sequelize.STRING(),

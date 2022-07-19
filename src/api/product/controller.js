@@ -13,9 +13,9 @@ import config from '../../common/config'
 import checkAuth from '../../express/middleware/authority-check'
 
 const createProduct = async (req, res, next) => {
-  const { storeId, categoryId, unitId, quantity, price, name, image, description } = req.body
+  const { storeId, categoryId, unitId, quantity, price, name, description } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
-  const {files} = req;
+  const { files } = req;
   service
     .createProduct(
       files,
@@ -25,7 +25,6 @@ const createProduct = async (req, res, next) => {
       quantity,
       price,
       name,
-      image,
       description,
       user.id
     )
@@ -69,21 +68,22 @@ const getListProduct = async (req, res, next) => {
 }
 
 const updateProduct = async (req, res, next) => {
+  const { files } = req;
   const { id } = req.params
-  const { storeId, categoryId, unitId, code, amount, price, name, image, description, status } =
+  const { storeId, categoryId, unitId, code, quantity, price, name, description, status } =
     req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
     .updateProduct(
+      files,
       id,
       storeId,
       categoryId,
       unitId,
       code,
-      amount,
+      quantity,
       price,
       name,
-      image,
       description,
       status,
       user.id

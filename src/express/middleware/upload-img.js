@@ -25,8 +25,6 @@ const uploadImage = (type, kind) => {
     },
   });
 
-  console.log(999, kind);
-
   if (kind && kind === 'array') {
     return upload.array(type);
   } else {

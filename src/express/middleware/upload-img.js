@@ -2,13 +2,10 @@ const mkdirp = require("mkdirp");
 const multer = require("multer");
 
 const uploadImage = (type, kind) => {
-  console.log(77777777, type);
-  const made = mkdirp.sync(`./public/images/${type}`);
+  const made = mkdirp.sync(`./src/public/images/${type}`);
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      console.log(6666666, kind);
-      cb(null, `./public/images/${type}`); // setup chổ cần lưu file
-      console.log(555555555555, type);
+      cb(null, `./src/public/images/${type}`); // setup chổ cần lưu file
     },
     filename: function (req, file, cb) {
       cb(null, Date.now() + "_" + file.originalname); // đặt lại tên cho file
@@ -27,7 +24,6 @@ const uploadImage = (type, kind) => {
       }
     },
   });
-  console.log(9999999, type);
   if (kind && kind === 'array') {
     return upload.array(type);
   } else {

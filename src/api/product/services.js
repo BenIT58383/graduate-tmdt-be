@@ -33,7 +33,6 @@ const createProduct = async (
   userId
 ) => {
   const res = {}
-  console.log(888888, files);
 
   const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
   const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;

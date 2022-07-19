@@ -15,8 +15,8 @@ const path = require('path');
 
 const app = express()
 
-const publicPath = path.join(__dirname, "../../public");
-app.use("/public", express.static(publicPath));
+const publicPath = path.join(__dirname, "../../src/public");
+app.use("/src/public", express.static(publicPath));
 
 // Check environment
 // const dev = config.NODE_ENV !== 'production'

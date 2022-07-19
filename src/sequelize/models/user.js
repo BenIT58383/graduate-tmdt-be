@@ -52,7 +52,7 @@ const User = sequelizeInstance.define(
     name: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'full_name',
+      field: 'name',
     },
     dateOfBirth: {
       type: sequelize.STRING(),

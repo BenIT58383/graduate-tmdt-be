@@ -110,9 +110,6 @@ router.route('/login').post(validateContentType, controller.login)
  *                role:
  *                  type: number
  *                  in: body
- *                avatar:
- *                  type: string
- *                  in: body
  *                name:
  *                  type: string
  *                  in: body
@@ -130,7 +127,7 @@ router.route('/login').post(validateContentType, controller.login)
  *              type: object
  *              $ref: '#/components/schemas/user'
  */
-router.route('/users').post(validateContentType, controller.createUser)
+router.route('/users').post(uploadImage("usersImg", "array"), controller.createUser)
 
 /**
  * @swagger

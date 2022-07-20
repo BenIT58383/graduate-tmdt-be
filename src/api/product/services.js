@@ -206,20 +206,28 @@ const deleteProduct = async (id) => {
   return res
 }
 
-const createCategory = async (name, image, userId) => {
+const createCategory = async (files, name, userId) => {
   const res = {}
 
-  const categoryExist = await CategoryModel.findOne({ where: { name } })
-  if (categoryExist) {
-    throw new APIError(
-      MESSAGE_THROW_ERROR.CATEGORY_CONFLICT,
-      httpStatus.CONFLICT
-    )
+  if (name) {
+    const categoryExist = await CategoryModel.findOne({ where: { name } })
+    if (categoryExist) {
+      throw new APIError(
+        MESSAGE_THROW_ERROR.CATEGORY_CONFLICT,
+        httpStatus.CONFLICT
+      )
+    }
   }
+
+  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
+  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
+  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
 
   const data = await CategoryModel.create({
     name,
-    image,
+    image1: image1,
+    image2: image2,
+    image3: image3,
     createdBy: userId,
   })
 
@@ -230,7 +238,7 @@ const createCategory = async (name, image, userId) => {
 const getDetailCategory = async (id) => {
   let res = {}
 
-  let queryString = `SELECT ct.id, ct.name, ct.image,
+  let queryString = `SELECT ct.id, ct.name, ct.image1, ct.image2, ct.image3,
   ct.created_at as createdAt, ct.created_by as createdBy, ct.updated_at as updatedAt, ct.updated_by as updatedBy
   FROM category ct
   WHERE ct.id = '${id}'`
@@ -254,7 +262,7 @@ const getListCategory = async (page, size, name) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT ct.id, ct.name, ct.image,
+  let queryString = `SELECT ct.id, ct.name, ct.image1, ct.image2, ct.image3,
   ct.created_at as createdAt, ct.created_by as createdBy, ct.updated_at as updatedAt, ct.updated_by as updatedBy
   FROM category ct
   WHERE true `
@@ -274,7 +282,7 @@ const getListCategory = async (page, size, name) => {
   return res
 }
 
-const updateCategory = async (id, name, image, userId) => {
+const updateCategory = async (files, id, name, userId) => {
   let res = {}
 
   const categoryExist = await CategoryModel.findOne({ where: { id } })
@@ -285,10 +293,16 @@ const updateCategory = async (id, name, image, userId) => {
     )
   }
 
+  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
+  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
+  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
+
   const data = await CategoryModel.update(
     {
       name,
-      image,
+      image1: image1,
+      image2: image2,
+      image3: image3,
       updatedBy: userId,
     },
     { where: { id } }

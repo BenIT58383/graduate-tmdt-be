@@ -259,7 +259,7 @@ router
  *              type: object
  *              $ref: '#/components/schemas/user'
  */
-router.route('/categories').post(validateContentType, controller.createCategory)
+router.route('/categories').post(uploadImage("categoriesImg", "array"), controller.createCategory)
 
 /**
  * @swagger
@@ -366,7 +366,7 @@ router
  */
 router
   .route('/categories/:id')
-  .put(validateContentType, controller.updateCategory)
+  .put(uploadImage("categoriesImg", "array"), controller.updateCategory)
 
 /**
  * @swagger

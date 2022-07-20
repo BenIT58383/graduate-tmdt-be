@@ -44,10 +44,20 @@ const User = sequelizeInstance.define(
       allowNull: true,
       field: 'role',
     },
-    avatar: {
+    image1: {
       type: sequelize.STRING(),
       allowNull: true,
-      field: 'avatar',
+      field: 'image1',
+    },
+    image2: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image2',
+    },
+    image3: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image3',
     },
     name: {
       type: sequelize.STRING(),

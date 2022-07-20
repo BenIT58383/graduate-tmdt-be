@@ -113,10 +113,11 @@ const deleteProduct = async (req, res, next) => {
 }
 
 const createCategory = async (req, res, next) => {
-  const { name, image } = req.body
+  const { files } = req;
+  const { name } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .createCategory(name, image, user.id)
+    .createCategory(files, name, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -157,11 +158,12 @@ const getListCategory = async (req, res, next) => {
 }
 
 const updateCategory = async (req, res, next) => {
+  const { files } = req;
   const { id } = req.params
-  const { name, image } = req.body
+  const { name } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateCategory(id, name, image, user.id)
+    .updateCategory(files, id, name, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

@@ -114,21 +114,48 @@ const login = async (userNamePhone, email, password) => {
 }
 
 const createUser = async (
+  files,
   userName,
   phone,
   email,
   password,
   role,
-  avatar,
   name,
   dateOfBirth
 ) => {
   const res = {}
 
-  const phoneExist = await UserModel.findOne({ where: { phone } })
-  if (phoneExist) {
-    throw new APIError(MESSAGE_THROW_ERROR.PHONE_CONFLICT, httpStatus.CONFLICT)
+  //handle phone
+  if (phone) {
+    const phoneExist = await UserModel.findOne({ where: { phone } })
+    if (phoneExist) {
+      throw new APIError(MESSAGE_THROW_ERROR.PHONE_CONFLICT, httpStatus.CONFLICT)
+    }
+  } else {
+    phone = null
   }
+
+  if (userName) {
+    const userNameExist = await UserModel.findOne({ where: { userName } })
+    if (userNameExist) {
+      throw new APIError(MESSAGE_THROW_ERROR.USER_NAME_CONFLICT, httpStatus.CONFLICT)
+    }
+  } else {
+    userName = null
+  }
+
+  if (email) {
+    const phoneExist = await UserModel.findOne({ where: { phone } })
+    if (phoneExist) {
+      throw new APIError(MESSAGE_THROW_ERROR.PHONE_CONFLICT, httpStatus.CONFLICT)
+    }
+  } else {
+    email = null
+  }
+
+  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
+  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
+  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
 
   const hashPassword = bcrypt.hashSync(password, 10)
 
@@ -138,7 +165,9 @@ const createUser = async (
     email,
     password: hashPassword,
     role,
-    avatar,
+    image1: image1,
+    image2: image2,
+    image3: image3,
     name,
     dateOfBirth
   })
@@ -150,7 +179,7 @@ const createUser = async (
 const getDetailUser = async (id) => {
   let res = {}
 
-  let queryString = `SELECT id, user_name as userName, phone, email, role, avatar, name,
+  let queryString = `SELECT id, user_name as userName, phone, email, role, image1, image2, image3, name, dateOfBirth
   date_of_birth as dateOfBirth, status, is_online as isOnline,
   created_at as createdAt, updated_at as updatedAt
   from user where id = '${id}'`
@@ -183,7 +212,7 @@ const getListUsers = async (page, size, code, name, phone, email, userName) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT id, user_name as userName, phone, email, role, avatar, name,
+  let queryString = `SELECT id, user_name as userName, phone, email, role, image1, image2, image3, name,
   date_of_birth as dateOfBirth, status, is_online as isOnline,
   created_at as createdAt, updated_at as updatedAt
   from user
@@ -221,7 +250,7 @@ const getListUsers = async (page, size, code, name, phone, email, userName) => {
 }
 
 const updateUser = async (
-  id, userName, phone, email, password, role, avatar, name, dateOfBirth, status, isOnline, userId
+  files, id, userName, phone, email, password, role, avatar, name, dateOfBirth, status, isOnline, userId
 ) => {
   let res = {}
   let pass = ''
@@ -230,6 +259,10 @@ const updateUser = async (
   if (!userExist) {
     throw new APIError(MESSAGE_THROW_ERROR.USER_NOT_FOUND, httpStatus.NOT_FOUND)
   }
+
+  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
+  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
+  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
 
   if (password) {
     pass = bcrypt.hashSync(password, 10)
@@ -244,6 +277,9 @@ const updateUser = async (
       role,
       avatar,
       name,
+      image1: image1,
+      image2: image2,
+      image3: image3,
       dateOfBirth,
       status,
       isOnline,

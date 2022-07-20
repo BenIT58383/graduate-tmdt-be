@@ -13,10 +13,11 @@ import config from '../../common/config'
 import checkAuth from '../../express/middleware/authority-check'
 
 const createStore = async (req, res, next) => {
+  const { files } = req;
   const { name } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .createStore(user.id, name)
+    .createStore(files, user.id, name)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

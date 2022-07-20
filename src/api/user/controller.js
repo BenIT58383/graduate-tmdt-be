@@ -41,9 +41,10 @@ const login = async (req, res, next) => {
 }
 
 const createUser = async (req, res, next) => {
-  const { userName, phone, email, password, role, avatar, name, dateOfBirth } = req.body
+  const { files } = req;
+  const { userName, phone, email, password, role, name, dateOfBirth } = req.body
   service
-    .createUser(userName, phone, email, password, role, avatar, name, dateOfBirth)
+    .createUser(files, userName, phone, email, password, role, name, dateOfBirth)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -55,11 +56,12 @@ const createUser = async (req, res, next) => {
 }
 
 const updateUser = async (req, res, next) => {
+  const { files } = req;
   const { id } = req.params
-  const { userName, phone, email, password, role, avatar, name, dateOfBirth, status, isOnline } = req.body
+  const { userName, phone, email, password, role, name, dateOfBirth, status, isOnline } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateUser(id, userName, phone, email, password, role, avatar, name, dateOfBirth, status, isOnline, user.id)
+    .updateUser(files, id, userName, phone, email, password, role, name, dateOfBirth, status, isOnline, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

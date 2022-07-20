@@ -110,7 +110,7 @@ const getDetailOrder = async (id) => {
 
   let queryString = `SELECT od.id, od.code, od.user_id as userId, od.status, od.note,
   od.created_at as createdAt, od.created_by as createdBy, od.updated_at as updatedAt, od.updated_by as updatedBy,
-  us.full_name as userName, 
+  us.name as userName, 
   od.address_id as addressId, ad.customer_name as customerName, ad.phone as customerPhone, ad.location
   FROM graduate.order od 
   JOIN graduate.user us ON us.id = od.user_id
@@ -141,7 +141,7 @@ const getListOrder = async (page, size, userId, storeId, status) => {
 
   let queryString = `SELECT od.id, od.code, od.user_id as userId, od.status, od.note,
   od.created_at as createdAt, od.created_by as createdBy, od.updated_at as updatedAt, od.updated_by as updatedBy,
-  us.full_name as userName,
+  us.name as userName,
   od.address_id as addressId, ad.customer_name as customerName, ad.phone as customerPhone, ad.location
   FROM graduate.order od
   JOIN graduate.order_detail odd ON odd.order_id = od.id
@@ -210,7 +210,7 @@ const updateOrder = async (id, addressId, status, userId, userRole) => {
     //check order status
     if (
       orderExist.status in
-        [CONFIG_ORDER_STATUS.CANCEL, CONFIG_ORDER_STATUS.FINISHED] ||
+      [CONFIG_ORDER_STATUS.CANCEL, CONFIG_ORDER_STATUS.FINISHED] ||
       (orderExist.status === CONFIG_ORDER_STATUS.PROCESSING &&
         userRole === USER_ROLE.CUSTOMER)
     ) {

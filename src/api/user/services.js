@@ -145,9 +145,9 @@ const createUser = async (
   }
 
   if (email) {
-    const phoneExist = await UserModel.findOne({ where: { phone } })
+    const phoneExist = await UserModel.findOne({ where: { email } })
     if (phoneExist) {
-      throw new APIError(MESSAGE_THROW_ERROR.PHONE_CONFLICT, httpStatus.CONFLICT)
+      throw new APIError(MESSAGE_THROW_ERROR.EMAIL_CONFLICT, httpStatus.CONFLICT)
     }
   } else {
     email = null
@@ -337,7 +337,7 @@ const getDetailAddress = async (id) => {
 
   let queryString = `SELECT ad.id, ad.user_id as userId, ad.store_id as storeId, ad.customer_name as customerName, ad.phone, ad.location, ad.is_default as isDefault, ad.type,
   ad.created_at as createdAt, ad.created_by as createdBy, ad.updated_at as updatedAt, ad.updated_by as updatedBy,
-  us.full_name as userName,
+  us.name as userName,
   st.name as storeName
   FROM address ad
   LEFT JOIN user us ON us.id = ad.user_id
@@ -365,7 +365,7 @@ const getListAddress = async (page, size, userId, storeId, isDefault, type) => {
 
   let queryString = `SELECT ad.id, ad.user_id as userId, ad.store_id as storeId, ad.customer_name as customerName, ad.phone, ad.location, ad.is_default as isDefault, ad.type,  
   ad.created_at as createdAt, ad.created_by as createdBy, ad.updated_at as updatedAt, ad.updated_by as updatedBy,
-  us.full_name as userName,
+  us.name as userName,
   st.name as storeName
   FROM address ad
   JOIN user us ON us.id = ad.user_id

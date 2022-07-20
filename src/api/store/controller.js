@@ -14,10 +14,10 @@ import checkAuth from '../../express/middleware/authority-check'
 
 const createStore = async (req, res, next) => {
   const { files } = req;
-  const { name } = req.body
+  const { userId, name, description, linkSupport } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .createStore(files, user.id, name)
+    .createStore(files, userId, name, description, linkSupport, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -58,11 +58,12 @@ const getListStore = async (req, res, next) => {
 }
 
 const updateStore = async (req, res, next) => {
+  const { files } = req;
   const { id } = req.params
-  const { name, isActive } = req.body
+  const { userId, name, description, linkSupport, isActive } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateStore(id, name, isActive, user.id)
+    .updateStore(files, id, userId, name, description, linkSupport, isActive, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

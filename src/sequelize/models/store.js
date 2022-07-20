@@ -24,10 +24,35 @@ const Store = sequelizeInstance.define(
       allowNull: true,
       field: 'name',
     },
+    image1: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image1',
+    },
+    image2: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image2',
+    },
+    image3: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'image3',
+    },
     isActive: {
       type: sequelize.INTEGER(),
       allowNull: true,
       field: 'is_active',
+    },
+    description: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'description',
+    },
+    linkSupport: {
+      type: sequelize.STRING(),
+      allowNull: true,
+      field: 'link_support',
     },
     createdAt: {
       type: sequelize.STRING(),

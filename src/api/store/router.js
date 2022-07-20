@@ -3,6 +3,7 @@ import controller from './controller'
 import validate from 'express-validation'
 import validateContentType from '../../express/middleware/validateContentType'
 import validation from './validation'
+const { uploadImage } = require("../../express/middleware/upload-img");
 
 const router = Router()
 
@@ -20,7 +21,16 @@ const router = Router()
  *            schema:
  *              type: object
  *              properties:
+ *                userId:
+ *                  type: string
+ *                  in: body
  *                name:
+ *                  type: string
+ *                  in: body
+ *                description:
+ *                  type: string
+ *                  in: body
+ *                linkSupport:
  *                  type: string
  *                  in: body
  *     responses:
@@ -34,7 +44,7 @@ const router = Router()
  *              type: object
  *              $ref: '#/components/schemas/user'
  */
-router.route('/stores').post(validateContentType, controller.createStore)
+router.route('/stores').post(uploadImage("storesImg", "array"), controller.createStore)
 
 /**
  * @swagger
@@ -145,7 +155,7 @@ router
  *              type: object
  *              $ref: '#/components/schemas/user'
  */
-router.route('/stores/:id').put(validateContentType, controller.updateStore)
+router.route('/stores/:id').put(uploadImage("storesImg", "array"), controller.updateStore)
 
 /**
  * @swagger

@@ -3,6 +3,7 @@ import controller from './controller'
 import validate from 'express-validation'
 import validateContentType from '../../express/middleware/validateContentType'
 import validation from './validation'
+const { uploadImage } = require("../../express/middleware/upload-img");
 
 const router = Router()
 

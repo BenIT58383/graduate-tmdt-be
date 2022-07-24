@@ -44,7 +44,7 @@ const router = Router()
  *              type: object
  *              $ref: '#/components/schemas/user'
  */
-router.route('/stores').post(uploadImage("storesImg", "array"), controller.createStore)
+router.route('/stores').post(uploadImage("images", "array"), controller.createStore)
 
 /**
  * @swagger
@@ -155,7 +155,7 @@ router
  *              type: object
  *              $ref: '#/components/schemas/user'
  */
-router.route('/stores/:id').put(uploadImage("storesImg", "array"), controller.updateStore)
+router.route('/stores/:id').put(uploadImage("images", "array"), controller.updateStore)
 
 /**
  * @swagger

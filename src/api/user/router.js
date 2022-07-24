@@ -128,7 +128,7 @@ router.route('/login').post(validateContentType, controller.login)
  *              type: object
  *              $ref: '#/components/schemas/user'
  */
-router.route('/users').post(uploadImage("usersImg", "array"), controller.createUser)
+router.route('/users').post(uploadImage("images", "array"), controller.createUser)
 
 /**
  * @swagger

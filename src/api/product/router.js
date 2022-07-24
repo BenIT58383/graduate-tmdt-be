@@ -55,7 +55,7 @@ const router = Router()
  */
 router
   .route('/stores/products')
-  .post(uploadImage("productsImg", "array"), controller.createProduct)
+  .post(uploadImage("images", "array"), controller.createProduct)
 
 /**
  * @swagger
@@ -192,7 +192,7 @@ router
  */
 router
   .route('/stores/products/:id')
-  .put(uploadImage("productsImg", "array"), controller.updateProduct)
+  .put(uploadImage("images", "array"), controller.updateProduct)
 
 /**
  * @swagger

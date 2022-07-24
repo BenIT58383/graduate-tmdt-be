@@ -2,10 +2,10 @@ const mkdirp = require("mkdirp");
 const multer = require("multer");
 
 const uploadImage = (type, kind) => {
-  const made = mkdirp.sync(`./src/public/images/${type}`);
+  // const made = mkdirp.sync(`./src/public/images/${type}`);
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, `./src/public/images/${type}`); // setup chổ cần lưu file
+      cb(null, `./src/images`); // setup chổ cần lưu file
     },
     filename: function (req, file, cb) {
       cb(null, Date.now() + "_" + file.originalname); // đặt lại tên cho file

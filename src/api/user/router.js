@@ -50,11 +50,11 @@ router.route('/register').post(validateContentType, controller.register)
  * @swagger
  * /login:
  *   post:
- *     description: create phone
+ *     description: login
  *     tags:
  *     - User
  *     requestBody:
- *       description: update user
+ *       description: login
  *       content:
  *         application/json:
  *            schema:
@@ -86,7 +86,7 @@ router.route('/login').post(validateContentType, controller.login)
  * @swagger
  * /users:
  *   post:
- *     description: create phone
+ *     description: create user
  *     tags:
  *     - User
  *     requestBody:
@@ -114,6 +114,15 @@ router.route('/login').post(validateContentType, controller.login)
  *                name:
  *                  type: string
  *                  in: body
+ *                image1:
+ *                  type: string
+ *                  in: body
+ *                image2:
+ *                  type: string
+ *                  in: body
+ *                image3:
+ *                  type: string
+ *                  in: body
  *                dateOfBirth:
  *                  type: string
  *                  in: body
@@ -121,14 +130,14 @@ router.route('/login').post(validateContentType, controller.login)
  *       allOf:
  *         - $ref: '#/components/responses/CommonChartErrorResponse'
  *       200:
- *         description: create phone
+ *         description: create user
  *         content:
  *          application/json:
  *            schema:
  *              type: object
  *              $ref: '#/components/schemas/user'
  */
-router.route('/users').post(uploadImage("images", "array"), controller.createUser)
+router.route('/users').post(validateContentType, controller.createUser)
 
 /**
  * @swagger
@@ -249,6 +258,15 @@ router
  *                  type: string
  *                  in: body
  *                name:
+ *                  type: string
+ *                  in: body
+ *                image1:
+ *                  type: string
+ *                  in: body
+ *                image2:
+ *                  type: string
+ *                  in: body
+ *                image3:
  *                  type: string
  *                  in: body
  *                dateOfBirth:

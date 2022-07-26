@@ -29,16 +29,15 @@ const createProduct = async (
   quantity,
   price,
   name,
+  image1, 
+  image2, 
+  image3, 
+  image4, 
+  image5,
   description,
   userId
 ) => {
   const res = {}
-
-  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
-  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
-  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
-  const image4 = files[3] ? `https://graduate-tmdt-be.herokuapp.com/${files[3].path}` : null;
-  const image5 = files[4] ? `https://graduate-tmdt-be.herokuapp.com/${files[4].path}` : null;
 
   const data = await ProductModel.create({
     storeId,
@@ -47,11 +46,11 @@ const createProduct = async (
     quantity,
     price,
     name,
-    image1: image1,
-    image2: image2,
-    image3: image3,
-    image4: image4,
-    image5: image5,
+    image1, 
+    image2, 
+    image3, 
+    image4, 
+    image5,
     description,
     status: ACTIVE_STATUS.ACTIVE,
     createdBy: userId,
@@ -135,7 +134,6 @@ const getListProduct = async (page, size, name, categoryId, storeId, description
 }
 
 const updateProduct = async (
-  files,
   id,
   storeId,
   categoryId,
@@ -144,17 +142,16 @@ const updateProduct = async (
   quantity,
   price,
   name,
+  image1, 
+  image2, 
+  image3, 
+  image4, 
+  image5,
   description,
   status,
   userId
 ) => {
   let res = {}
-
-  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
-  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
-  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
-  const image4 = files[3] ? `https://graduate-tmdt-be.herokuapp.com/${files[3].path}` : null;
-  const image5 = files[4] ? `https://graduate-tmdt-be.herokuapp.com/${files[4].path}` : null;
 
   const productExist = await ProductModel.findOne({ where: { id } })
   if (!productExist) {
@@ -173,11 +170,11 @@ const updateProduct = async (
       quantity,
       price,
       name,
-      image1: image1,
-      image2: image2,
-      image3: image3,
-      image4: image4,
-      image5: image5,
+      image1, 
+      image2, 
+      image3, 
+      image4, 
+      image5,
       description,
       status,
       updatedBy: userId,
@@ -206,7 +203,7 @@ const deleteProduct = async (id) => {
   return res
 }
 
-const createCategory = async (files, name, userId) => {
+const createCategory = async (name, userId) => {
   const res = {}
 
   if (name) {
@@ -219,15 +216,11 @@ const createCategory = async (files, name, userId) => {
     }
   }
 
-  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
-  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
-  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
-
   const data = await CategoryModel.create({
     name,
-    image1: image1,
-    image2: image2,
-    image3: image3,
+    image1,
+    image2,
+    image3,
     createdBy: userId,
   })
 
@@ -282,7 +275,7 @@ const getListCategory = async (page, size, name) => {
   return res
 }
 
-const updateCategory = async (files, id, name, userId) => {
+const updateCategory = async (id, name, image1, image2, image3, userId) => {
   let res = {}
 
   const categoryExist = await CategoryModel.findOne({ where: { id } })
@@ -293,16 +286,12 @@ const updateCategory = async (files, id, name, userId) => {
     )
   }
 
-  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
-  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
-  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
-
   const data = await CategoryModel.update(
     {
       name,
-      image1: image1,
-      image2: image2,
-      image3: image3,
+      image1,
+      image2,
+      image3,
       updatedBy: userId,
     },
     { where: { id } }

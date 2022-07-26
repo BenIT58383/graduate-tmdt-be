@@ -39,6 +39,21 @@ const router = Router()
  *                name:
  *                  type: string
  *                  in: body
+ *                image1:
+ *                  type: string
+ *                  in: body
+ *                image2:
+ *                  type: string
+ *                  in: body
+ *                image3:
+ *                  type: string
+ *                  in: body
+ *                image4:
+ *                  type: string
+ *                  in: body
+ *                image5:
+ *                  type: string
+ *                  in: body
  *                description:
  *                  type: string
  *                  in: body
@@ -55,7 +70,7 @@ const router = Router()
  */
 router
   .route('/stores/products')
-  .post(uploadImage("images", "array"), controller.createProduct)
+  .post(validateContentType, controller.createProduct)
 
 /**
  * @swagger
@@ -101,6 +116,26 @@ router
  *         schema:
  *           type: number
  *       - name: name
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: image1
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: image2
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: image3
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: image4
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: image5
  *         in: query
  *         schema:
  *           type: string
@@ -192,7 +227,7 @@ router
  */
 router
   .route('/stores/products/:id')
-  .put(uploadImage("images", "array"), controller.updateProduct)
+  .put(validateContentType, controller.updateProduct)
 
 /**
  * @swagger
@@ -239,6 +274,15 @@ router
  *                name:
  *                  type: string
  *                  in: body
+ *                image1:
+ *                  type: string
+ *                  in: body
+ *                image2:
+ *                  type: string
+ *                  in: body
+ *                image3:
+ *                  type: string
+ *                  in: body
  *     responses:
  *       allOf:
  *         - $ref: '#/components/responses/CommonChartErrorResponse'
@@ -250,7 +294,7 @@ router
  *              type: object
  *              $ref: '#/components/schemas/user'
  */
-router.route('/categories').post(uploadImage("images", "array"), controller.createCategory)
+router.route('/categories').post(validateContentType, controller.createCategory)
 
 /**
  * @swagger
@@ -341,7 +385,19 @@ router
  *                name:
  *                  type: string
  *                  in: body
- *                image:
+ *                image1:
+ *                  type: string
+ *                  in: body
+ *                image2:
+ *                  type: string
+ *                  in: body
+ *                image3:
+ *                  type: string
+ *                  in: body
+ *                image4:
+ *                  type: string
+ *                  in: body
+ *                image5:
  *                  type: string
  *                  in: body
  *     responses:
@@ -357,7 +413,7 @@ router
  */
 router
   .route('/categories/:id')
-  .put(uploadImage("images", "array"), controller.updateCategory)
+  .put(validateContentType, controller.updateCategory)
 
 /**
  * @swagger

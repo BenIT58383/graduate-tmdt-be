@@ -20,6 +20,7 @@ import UserModel from '../../sequelize/models/user'
 import OrderModel from '../../sequelize/models/order'
 import OrderDetailModel from '../../sequelize/models/order_detail'
 import ProductModel from '../../sequelize/models/product'
+import LogsModel from '../../sequelize/models/logs'
 import config from '../../common/config'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
@@ -45,6 +46,9 @@ const createOrder = async (userId, products, addressId, note, createdBy) => {
       },
       { transaction: tran }
     )
+
+    //create logs
+    await LogsModel.create({orderId: data.id},{transaction: tran})
 
     //handle products
     for (let product of products) {
@@ -206,6 +210,9 @@ const updateOrder = async (id, addressId, status, userId, userRole) => {
     if (!orderExist) {
       return MESSAGE_THROW_ERROR.ORDER_NOT_FOUND
     }
+
+    //create logs
+    await LogsModel.create({orderId: id},{transaction: tran})
 
     //check order status
     if (

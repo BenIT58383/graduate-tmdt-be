@@ -27,6 +27,15 @@ const router = Router()
  *                name:
  *                  type: string
  *                  in: body
+ *                image1:
+ *                  type: string
+ *                  in: body
+ *                image2:
+ *                  type: string
+ *                  in: body
+ *                image3:
+ *                  type: string
+ *                  in: body
  *                description:
  *                  type: string
  *                  in: body
@@ -139,6 +148,21 @@ router
  *              type: object
  *              properties:
  *                name:
+ *                  type: string
+ *                  in: body
+ *                image1:
+ *                  type: string
+ *                  in: body
+ *                image2:
+ *                  type: string
+ *                  in: body
+ *                image3:
+ *                  type: string
+ *                  in: body
+ *                description:
+ *                  type: string
+ *                  in: body
+ *                linkSupport:
  *                  type: string
  *                  in: body
  *                isActive:

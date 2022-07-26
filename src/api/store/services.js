@@ -24,7 +24,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import jwtHelper from '../../common/helpers/jwt-helper'
 
-const createStore = async (files, userId, name, description, linkSupport, createdBy) => {
+const createStore = async (files, userId, name, image1, image2, image3, description, linkSupport, createdBy) => {
   const res = {}
 
   const storeNameExist = await StoreModel.findOne({ where: { name } })
@@ -35,18 +35,14 @@ const createStore = async (files, userId, name, description, linkSupport, create
     )
   }
 
-  const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
-  const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
-  const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
-
   const data = await StoreModel.create({
     userId: userId ? userId : createdBy,
     name,
     description,
     linkSupport,
-    image1: image1,
-    image2: image2,
-    image3: image3,
+    image1,
+    image2,
+    image3,
     isActive: ACTIVE_STATUS.ACTIVE,
     createdBy: createdBy,
   })
@@ -116,7 +112,7 @@ const getListStore = async (page, size, name, userId, isActive) => {
   return res
 }
 
-const updateStore = async (files, id, userId, name, description, linkSupport, isActive, updatedBy) => {
+const updateStore = async (id, userId, name, image1, image2, image3, description, linkSupport, isActive, updatedBy) => {
   let res = {}
   let tran = await Sequelize.transaction()
 
@@ -126,17 +122,13 @@ const updateStore = async (files, id, userId, name, description, linkSupport, is
       return MESSAGE_THROW_ERROR.STORE_NOT_FOUND
     }
 
-    const image1 = files[0] ? `https://graduate-tmdt-be.herokuapp.com/${files[0].path}` : null;
-    const image2 = files[1] ? `https://graduate-tmdt-be.herokuapp.com/${files[1].path}` : null;
-    const image3 = files[2] ? `https://graduate-tmdt-be.herokuapp.com/${files[2].path}` : null;
-
     const data = await StoreModel.update(
       {
         userId: userId ? userId : updatedBy,
         name,
-        image1: image1,
-        image2: image2,
-        image3: image3,
+        image1,
+        image2,
+        image3,
         description,
         linkSupport,
         isActive,

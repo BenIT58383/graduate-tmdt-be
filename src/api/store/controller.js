@@ -16,7 +16,7 @@ const createStore = async (req, res, next) => {
   const { userId, name, image1, image2, image3, description, linkSupport } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .createStore(files, userId, name, image1, image2, image3, description, linkSupport, user.id)
+    .createStore(userId, name, image1, image2, image3, description, linkSupport, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -57,12 +57,11 @@ const getListStore = async (req, res, next) => {
 }
 
 const updateStore = async (req, res, next) => {
-  const { files } = req;
   const { id } = req.params
   const { userId, name, description, linkSupport, isActive } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateStore(files, id, userId, name, description, linkSupport, isActive, user.id)
+    .updateStore(id, userId, name, description, linkSupport, isActive, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

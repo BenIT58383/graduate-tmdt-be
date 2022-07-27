@@ -22,7 +22,6 @@ import bcrypt from 'bcrypt'
 import jwtHelper from '../../common/helpers/jwt-helper'
 
 const createProduct = async (
-  files,
   storeId,
   categoryId,
   unitId,

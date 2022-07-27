@@ -17,7 +17,6 @@ const createProduct = async (req, res, next) => {
   const user = await CommonHelper.getUserFromRequest(req)
   service
     .createProduct(
-      files,
       storeId,
       categoryId,
       unitId,
@@ -78,7 +77,6 @@ const updateProduct = async (req, res, next) => {
   const user = await CommonHelper.getUserFromRequest(req)
   service
     .updateProduct(
-      files,
       id,
       storeId,
       categoryId,
@@ -124,7 +122,7 @@ const createCategory = async (req, res, next) => {
   const { name, image1, image2, image3 } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .createCategory(files, name, image1, image2, image3, user.id)
+    .createCategory(name, image1, image2, image3, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -169,7 +167,7 @@ const updateCategory = async (req, res, next) => {
   const { name, image1, image2, image3 } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateCategory(files, id, name, image1, image2, image3, user.id)
+    .updateCategory(id, name, image1, image2, image3, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

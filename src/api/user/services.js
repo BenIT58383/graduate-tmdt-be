@@ -248,7 +248,7 @@ const getListUsers = async (page, size, code, name, phone, email, userName) => {
 }
 
 const updateUser = async (
-  files, id, userName, phone, email, password, role, avatar, name, image1, image2, image3, dateOfBirth, status, isOnline, userId
+  id, userName, phone, email, password, role, avatar, name, image1, image2, image3, dateOfBirth, status, isOnline, userId
 ) => {
   let res = {}
   let pass = ''

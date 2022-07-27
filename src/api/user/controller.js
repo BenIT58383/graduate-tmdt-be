@@ -59,7 +59,7 @@ const updateUser = async (req, res, next) => {
   const { userName, phone, email, password, role, name, image1, image2, image3, dateOfBirth, status, isOnline } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateUser(files, id, userName, phone, email, password, role, name, image1, image2, image3, dateOfBirth, status, isOnline, user.id)
+    .updateUser(id, userName, phone, email, password, role, name, image1, image2, image3, dateOfBirth, status, isOnline, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

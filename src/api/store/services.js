@@ -24,7 +24,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import jwtHelper from '../../common/helpers/jwt-helper'
 
-const createStore = async (files, userId, name, image1, image2, image3, description, linkSupport, createdBy) => {
+const createStore = async (userId, name, image1, image2, image3, description, linkSupport, createdBy) => {
   const res = {}
 
   const storeNameExist = await StoreModel.findOne({ where: { name } })

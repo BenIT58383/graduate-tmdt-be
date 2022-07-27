@@ -119,26 +119,6 @@ router
  *         in: query
  *         schema:
  *           type: string
- *       - name: image1
- *         in: query
- *         schema:
- *           type: string
- *       - name: image2
- *         in: query
- *         schema:
- *           type: string
- *       - name: image3
- *         in: query
- *         schema:
- *           type: string
- *       - name: image4
- *         in: query
- *         schema:
- *           type: string
- *       - name: image5
- *         in: query
- *         schema:
- *           type: string
  *       - name: categoryId
  *         in: query
  *         schema:
@@ -206,6 +186,21 @@ router
  *                  type: number
  *                  in: body
  *                name:
+ *                  type: string
+ *                  in: body
+ *                image1:
+ *                  type: string
+ *                  in: body
+ *                image2:
+ *                  type: string
+ *                  in: body
+ *                image3:
+ *                  type: string
+ *                  in: body
+ *                image4:
+ *                  type: string
+ *                  in: body
+ *                image5:
  *                  type: string
  *                  in: body
  *                description:
@@ -392,12 +387,6 @@ router
  *                  type: string
  *                  in: body
  *                image3:
- *                  type: string
- *                  in: body
- *                image4:
- *                  type: string
- *                  in: body
- *                image5:
  *                  type: string
  *                  in: body
  *     responses:

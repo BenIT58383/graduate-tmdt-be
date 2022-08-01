@@ -254,9 +254,6 @@ router
  *                role:
  *                  type: number
  *                  in: body
- *                avatar:
- *                  type: string
- *                  in: body
  *                name:
  *                  type: string
  *                  in: body

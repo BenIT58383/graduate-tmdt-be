@@ -177,7 +177,7 @@ const createUser = async (
 const getDetailUser = async (id) => {
   let res = {}
 
-  let queryString = `SELECT id, user_name as userName, phone, email, role, image1, image2, image3, name, dateOfBirth
+  let queryString = `SELECT id, user_name as userName, phone, email, role, image1, image2, image3, name,
   date_of_birth as dateOfBirth, status, is_online as isOnline,
   created_at as createdAt, updated_at as updatedAt
   from user where id = '${id}'`

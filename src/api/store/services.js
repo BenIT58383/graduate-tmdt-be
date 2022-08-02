@@ -43,7 +43,7 @@ const createStore = async (userId, name, image1, image2, image3, description, li
     image1,
     image2,
     image3,
-    isActive: ACTIVE_STATUS.ACTIVE,
+    isActive: ACTIVE_STATUS.IN_ACTIVE,
     createdBy: createdBy,
   })
 
@@ -121,6 +121,7 @@ const updateStore = async (id, userId, name, image1, image2, image3, description
     if (!storeExist) {
       return MESSAGE_THROW_ERROR.STORE_NOT_FOUND
     }
+    console.log(111111, userId);
 
     const data = await StoreModel.update(
       {
@@ -149,7 +150,7 @@ const updateStore = async (id, userId, name, image1, image2, image3, description
     return res
   } catch (error) {
     await tran.rollback()
-    throw new APIError(error, httpStatus.BAD_REQUEST)
+    throw new APIError("cập nhật thất bại", httpStatus.BAD_REQUEST)
   }
 }
 

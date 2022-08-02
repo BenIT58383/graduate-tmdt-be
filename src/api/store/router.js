@@ -147,6 +147,9 @@ router
  *            schema:
  *              type: object
  *              properties:
+ *                userId:
+ *                  type: string
+ *                  in: body
  *                name:
  *                  type: string
  *                  in: body
@@ -179,7 +182,7 @@ router
  *              type: object
  *              $ref: '#/components/schemas/user'
  */
-router.route('/stores/:id').put(uploadImage("images", "array"), controller.updateStore)
+router.route('/stores/:id').put(validateContentType, controller.updateStore)
 
 /**
  * @swagger

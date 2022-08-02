@@ -58,10 +58,11 @@ const getListStore = async (req, res, next) => {
 
 const updateStore = async (req, res, next) => {
   const { id } = req.params
-  const { userId, name, description, linkSupport, isActive } = req.body
+  const { userId, name, image1, image2, image3, description, linkSupport, isActive } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
+
   service
-    .updateStore(id, userId, name, description, linkSupport, isActive, user.id)
+    .updateStore(id, userId, name, image1, image2, image3, description, linkSupport, isActive, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

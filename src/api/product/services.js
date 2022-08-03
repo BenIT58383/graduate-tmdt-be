@@ -28,10 +28,10 @@ const createProduct = async (
   quantity,
   price,
   name,
-  image1, 
-  image2, 
-  image3, 
-  image4, 
+  image1,
+  image2,
+  image3,
+  image4,
   image5,
   description,
   userId
@@ -45,10 +45,10 @@ const createProduct = async (
     quantity,
     price,
     name,
-    image1, 
-    image2, 
-    image3, 
-    image4, 
+    image1,
+    image2,
+    image3,
+    image4,
     image5,
     description,
     status: ACTIVE_STATUS.ACTIVE,
@@ -67,9 +67,11 @@ const getDetailProduct = async (id) => {
   pd.created_at as createdAt, pd.created_by as createdBy, pd.updated_at as updatedAt, pd.updated_by as updatedBy,
   st.name as storeName,
   c.name as categoryName,
-  u.name as unitName
+  u.name as unitName,
+  us.name as userName, us.phone, us.email
   FROM product pd
   JOIN store st ON pd.store_id = st.id
+  LEFT JOIN user us ON us.id = st.user_id 
   JOIN category c ON pd.category_id = c.id
   JOIN unit u ON pd.unit_id = u.id
   WHERE pd.id = '${id}'`
@@ -141,10 +143,10 @@ const updateProduct = async (
   quantity,
   price,
   name,
-  image1, 
-  image2, 
-  image3, 
-  image4, 
+  image1,
+  image2,
+  image3,
+  image4,
   image5,
   description,
   status,
@@ -169,10 +171,10 @@ const updateProduct = async (
       quantity,
       price,
       name,
-      image1, 
-      image2, 
-      image3, 
-      image4, 
+      image1,
+      image2,
+      image3,
+      image4,
       image5,
       description,
       status,

@@ -74,11 +74,11 @@ const login = async (userNamePhone, email, password) => {
     userEmail = await UserModel.findOne({ where: { email }, raw: true })
   }
 
-  if (!!userName || bcrypt.compareSync(password, userName.password)) {
+  if (userName && bcrypt.compareSync(password, userName.password)) {
     user = userName
-  } else if (!!userPhone || bcrypt.compareSync(password, userPhone.password)) {
+  } else if (userPhone || bcrypt.compareSync(password, userPhone.password)) {
     user = userPhone
-  } else if (!!userEmail || bcrypt.compareSync(password, userEmail.password)) {
+  } else if (userEmail || bcrypt.compareSync(password, userEmail.password)) {
     user = userEmail
   } else {
     throw new APIError(

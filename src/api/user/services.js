@@ -66,19 +66,19 @@ const login = async (userNamePhone, email, password) => {
   let user = {}
 
   if (userNamePhone) {
-    userName = await UserModel.findOne({ where: { userName: userNamePhone } })
-    userPhone = await UserModel.findOne({ where: { phone: userNamePhone } })
+    userName = await UserModel.findOne({ where: { userName: userNamePhone }, raw: true })
+    userPhone = await UserModel.findOne({ where: { phone: userNamePhone }, raw: true })
   }
 
   if (email) {
-    userEmail = await UserModel.findOne({ where: { email } })
+    userEmail = await UserModel.findOne({ where: { email }, raw: true })
   }
 
-  if (userName && bcrypt.compareSync(password, userName.password)) {
+  if (!!userName && bcrypt.compareSync(password, userName.password)) {
     user = userName
-  } else if (userPhone && bcrypt.compareSync(password, userPhone.password)) {
+  } else if (!!userPhone || bcrypt.compareSync(password, userPhone.password)) {
     user = userPhone
-  } else if (userEmail && bcrypt.compareSync(password, userEmail.password)) {
+  } else if (!!userEmail || bcrypt.compareSync(password, userEmail.password)) {
     user = userEmail
   } else {
     throw new APIError(

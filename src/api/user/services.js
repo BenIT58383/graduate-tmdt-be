@@ -74,7 +74,7 @@ const login = async (userNamePhone, email, password) => {
     userEmail = await UserModel.findOne({ where: { email }, raw: true })
   }
 
-  if (!!userName && bcrypt.compareSync(password, userName.password)) {
+  if (!!userName || bcrypt.compareSync(password, userName.password)) {
     user = userName
   } else if (!!userPhone || bcrypt.compareSync(password, userPhone.password)) {
     user = userPhone

@@ -177,10 +177,13 @@ const createUser = async (
 const getDetailUser = async (id) => {
   let res = {}
 
-  let queryString = `SELECT id, user_name as userName, phone, email, role, image1, image2, image3, name,
-  date_of_birth as dateOfBirth, status, is_online as isOnline,
-  created_at as createdAt, updated_at as updatedAt
-  from user where id = '${id}'`
+  let queryString = `SELECT us.id, us.user_name as userName, us.phone, us.email, us.role, us.image1, us.image2, us.image3, us.name,
+  us.date_of_birth as dateOfBirth, us.status, us.is_online as isOnline,
+  us.created_at as createdAt, us.updated_at as updatedAt,
+  st.id as storeId
+  from user us
+  left join store st on st.user_id = us.id
+  where us.id = '${id}'`
 
   const data = await Sequelize.query(queryString, {
     type: Sequelize.QueryTypes.SELECT,

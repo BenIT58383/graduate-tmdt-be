@@ -248,9 +248,6 @@ router
  *                email:
  *                  type: string
  *                  in: body
- *                password:
- *                  type: string
- *                  in: body
  *                role:
  *                  type: number
  *                  in: body
@@ -287,6 +284,42 @@ router
  *              $ref: '#/components/schemas/user'
  */
 router.route('/users/:id').put(validateContentType, controller.updateUser)
+
+/**
+ * @swagger
+ * /users/update-password/{id}:
+ *   put:
+ *     description: update password user
+ *     tags:
+ *     - User
+ *     parameters:
+ *      - name: id
+ *        in: path
+ *        schema:
+ *          type: string
+ *        required: true
+ *     requestBody:
+ *       description: update password user
+ *       content:
+ *         application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                password:
+ *                  type: string
+ *                  in: body
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: user info.
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/user'
+ */
+ router.route('/users/update-password/:id').put(validateContentType, controller.updatePasswordUser)
 
 /**
  * @swagger

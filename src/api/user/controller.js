@@ -56,10 +56,26 @@ const createUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   const { id } = req.params
-  const { userName, phone, email, password, role, name, image1, image2, image3, dateOfBirth, status, isOnline } = req.body
+  const { userName, phone, email, role, name, image1, image2, image3, dateOfBirth, status, isOnline } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateUser(id, userName, phone, email, password, role, name, image1, image2, image3, dateOfBirth, status, isOnline, user.id)
+    .updateUser(id, userName, phone, email, role, name, image1, image2, image3, dateOfBirth, status, isOnline, user.id)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
+const updatePasswordUser = async (req, res, next) => {
+  const { id } = req.params
+  const { password } = req.body
+  const user = await CommonHelper.getUserFromRequest(req)
+  service
+    .updatePasswordUser(id, password, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -209,6 +225,7 @@ export default {
   login,
   createUser,
   updateUser,
+  updatePasswordUser,
   getDetailUser,
   getListUsers,
   deleteUser,

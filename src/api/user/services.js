@@ -17,6 +17,7 @@ import config from '../../common/config'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import jwtHelper from '../../common/helpers/jwt-helper'
+import dayjs from 'dayjs'
 
 const register = async (userName, phone, email, password) => {
   const res = {}
@@ -244,6 +245,13 @@ const getListUsers = async (page, size, code, name, phone, email, userName) => {
   const data = await Sequelize.query(queryString, {
     type: Sequelize.QueryTypes.SELECT,
   })
+
+  if (data && data.length > 0) {
+    for (let item of data) {
+      item.createdAt = dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')
+      item.updatedAt = dayjs(item.updatedAt).format('DD/MM/YYYY HH:mm:ss')
+    }
+  }
 
   res.total = data.length
   res.users = data.slice(offset, offset + size)

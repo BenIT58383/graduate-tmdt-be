@@ -148,7 +148,7 @@ app.use(function (req, res, next) {
   )
   next()
 })
-// app.use(authorityCheck)
+app.use(authorityCheck)
 
 // Mount all api routes
 app.use('/', routes)

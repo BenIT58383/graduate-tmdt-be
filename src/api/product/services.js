@@ -204,7 +204,7 @@ const deleteProduct = async (id) => {
   return res
 }
 
-const createCategory = async (name, userId) => {
+const createCategory = async (name, image1, image2, image3, userId) => {
   const res = {}
 
   if (name) {

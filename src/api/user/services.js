@@ -251,7 +251,39 @@ const getListUsers = async (page, size, code, name, phone, email, userName) => {
 }
 
 const updateUser = async (
-  id, userName, phone, email, password, role, name, image1, image2, image3, dateOfBirth, status, isOnline, userId
+  id, userName, phone, email, role, name, image1, image2, image3, dateOfBirth, status, isOnline, userId
+) => {
+  let res = {}
+
+  const userExist = await UserModel.findOne({ where: { id } })
+  if (!userExist) {
+    throw new APIError(MESSAGE_THROW_ERROR.USER_NOT_FOUND, httpStatus.NOT_FOUND)
+  }
+
+  const data = await UserModel.update(
+    {
+      userName,
+      phone,
+      email,
+      role,
+      name,
+      image1,
+      image2,
+      image3,
+      dateOfBirth,
+      status,
+      isOnline,
+      updatedBy: userId,
+    },
+    { where: { id } }
+  )
+
+  res.data = data
+  return res
+}
+
+const updatePasswordUser = async (
+  id, password, userId
 ) => {
   let res = {}
   let pass = ''
@@ -267,18 +299,7 @@ const updateUser = async (
 
   const data = await UserModel.update(
     {
-      userName,
-      phone,
-      email,
       password: pass,
-      role,
-      name,
-      image1,
-      image2,
-      image3,
-      dateOfBirth,
-      status,
-      isOnline,
       updatedBy: userId,
     },
     { where: { id } }
@@ -452,6 +473,7 @@ export default {
   login,
   createUser,
   updateUser,
+  updatePasswordUser,
   getDetailUser,
   getListUsers,
   deleteUser,

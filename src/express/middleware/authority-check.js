@@ -36,7 +36,7 @@ const authorityCheck = (req, res, next) => {
     token = token.substring(7, token.length)
   }
   // Check authentization
-  if (path == '/login' || path == '/register') {
+  if (path === '/login' || path === '/register' || path === '/stores/products' || path === '/users/update-password') {
     return next()
   }
 

@@ -57,6 +57,60 @@ router.route('/orders').post(validateContentType, controller.createOrder)
 
 /**
  * @swagger
+ * /orders-v1:
+ *   post:
+ *     description: create order
+ *     tags:
+ *     - Order
+ *     requestBody:
+ *       description: create order
+ *       content:
+ *         application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                userId:
+ *                  type: string
+ *                  in: body
+ *                orders:
+ *                  type: array
+ *                  items: 
+ *                    type: object
+ *                    properties:
+ *                      products:
+ *                        type: array
+ *                        items:
+ *                          type: object
+ *                          properties:
+ *                            id:
+ *                              type: string
+ *                            storeId:
+ *                              type: string
+ *                            quantity:
+ *                              type: number
+ *                            price:
+ *                              type: number
+ *                      addressId:
+ *                        type: string
+ *                        in: body
+ *                      note:
+ *                        type: string
+ *                        in: body
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: create order
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/user'
+ */
+router.route('/orders-v1').post(validateContentType, controller.createOrderV1)
+
+/**
+ * @swagger
  * /orders/{id}:
  *   get:
  *     description: Get detail order.

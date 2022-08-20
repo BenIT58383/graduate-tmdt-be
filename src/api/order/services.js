@@ -48,7 +48,7 @@ const createOrder = async (userId, products, addressId, note, createdBy) => {
     )
 
     //create logs
-    await LogsModel.create({orderId: data.id},{transaction: tran})
+    await LogsModel.create({ orderId: data.id }, { transaction: tran })
 
     //handle products
     for (let product of products) {
@@ -87,6 +87,81 @@ const createOrder = async (userId, products, addressId, note, createdBy) => {
     }
 
     res.order = data
+    await tran.commit()
+    return res
+  } catch (error) {
+    await tran.rollback()
+    throw new APIError(error, httpStatus.BAD_REQUEST)
+  }
+}
+
+const createOrderV1 = async (body, createdBy) => {
+  let tran = await Sequelize.transaction()
+  try {
+    const res = {}
+
+    if (!products || products.length == 0) {
+      return MESSAGE_THROW_ERROR.PRODUCT_NOT_EMPTY
+    }
+
+    for (let order of body.orders) {
+      //create order
+      const data = await OrderModel.create(
+        {
+          userId: body.userId,
+          addressId: order.addressId,
+          status: CONFIG_ORDER_STATUS.NEW,
+          note: order.note,
+          createdBy: createdBy,
+        },
+        { transaction: tran }
+      )
+
+      //create logs
+      await LogsModel.create({ orderId: data.id }, { transaction: tran })
+
+      //handle products
+      for (let product of order.products) {
+        const productExist = await ProductModel.findOne({
+          where: { id: product.id },
+          transaction: tran,
+        })
+
+        //check exist product
+        if (!productExist) {
+          await tran.rollback()
+          return MESSAGE_THROW_ERROR.PRODUCT_NOTFOUND
+        }
+
+        //check validate
+        if (productExist.quantity < product.quantity) {
+          await tran.rollback()
+          return MESSAGE_THROW_ERROR.QUANTITY_PRODUCT_AND_ORDER
+        }
+
+        //create order detail
+        await OrderDetailModel.create(
+          {
+            orderId: data.id,
+            productId: product.id,
+            storeId: product.storeId,
+            quantity: product.quantity,
+            price: product.price,
+            createdBy: createdBy,
+          },
+          { transaction: tran }
+        )
+
+        //update product
+        await ProductModel.update(
+          { quantity: productExist.quantity - product.quantity },
+          { where: { id: product.id }, transaction: tran }
+        )
+      }
+      res.order = data
+
+    }
+
     await tran.commit()
     return res
   } catch (error) {
@@ -212,7 +287,7 @@ const updateOrder = async (id, addressId, status, userId, userRole) => {
     }
 
     //create logs
-    await LogsModel.create({orderId: id},{transaction: tran})
+    await LogsModel.create({ orderId: id }, { transaction: tran })
 
     //check order status
     if (
@@ -252,6 +327,7 @@ const updateOrder = async (id, addressId, status, userId, userRole) => {
 
 export default {
   createOrder,
+  createOrderV1,
   getDetailOrder,
   getListOrder,
   updateOrder,

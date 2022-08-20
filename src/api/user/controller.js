@@ -71,8 +71,7 @@ const updateUser = async (req, res, next) => {
 }
 
 const updatePasswordUser = async (req, res, next) => {
-  const { id } = req.params
-  const { password } = req.body
+  const { id, password } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
     .updatePasswordUser(id, password, user.id)

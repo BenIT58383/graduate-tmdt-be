@@ -27,6 +27,21 @@ const createOrder = async (req, res, next) => {
     })
 }
 
+const createOrderV1 = async (req, res, next) => {
+
+  const user = await CommonHelper.getUserFromRequest(req)
+  service
+    .createOrder(req.body, user.id)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
 const getDetailOrder = async (req, res, next) => {
   const { id } = req.params
   service
@@ -77,4 +92,5 @@ export default {
   getDetailOrder,
   getListOrder,
   updateOrder,
+  createOrderV1
 }

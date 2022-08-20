@@ -43,7 +43,6 @@ const getDetailStore = async (req, res, next) => {
 
 const getListStore = async (req, res, next) => {
   const { page, size, name, userId, isActive } = req.query
-  const user = await CommonHelper.getUserFromRequest(req)
   service
     .getListStore(page, size, name, userId, isActive)
     .then((data) => {

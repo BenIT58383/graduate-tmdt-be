@@ -20,7 +20,6 @@ import jwtHelper from '../../common/helpers/jwt-helper'
 import dayjs from 'dayjs'
 
 const register = async (userName, phone, email, password) => {
-  const res = {}
 
   if (email) {
     const emailExist = await UserModel.findOne({ where: { email } })
@@ -56,7 +55,12 @@ const register = async (userName, phone, email, password) => {
     type: 1,
   })
 
-  res.user = data
+  let res = {
+    userName: data.userName,
+    phone: data.phone,
+    email: data.email,
+  }
+
   return res
 }
 

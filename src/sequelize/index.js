@@ -4,10 +4,10 @@ import config from '../common/config/index.js'
 const masterDb = new Sequelize(null, null, null, {
   dialect: 'mysql',
   dialect: 'mysql',
-  host: 'db.cpvgp05jwwhk.ap-southeast-1.rds.amazonaws.com',
+  host: '127.0.0.1',
   port: '3306',
-  username: 'admin',
-  password: 'Benit789',
+  username: 'ben',
+  password: '123456',
   database: 'graduate',
   define: {
     underscored: false,

@@ -9,6 +9,75 @@ const router = Router()
 
 /**
  * @swagger
+ * /login:
+ *   post:
+ *     description: login
+ *     tags:
+ *     - User
+ *     requestBody:
+ *       description: login
+ *       content:
+ *         application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                userNamePhone:
+ *                  type: string
+ *                  in: body
+ *                email:
+ *                  type: string
+ *                  in: body
+ *                password:
+ *                  type: string
+ *                  in: body
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: create phone
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/user'
+ */
+router.route('/login').post(validateContentType, controller.login)
+
+/**
+ * @swagger
+ * /users/update-password:
+ *   put:
+ *     description: update password user
+ *     tags:
+ *     - User
+ *     requestBody:
+ *       description: update password user
+ *       content:
+ *         application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                id:
+ *                  type: string
+ *                  in: body
+ *                password:
+ *                  type: string
+ *                  in: body
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: user info.
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/user'
+ */
+router.route('/users/update-password').put(validateContentType, controller.updatePasswordUser)
+
+/**
+ * @swagger
  * /register:
  *   post:
  *     description: register
@@ -45,42 +114,6 @@ const router = Router()
  *              $ref: '#/components/schemas/user'
  */
 router.route('/register').post(validateContentType, controller.register)
-
-/**
- * @swagger
- * /login:
- *   post:
- *     description: login
- *     tags:
- *     - User
- *     requestBody:
- *       description: login
- *       content:
- *         application/json:
- *            schema:
- *              type: object
- *              properties:
- *                userNamePhone:
- *                  type: string
- *                  in: body
- *                email:
- *                  type: string
- *                  in: body
- *                password:
- *                  type: string
- *                  in: body
- *     responses:
- *       allOf:
- *         - $ref: '#/components/responses/CommonChartErrorResponse'
- *       200:
- *         description: create phone
- *         content:
- *          application/json:
- *            schema:
- *              type: object
- *              $ref: '#/components/schemas/user'
- */
-router.route('/login').post(validateContentType, controller.login)
 
 /**
  * @swagger
@@ -284,42 +317,6 @@ router
  *              $ref: '#/components/schemas/user'
  */
 router.route('/users/:id').put(validateContentType, controller.updateUser)
-
-/**
- * @swagger
- * /users/update-password/{id}:
- *   put:
- *     description: update password user
- *     tags:
- *     - User
- *     parameters:
- *      - name: id
- *        in: path
- *        schema:
- *          type: string
- *        required: true
- *     requestBody:
- *       description: update password user
- *       content:
- *         application/json:
- *            schema:
- *              type: object
- *              properties:
- *                password:
- *                  type: string
- *                  in: body
- *     responses:
- *       allOf:
- *         - $ref: '#/components/responses/CommonChartErrorResponse'
- *       200:
- *         description: user info.
- *         content:
- *          application/json:
- *            schema:
- *              type: object
- *              $ref: '#/components/schemas/user'
- */
- router.route('/users/update-password/:id').put(validateContentType, controller.updatePasswordUser)
 
 /**
  * @swagger

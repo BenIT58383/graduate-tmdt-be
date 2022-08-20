@@ -4,8 +4,8 @@ import sequelize from 'sequelize'
 import { masterDb as sequelizeInstance } from '..'
 import { ORDER_CODE_LENGTH } from '../../common/constant'
 
-const Store = sequelizeInstance.define(
-  'store',
+const Logs = sequelizeInstance.define(
+  'logs',
   {
     id: {
       type: sequelize.UUIDV4(36),
@@ -41,7 +41,7 @@ const Store = sequelizeInstance.define(
     },
   },
   {
-    tableName: 'store',
+    tableName: 'logs',
   }
 )
-export default Store
+export default Logs

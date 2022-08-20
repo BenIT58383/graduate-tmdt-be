@@ -100,11 +100,13 @@ const createOrderV1 = async (body, createdBy) => {
   try {
     const res = {}
 
-    if (!products || products.length == 0) {
-      return MESSAGE_THROW_ERROR.PRODUCT_NOT_EMPTY
-    }
-
     for (let order of body.orders) {
+
+      if (!order.products || order.products.length == 0) {
+        await tran.rollback()
+        return MESSAGE_THROW_ERROR.PRODUCT_NOT_EMPTY
+      }
+
       //create order
       const data = await OrderModel.create(
         {

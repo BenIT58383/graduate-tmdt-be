@@ -177,9 +177,11 @@ const getDetailOrder = async (id) => {
   let totalPrice = 0
 
   const dataOrderDetail = await Sequelize.query(
-    `SELECT odd.product_id, odd.quantity, odd.price, odd.store_id 
-      FROM graduate.order_detail odd
-      WHERE odd.order_id = '${id}'`,
+    `SELECT odd.product_id, odd.quantity, odd.price, odd.store_id, 
+     pd.name, pd.image1, pd.image2, pd.image3, pd.image4, pd.image5
+     FROM graduate.order_detail odd
+     JOIN graduate.product pd ON pd.id = odd.product_id
+     WHERE odd.order_id = '${id}'`,
     {
       type: Sequelize.QueryTypes.SELECT,
     }
@@ -250,8 +252,10 @@ const getListOrder = async (page, size, userId, storeId, status) => {
 
   if (data && data.length) {
     for (let order of data) {
-      let sql = `SELECT odd.product_id, odd.quantity, odd.price, odd.store_id 
+      let sql = `SELECT odd.product_id, odd.quantity, odd.price, odd.store_id, 
+      pd.name, pd.image1, pd.image2, pd.image3, pd.image4, pd.image5
       FROM graduate.order_detail odd
+      JOIN graduate.product pd ON pd.id = odd.product_id
       WHERE odd.order_id = '${order.id}'`
 
       if (storeId) {

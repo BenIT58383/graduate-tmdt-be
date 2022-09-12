@@ -20,7 +20,7 @@ const Logs = sequelizeInstance.define(
       field: 'order_id',
     },
     createdAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'created_at',
     },
@@ -30,7 +30,7 @@ const Logs = sequelizeInstance.define(
       field: 'created_by',
     },
     updatedAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'updated_at',
     },

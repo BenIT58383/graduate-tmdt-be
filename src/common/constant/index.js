@@ -49,3 +49,9 @@ export const ACTIVE_STATUS = {
   IN_ACTIVE: 0,
   ACTIVE: 1,
 }
+
+export const STATUS_STORE = {
+  WAITING_FOR_APPROVED: 0,
+  ACTIVE: 1,
+  IN_ACTIVE: 2,
+}

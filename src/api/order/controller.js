@@ -57,7 +57,6 @@ const getDetailOrder = async (req, res, next) => {
 
 const getListOrder = async (req, res, next) => {
   const { page, size, userId, storeId, status } = req.query
-  const user = await CommonHelper.getUserFromRequest(req)
   service
     .getListOrder(page, size, userId, storeId, status)
     .then((data) => {
@@ -86,10 +85,25 @@ const updateOrder = async (req, res, next) => {
     })
 }
 
+const getTotalOrder = async (req, res, next) => {
+  const { userId, storeId } = req.query
+  service
+    .getTotalOrder(userId, storeId)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
 export default {
   createOrder,
   getDetailOrder,
   getListOrder,
   updateOrder,
-  createOrderV1
+  createOrderV1,
+  getTotalOrder
 }

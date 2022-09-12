@@ -84,7 +84,7 @@ router.route('/stores/:id').get(validateContentType, controller.getDetailStore)
  * @swagger
  * /stores:
  *   get:
- *     description: Get list product.
+ *     description: Get list stores.
  *     tags:
  *     - Store
  *     parameters:
@@ -96,7 +96,7 @@ router.route('/stores/:id').get(validateContentType, controller.getDetailStore)
  *         in: query
  *         schema:
  *           type: number
- *       - name: name
+ *       - name: search
  *         in: query
  *         schema:
  *           type: string
@@ -104,10 +104,18 @@ router.route('/stores/:id').get(validateContentType, controller.getDetailStore)
  *         in: query
  *         schema:
  *           type: string
- *       - name: isActive
+ *       - name: status
  *         in: query
  *         schema:
  *           type: number
+ *       - name: startDate
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: endDate
+ *         in: query
+ *         schema:
+ *           type: string
  *     responses:
  *       allOf:
  *         - $ref: '#/components/responses/CommonChartErrorResponse'
@@ -168,7 +176,7 @@ router
  *                linkSupport:
  *                  type: string
  *                  in: body
- *                isActive:
+ *                status:
  *                  type: number
  *                  in: body
  *     responses:

@@ -20,6 +20,7 @@ import config from '../../common/config'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import jwtHelper from '../../common/helpers/jwt-helper'
+import dayjs from 'dayjs'
 
 const createProduct = async (
   storeId,
@@ -53,6 +54,7 @@ const createProduct = async (
     description,
     status: ACTIVE_STATUS.ACTIVE,
     createdBy: userId,
+    createdAt: new Date(),
   })
 
   res.user = data
@@ -129,6 +131,14 @@ const getListProduct = async (page, size, name, categoryId, storeId, description
     type: Sequelize.QueryTypes.SELECT,
   })
 
+  //handle data
+  if (data && data.length > 0) {
+    for (let item of data) {
+      item.createdAt = dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')
+      item.updatedAt = dayjs(item.updatedAt).format('DD/MM/YYYY HH:mm:ss')
+    }
+  }
+
   res.total = data.length
   res.products = data.slice(offset, offset + size)
   return res
@@ -179,6 +189,7 @@ const updateProduct = async (
       description,
       status,
       updatedBy: userId,
+      updatedAt: new Date(),
     },
     { where: { id } }
   )
@@ -223,6 +234,7 @@ const createCategory = async (name, image1, image2, image3, userId) => {
     image2,
     image3,
     createdBy: userId,
+    createdAt: new Date(),
   })
 
   res.user = data
@@ -271,6 +283,14 @@ const getListCategory = async (page, size, name) => {
     type: Sequelize.QueryTypes.SELECT,
   })
 
+  //handle data
+  if (data && data.length > 0) {
+    for (let item of data) {
+      item.createdAt = dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')
+      item.updatedAt = dayjs(item.updatedAt).format('DD/MM/YYYY HH:mm:ss')
+    }
+  }
+
   res.total = data.length
   res.categories = data.slice(offset, offset + size)
   return res
@@ -294,6 +314,7 @@ const updateCategory = async (id, name, image1, image2, image3, userId) => {
       image2,
       image3,
       updatedBy: userId,
+      updatedAt: new Date()
     },
     { where: { id } }
   )
@@ -331,6 +352,7 @@ const createUnit = async (userId, name, description) => {
     name,
     description,
     createdBy: userId,
+    createdAt: new Date(),
   })
 
   res.user = data
@@ -359,6 +381,14 @@ const getListUnit = async (page, size, name, description) => {
   const data = await Sequelize.query(queryString, {
     type: Sequelize.QueryTypes.SELECT,
   })
+
+  //handle data
+  if (data && data.length > 0) {
+    for (let item of data) {
+      item.createdAt = dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')
+      item.updatedAt = dayjs(item.updatedAt).format('DD/MM/YYYY HH:mm:ss')
+    }
+  }
 
   res.total = data.length
   res.units = data.slice(offset, offset + size)

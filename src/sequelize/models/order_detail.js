@@ -40,7 +40,7 @@ const OrderDetail = sequelizeInstance.define(
       field: 'price',
     },
     createdAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'created_at',
     },
@@ -50,7 +50,7 @@ const OrderDetail = sequelizeInstance.define(
       field: 'created_by',
     },
     updatedAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'updated_at',
     },

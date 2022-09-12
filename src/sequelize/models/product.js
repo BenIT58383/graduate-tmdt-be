@@ -85,7 +85,7 @@ const Product = sequelizeInstance.define(
       field: 'status',
     },
     createdAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'created_at',
     },
@@ -95,7 +95,7 @@ const Product = sequelizeInstance.define(
       field: 'created_by',
     },
     updatedAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'updated_at',
     },

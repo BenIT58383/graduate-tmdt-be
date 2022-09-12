@@ -22,9 +22,7 @@ import OrderDetailModel from '../../sequelize/models/order_detail'
 import ProductModel from '../../sequelize/models/product'
 import LogsModel from '../../sequelize/models/logs'
 import config from '../../common/config'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
-import jwtHelper from '../../common/helpers/jwt-helper'
+import dayjs from 'dayjs'
 
 const createOrder = async (userId, products, addressId, note, createdBy) => {
   let tran = await Sequelize.transaction()
@@ -43,6 +41,7 @@ const createOrder = async (userId, products, addressId, note, createdBy) => {
         status: CONFIG_ORDER_STATUS.NEW,
         note,
         createdBy: createdBy,
+        createdAt: new Date()
       },
       { transaction: tran }
     )
@@ -75,6 +74,7 @@ const createOrder = async (userId, products, addressId, note, createdBy) => {
           quantity: product.quantity,
           price: product.price,
           createdBy: createdBy,
+          createdAt: new Date()
         },
         { transaction: tran }
       )
@@ -115,6 +115,7 @@ const createOrderV1 = async (body, createdBy) => {
           status: CONFIG_ORDER_STATUS.NEW,
           note: order.note,
           createdBy: createdBy,
+          createdAt: new Date()
         },
         { transaction: tran }
       )
@@ -150,6 +151,7 @@ const createOrderV1 = async (body, createdBy) => {
             quantity: product.quantity,
             price: product.price,
             createdBy: createdBy,
+            createdAt: new Date()
           },
           { transaction: tran }
         )
@@ -178,9 +180,11 @@ const getDetailOrder = async (id) => {
 
   const dataOrderDetail = await Sequelize.query(
     `SELECT odd.product_id, odd.quantity, odd.price, odd.store_id, 
-     pd.name, pd.image1, pd.image2, pd.image3, pd.image4, pd.image5
+     pd.name, pd.image1, pd.image2, pd.image3, pd.image4, pd.image5,
+     st.image1 as image_store, st.name as name_store
      FROM graduate.order_detail odd
      JOIN graduate.product pd ON pd.id = odd.product_id
+     JOIN graduate.store st ON st.id = odd.store_id
      WHERE odd.order_id = '${id}'`,
     {
       type: Sequelize.QueryTypes.SELECT,
@@ -212,6 +216,9 @@ const getDetailOrder = async (id) => {
   }
   data[0].products = dataOrderDetail
   data[0].totalPrice = totalPrice
+  data[0].store_id = dataOrderDetail[0].store_id
+  data[0].image_store = dataOrderDetail[0].image_store
+  data[0].name_store = dataOrderDetail[0].name_store
 
   res.order = data[0]
   return res
@@ -222,7 +229,7 @@ const getListOrder = async (page, size, userId, storeId, status) => {
   let offset = (page - 1) * size
   let totalPrice = 0
 
-  let queryString = `SELECT od.id, od.code, od.user_id as userId, od.status, od.note,
+  let queryOrder = `SELECT od.id, od.code, od.user_id as userId, od.status, od.note,
   od.created_at as createdAt, od.created_by as createdBy, od.updated_at as updatedAt, od.updated_by as updatedBy,
   us.name as userName,
   od.address_id as addressId, ad.customer_name as customerName, ad.phone as customerPhone, ad.location
@@ -233,29 +240,30 @@ const getListOrder = async (page, size, userId, storeId, status) => {
   WHERE true `
 
   if (userId) {
-    queryString += ` and od.user_id = '${userId}' `
+    queryOrder += ` and od.user_id = '${userId}' `
   }
 
   if (storeId) {
-    queryString += ` and odd.store_id = '${storeId}' `
+    queryOrder += ` and odd.store_id = '${storeId}' `
   }
 
   if (status) {
-    queryString += ` and od.status = '${status}' `
+    queryOrder += ` and od.status = '${status}' `
   }
 
-  queryString += ` group by od.id order by od.created_at desc`
+  queryOrder += ` group by od.id order by od.updated_at desc`
 
-  const data = await Sequelize.query(queryString, {
+  const data = await Sequelize.query(queryOrder, {
     type: Sequelize.QueryTypes.SELECT,
   })
 
   if (data && data.length) {
     for (let order of data) {
       let sql = `SELECT odd.product_id, odd.quantity, odd.price, odd.store_id, 
-      pd.name, pd.image1, pd.image2, pd.image3, pd.image4, pd.image5
+      pd.name, pd.image1, pd.image2, pd.image3, pd.image4, pd.image5, st.image1 as image_store, st.name as name_store
       FROM graduate.order_detail odd
       JOIN graduate.product pd ON pd.id = odd.product_id
+      JOIN graduate.store st ON st.id = odd.store_id
       WHERE odd.order_id = '${order.id}'`
 
       if (storeId) {
@@ -272,11 +280,22 @@ const getListOrder = async (page, size, userId, storeId, status) => {
 
       order.products = dataOrderDetail
       order.totalPrice = totalPrice
+      order.store_id = dataOrderDetail[0].store_id
+      order.image_store = dataOrderDetail[0].image_store
+      order.name_store = dataOrderDetail[0].name_store
+    }
+  }
+
+  //handle data
+  if (data && data.length > 0) {
+    for (let item of data) {
+      item.createdAt = dayjs(item.createdAt).format('DD/MM/YYYY HH:mm:ss')
+      item.updatedAt = dayjs(item.updatedAt).format('DD/MM/YYYY HH:mm:ss')
     }
   }
 
   res.total = data.length
-  res.products = data.slice(offset, offset + size)
+  res.orders = data.slice(offset, offset + size)
   return res
 }
 
@@ -284,10 +303,12 @@ const updateOrder = async (id, addressId, status, userId, userRole) => {
   let res = {}
   let tran = await Sequelize.transaction()
   try {
+
     const orderExist = await OrderModel.findOne({
       where: { id },
       transaction: tran,
     })
+
     if (!orderExist) {
       return MESSAGE_THROW_ERROR.ORDER_NOT_FOUND
     }
@@ -297,10 +318,7 @@ const updateOrder = async (id, addressId, status, userId, userRole) => {
 
     //check order status
     if (
-      orderExist.status in
-      [CONFIG_ORDER_STATUS.CANCEL, CONFIG_ORDER_STATUS.FINISHED] ||
-      (orderExist.status === CONFIG_ORDER_STATUS.PROCESSING &&
-        userRole === USER_ROLE.CUSTOMER)
+      orderExist.status == CONFIG_ORDER_STATUS.CANCEL || orderExist.status == CONFIG_ORDER_STATUS.FINISHED
     ) {
       return MESSAGE_THROW_ERROR.ORDER_DO_NOT_HANDLE
     }
@@ -315,12 +333,12 @@ const updateOrder = async (id, addressId, status, userId, userRole) => {
       { where: { id }, transaction: tran }
     )
 
-    if (status === 0) {
-      await OrderDetailModel.destroy({
-        where: { orderId: id },
-        transaction: tran,
-      })
-    }
+    // if (status === 0) {
+    //   await OrderDetailModel.destroy({
+    //     where: { orderId: id },
+    //     transaction: tran,
+    //   })
+    // }
 
     res.data = data
     await tran.commit()
@@ -331,10 +349,65 @@ const updateOrder = async (id, addressId, status, userId, userRole) => {
   }
 }
 
+const getTotalOrder = async (userId, storeId) => {
+
+  let queryOrder = `SELECT count(DISTINCT od.id) as total
+    FROM graduate.order_detail odd
+    JOIN graduate.order od on od.id = odd.order_id 
+    JOIN graduate.user us ON us.id = od.user_id
+    JOIN graduate.address ad ON ad.id = od.address_id
+    where true`
+
+  let sqlCancelOrder = queryOrder
+  let sqlNewOrder = queryOrder
+  let sqlProcessingOrder = queryOrder
+  let sqlFinishOrder = queryOrder
+
+  if (userId) {
+    sqlCancelOrder += ` and od.user_id = '${userId}' and od.status = 0`
+    sqlNewOrder += ` and od.user_id = '${userId}' and od.status = 1`
+    sqlProcessingOrder += ` and od.user_id = '${userId}' and od.status = 2`
+    sqlFinishOrder += ` and od.user_id = '${userId}' and od.status = 3`
+  }
+
+  if (storeId) {
+    sqlCancelOrder += ` and odd.store_id = '${storeId}' and od.status = 0`
+    sqlNewOrder += ` and odd.store_id = '${storeId}' and od.status = 1`
+    sqlProcessingOrder += ` and odd.store_id = '${storeId}' and od.status = 2`
+    sqlFinishOrder += ` and odd.store_id = '${storeId}' and od.status = 3`
+  }
+
+  const dataCancelOrder = await Sequelize.query(sqlCancelOrder, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+  const dataNewOrder = await Sequelize.query(sqlNewOrder, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+  const dataProcessingOrder = await Sequelize.query(sqlProcessingOrder, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+  const dataFinishOrder = await Sequelize.query(sqlFinishOrder, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+  let result = {}
+
+  result.cancelOrder = dataCancelOrder[0].total
+  result.newOrder = dataNewOrder[0].total
+  result.processingOrder = dataProcessingOrder[0].total
+  result.finishOrder = dataFinishOrder[0].total
+
+  return result
+}
+
 export default {
   createOrder,
   createOrderV1,
   getDetailOrder,
   getListOrder,
   updateOrder,
+  getTotalOrder
 }

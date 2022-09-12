@@ -10,7 +10,7 @@ import {
   ForbiddenError,
 } from '../../common/helpers/api-error'
 import { masterDb as Sequelize } from '../../sequelize/index'
-import { MESSAGE_THROW_ERROR, USER_TYPE } from '../../common/constant/index'
+import { MESSAGE_THROW_ERROR, USER_ROLE, ACTIVE_STATUS, CONFIG_TIME } from '../../common/constant/index'
 import UserModel from '../../sequelize/models/user'
 import AddressModel from '../../sequelize/models/address'
 import config from '../../common/config'
@@ -52,7 +52,8 @@ const register = async (userName, phone, email, password) => {
     phone,
     email,
     password: pass,
-    type: 1,
+    status: ACTIVE_STATUS.ACTIVE,
+    role: USER_ROLE.CUSTOMER
   })
 
   let res = {
@@ -128,7 +129,8 @@ const createUser = async (
   image1,
   image2,
   image3,
-  dateOfBirth
+  dateOfBirth,
+  userId
 ) => {
   const res = {}
 
@@ -172,7 +174,9 @@ const createUser = async (
     image2,
     image3,
     name,
-    dateOfBirth
+    dateOfBirth,
+    createdBy: userId,
+    createdAt: new Date(),
   })
 
   res.user = data
@@ -185,7 +189,7 @@ const getDetailUser = async (id) => {
   let queryString = `SELECT us.id, us.user_name as userName, us.phone, us.email, us.role, us.image1, us.image2, us.image3, us.name,
   us.date_of_birth as dateOfBirth, us.status, us.is_online as isOnline,
   us.created_at as createdAt, us.updated_at as updatedAt,
-  st.id as storeId
+  st.id as storeId, st.name as storeName
   from user us
   left join store st on st.user_id = us.id
   where us.id = '${id}'`
@@ -198,11 +202,14 @@ const getDetailUser = async (id) => {
     throw new APIError(MESSAGE_THROW_ERROR.USER_NOT_FOUND, httpStatus.NOT_FOUND)
   }
 
+  data[0].createdAt = dayjs(data.createdAt).format('DD/MM/YYYY HH:mm:ss')
+  data[0].updatedAt = dayjs(data.updatedAt).format('DD/MM/YYYY HH:mm:ss')
+
   res.user = data[0]
   return res
 }
 
-const getListUsers = async (page, size, code, name, phone, email, userName) => {
+const getListUsers = async (page, size, search, status, startDate, endDate) => {
   // if (user == '') {
   //   throw new APIError(MESSAGE_THROW_ERROR.LOGIN, httpStatus.FORBIDDEN)
   // }
@@ -224,27 +231,27 @@ const getListUsers = async (page, size, code, name, phone, email, userName) => {
   from user
   where true `
 
-  if (code) {
-    queryString += ` and code like '%${code}%' `
+  if (search) {
+    queryString += ` 
+    and (name like '%${search}%'
+    or phone like '%${search}%'
+    or email like '%${search}%'
+    or user_name like '%${search}%') `
   }
 
-  if (name) {
-    queryString += ` and name like '%${name}%' `
+  if (status) {
+    queryString += ` and status = ${status} `
   }
 
-  if (phone) {
-    queryString += ` and phone like '%${phone}%' `
+  if (startDate) {
+    queryString += ` and created_at >= '${startDate} ${CONFIG_TIME.START_TIME}' `
   }
 
-  if (email) {
-    queryString += ` and email like '%${email}%' `
+  if (endDate) {
+    queryString += ` and created_at <= '${endDate} ${CONFIG_TIME.END_TIME}' `
   }
 
-  if (userName) {
-    queryString += ` and user_name like '%${userName}%' `
-  }
-
-  queryString += ` order by created_at desc`
+  queryString += ` order by createdAt desc`
 
   const data = await Sequelize.query(queryString, {
     type: Sequelize.QueryTypes.SELECT,
@@ -258,12 +265,13 @@ const getListUsers = async (page, size, code, name, phone, email, userName) => {
   }
 
   res.total = data.length
-  res.users = data.slice(offset, offset + size)
+  // res.users = data.slice(offset, offset + size)
+  res.users = data
   return res
 }
 
 const updateUser = async (
-  id, userName, phone, email, role, name, image1, image2, image3, dateOfBirth, status, isOnline, userId
+  id, userName, phone, email, role, name, image1, image2, image3, dateOfBirth, status, isOnline, userId, password
 ) => {
   let res = {}
 
@@ -285,7 +293,9 @@ const updateUser = async (
       dateOfBirth,
       status,
       isOnline,
+      password,
       updatedBy: userId,
+      updatedAt: new Date()
     },
     { where: { id } }
   )
@@ -355,6 +365,7 @@ const createAddress = async (
     isDefault,
     type,
     createdBy: userId,
+    createdAt: new Date()
   })
 
   res.address = data
@@ -455,6 +466,7 @@ const updateAddress = async (
       isDefault,
       type,
       updatedBy: userId,
+      updatedAt: new Date()
     },
     { where: { id } }
   )

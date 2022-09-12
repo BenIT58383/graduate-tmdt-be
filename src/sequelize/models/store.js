@@ -39,10 +39,10 @@ const Store = sequelizeInstance.define(
       allowNull: true,
       field: 'image3',
     },
-    isActive: {
+    status: {
       type: sequelize.INTEGER(),
       allowNull: true,
-      field: 'is_active',
+      field: 'status',
     },
     description: {
       type: sequelize.STRING(),
@@ -55,7 +55,7 @@ const Store = sequelizeInstance.define(
       field: 'link_support',
     },
     createdAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'created_at',
     },
@@ -65,7 +65,7 @@ const Store = sequelizeInstance.define(
       field: 'created_by',
     },
     updatedAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'updated_at',
     },

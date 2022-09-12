@@ -42,8 +42,9 @@ const login = async (req, res, next) => {
 
 const createUser = async (req, res, next) => {
   const { userName, phone, email, password, role, name, image1, image2, image3, dateOfBirth } = req.body
+  const user = await CommonHelper.getUserFromRequest(req)
   service
-    .createUser(userName, phone, email, password, role, name, image1, image2, image3, dateOfBirth)
+    .createUser(userName, phone, email, password, role, name, image1, image2, image3, dateOfBirth, user.id)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -56,10 +57,10 @@ const createUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   const { id } = req.params
-  const { userName, phone, email, role, name, image1, image2, image3, dateOfBirth, status, isOnline } = req.body
+  const { userName, phone, email, role, name, image1, image2, image3, dateOfBirth, status, isOnline, password } = req.body
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .updateUser(id, userName, phone, email, role, name, image1, image2, image3, dateOfBirth, status, isOnline, user.id)
+    .updateUser(id, userName, phone, email, role, name, image1, image2, image3, dateOfBirth, status, isOnline, user.id, password)
     .then((data) => {
       return new APISuccess(res, {
         data: data,
@@ -100,9 +101,9 @@ const getDetailUser = async (req, res, next) => {
 }
 
 const getListUsers = async (req, res, next) => {
-  const { page, size, code, name, phone, email, userName } = req.query
+  const { page, size, search, status, startDate, endDate } = req.query
   service
-    .getListUsers(page, size, code, name, phone, email, userName)
+    .getListUsers(page, size, search, status, startDate, endDate)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

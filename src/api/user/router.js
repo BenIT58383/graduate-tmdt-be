@@ -213,23 +213,19 @@ router.route('/users/:id').get(validateContentType, controller.getDetailUser)
  *         in: query
  *         schema:
  *           type: number
- *       - name: code
+ *       - name: search
  *         in: query
  *         schema:
  *           type: string
- *       - name: name
+ *       - name: status
  *         in: query
  *         schema:
  *           type: string
- *       - name: userName
+ *       - name: startDate
  *         in: query
  *         schema:
  *           type: string
- *       - name: phone
- *         in: query
- *         schema:
- *           type: string
- *       - name: email
+ *       - name: endDate
  *         in: query
  *         schema:
  *           type: string
@@ -304,6 +300,9 @@ router
  *                  in: body
  *                isOnline:
  *                  type: number
+ *                  in: body
+ *                password:
+ *                  type: string
  *                  in: body
  *     responses:
  *       allOf:

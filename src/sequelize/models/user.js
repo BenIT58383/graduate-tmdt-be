@@ -80,12 +80,12 @@ const User = sequelizeInstance.define(
       field: 'is_online',
     },
     createdAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'created_at',
     },
     updatedAt: {
-      type: sequelize.STRING(),
+      type: sequelize.TIME(),
       allowNull: true,
       field: 'updated_at',
     },

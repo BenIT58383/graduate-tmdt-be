@@ -13,8 +13,10 @@ import {
 import { masterDb as Sequelize } from '../../sequelize/index'
 import {
   MESSAGE_THROW_ERROR,
-  ACTIVE_STATUS,
   USER_ROLE,
+  STATUS_STORE,
+  CONFIG_TIME,
+  ACTIVE_STATUS
 } from '../../common/constant/index'
 import UserModel from '../../sequelize/models/user'
 import ProductModel from '../../sequelize/models/product'
@@ -44,8 +46,9 @@ const createStore = async (userId, name, image1, image2, image3, description, li
     image1,
     image2,
     image3,
-    isActive: ACTIVE_STATUS.IN_ACTIVE,
+    status: STATUS_STORE.WAITING_FOR_APPROVED,
     createdBy: createdBy,
+    createdAt: new Date(),
   })
 
   res.user = data
@@ -55,7 +58,7 @@ const createStore = async (userId, name, image1, image2, image3, description, li
 const getDetailStore = async (id) => {
   let res = {}
 
-  let queryString = `SELECT st.id, st.user_id as userId, st.name as storeName, st.is_active as isActive, 
+  let queryString = `SELECT st.id, st.user_id as userId, st.name as storeName, st.status, 
   st.image1, st.image2, st.image3, st.description, st.link_support as linkSupport,
   st.created_at as createdAt, st.created_by as createdBy, st.updated_at as updatedAt, st.updated_by as updatedBy,
   us.name as userName
@@ -78,11 +81,11 @@ const getDetailStore = async (id) => {
   return res
 }
 
-const getListStore = async (page, size, name, userId, isActive) => {
+const getListStore = async (page, size, search, userId, status, startDate, endDate) => {
   let res = {}
   let offset = (page - 1) * size
 
-  let queryString = `SELECT st.id, st.user_id as userId, st.name as storeName, st.is_active as isActive, 
+  let queryString = `SELECT st.id, st.user_id as userId, st.name as storeName, st.status, 
   st.image1, st.image2, st.image3, st.description, st.link_support as linkSupport,
   st.created_at as createdAt, st.created_by as createdBy, st.updated_at as updatedAt, st.updated_by as updatedBy,
   us.name as userName
@@ -90,16 +93,24 @@ const getListStore = async (page, size, name, userId, isActive) => {
   LEFT JOIN user us ON us.id = st.user_id
   WHERE true`
 
-  if (name) {
-    queryString += ` and st.name like '%${name}%' `
+  if (search) {
+    queryString += ` and (st.name like '%${search}%' or st.description like '%${search}%' or us.name like '%${search}%') `
   }
 
   if (userId) {
     queryString += ` and st.user_id = '${userId}' `
   }
 
-  if (isActive) {
-    queryString += ` and st.is_active = '${isActive}' `
+  if (status) {
+    queryString += ` and st.status = '${status}' `
+  }
+
+  if (startDate) {
+    queryString += ` and st.created_at >= '${startDate} ${CONFIG_TIME.START_TIME}' `
+  }
+
+  if (endDate) {
+    queryString += ` and st.created_at <= '${endDate} ${CONFIG_TIME.END_TIME}' `
   }
 
   queryString += ` order by st.created_at desc`
@@ -120,7 +131,7 @@ const getListStore = async (page, size, name, userId, isActive) => {
   return res
 }
 
-const updateStore = async (id, userId, name, image1, image2, image3, description, linkSupport, isActive, updatedBy) => {
+const updateStore = async (id, userId, name, image1, image2, image3, description, linkSupport, status, updatedBy) => {
   let res = {}
   let tran = await Sequelize.transaction()
 
@@ -129,7 +140,6 @@ const updateStore = async (id, userId, name, image1, image2, image3, description
     if (!storeExist) {
       return MESSAGE_THROW_ERROR.STORE_NOT_FOUND
     }
-    console.log(111111, userId);
 
     const data = await StoreModel.update(
       {
@@ -140,16 +150,28 @@ const updateStore = async (id, userId, name, image1, image2, image3, description
         image3,
         description,
         linkSupport,
-        isActive,
+        status,
         updatedBy: updatedBy,
+        updatedAt: new Date(),
       },
       { where: { id: id }, transaction: tran }
     )
-
-    if (isActive === ACTIVE_STATUS.ACTIVE) {
+    //handle update role for user
+    if (status === STATUS_STORE.ACTIVE) {
       await UserModel.update(
         { role: USER_ROLE.STORE },
-        { where: { id: userId }, transaction: tran }
+        { where: { id: userId ? userId : updatedBy, status: ACTIVE_STATUS.ACTIVE }, transaction: tran }
+      )
+    }
+
+    const storeOfUserExist = await StoreModel.findAll({
+      where: { userId: userId ? userId : updatedBy, status: STATUS_STORE.ACTIVE },
+    })
+
+    if (storeOfUserExist.length === 0) {
+      await UserModel.update(
+        { role: USER_ROLE.CUSTOMER },
+        { where: { id: userId ? userId : updatedBy, status: ACTIVE_STATUS.ACTIVE }, transaction: tran }
       )
     }
 

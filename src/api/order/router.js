@@ -8,6 +8,40 @@ const router = Router()
 
 /**
  * @swagger
+ * /orders/total:
+ *   get:
+ *     description: Get total Order.
+ *     tags:
+ *     - Order
+ *     parameters:
+ *       - name: userId
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: storeId
+ *         in: query
+ *         schema:
+ *           type: string
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: Get total.
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/banners'
+ */
+router
+  .route('/orders/total')
+  .get(
+    validateContentType,
+    controller.getTotalOrder
+  )
+
+/**
+ * @swagger
  * /orders:
  *   post:
  *     description: create order

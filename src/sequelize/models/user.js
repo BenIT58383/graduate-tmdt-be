@@ -74,11 +74,6 @@ const User = sequelizeInstance.define(
       allowNull: true,
       field: 'status',
     },
-    isOnline: {
-      type: sequelize.STRING(),
-      allowNull: true,
-      field: 'is_online',
-    },
     createdAt: {
       type: sequelize.TIME(),
       allowNull: true,

@@ -16,7 +16,8 @@ import {
   USER_ROLE,
   STATUS_STORE,
   CONFIG_TIME,
-  ACTIVE_STATUS
+  ACTIVE_STATUS,
+  CONFIG_ORDER_STATUS
 } from '../../common/constant/index'
 import UserModel from '../../sequelize/models/user'
 import ProductModel from '../../sequelize/models/product'
@@ -61,9 +62,9 @@ const getDetailStore = async (id) => {
   let queryString = `SELECT st.id, st.user_id as userId, st.name as storeName, st.status, 
   st.image1, st.image2, st.image3, st.description, st.link_support as linkSupport,
   st.created_at as createdAt, st.created_by as createdBy, st.updated_at as updatedAt, st.updated_by as updatedBy,
-  us.name as userName
+  us.name as userName, us.phone
   FROM store st
-  LEFT JOIN user us ON us.id = st.user_id
+  JOIN user us ON us.id = st.user_id
   WHERE st.id = '${id}'`
 
   const data = await Sequelize.query(queryString, {
@@ -77,7 +78,7 @@ const getDetailStore = async (id) => {
     )
   }
 
-  res.user = data[0]
+  res.store = data[0]
   return res
 }
 
@@ -144,13 +145,13 @@ const updateStore = async (id, userId, name, image1, image2, image3, description
     const data = await StoreModel.update(
       {
         userId: userId ? userId : updatedBy,
-        name,
-        image1,
-        image2,
-        image3,
-        description,
-        linkSupport,
-        status,
+        name: name ? name : storeExist.name,
+        image1: image1 ? image1 : storeExist.image1,
+        image2: image2 ? image2 : storeExist.image2,
+        image3: image3 ? image3 : storeExist.image3,
+        description: description ? description : storeExist.description,
+        linkSupport: linkSupport ? linkSupport : storeExist.linkSupport,
+        status: status ? status : storeExist.status,
         updatedBy: updatedBy,
         updatedAt: new Date(),
       },
@@ -213,10 +214,96 @@ const deleteStore = async (id, userId) => {
   return res
 }
 
+const getStatistical = async (storeId, startDate, endDate) => {
+  let res = {}
+
+  //get total money
+  let queryTotalBenefit = `select sum(odd.quantity * odd.price) as total
+  from graduate.order od 
+  join graduate.order_detail odd on odd.order_id = od.id
+  where odd.store_id = '${storeId}' and od.status = ${CONFIG_ORDER_STATUS.FINISHED}`
+
+  const totalBenefit = await Sequelize.query(queryTotalBenefit, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+  //get list category
+  let sqlCategory = `select DISTINCT ct.id, ct.name  
+  from graduate.product pd
+  join graduate.category ct on ct.id = pd.category_id
+  where pd.store_id = '${storeId}'`
+
+  const list_category = await Sequelize.query(sqlCategory, {
+    type: Sequelize.QueryTypes.SELECT,
+  })
+
+
+  let totalMoneySaleSeed = 0
+  let totalMoneySaleFruit = 0
+  let totalMoneySaleVegetables = 0
+  let totalMoneySaleVegetables1 = 0
+  let totalMoneySaleRice = 0
+  let totalMoneySaleIngredient = 0
+  let totalMoneySaleIngredient1 = 0
+  let other = 0
+
+  for (let category of list_category) {
+
+    let sqlTotalBenefitByCategory = `select sum(odd.price * odd.quantity) as total 
+    from graduate.order od
+    join graduate.order_detail odd on odd.order_id = od.id
+    join graduate.product pd on pd.id = odd.product_id
+    where odd.store_id = '${storeId}' and od.status = ${CONFIG_ORDER_STATUS.FINISHED} and pd.category_id = '${category.id}'`
+
+    const totalBenefitByCategory = await Sequelize.query(sqlTotalBenefitByCategory, {
+      type: Sequelize.QueryTypes.SELECT,
+    })
+
+    switch (category.name) {
+      case 'Hạt':
+        totalMoneySaleSeed = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+        break;
+      case 'Rau củ':
+        totalMoneySaleVegetables = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+        break;
+      case 'Trái cây':
+        totalMoneySaleFruit = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+        break;
+      case 'Rau xanh':
+        totalMoneySaleVegetables1 = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+        break;
+      case 'Gạo':
+        totalMoneySaleRice = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+        break;
+      case 'Nguyên liệu':
+        totalMoneySaleIngredient = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+        break;
+      case 'Gia vị':
+        totalMoneySaleIngredient1 = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+        break;
+      default:
+        other = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+    }
+  }
+
+  res.totalBenefit = totalBenefit[0].total
+  res.totalMoneySaleSeed = totalMoneySaleSeed
+  res.totalMoneySaleFruit = totalMoneySaleFruit
+  res.totalMoneySaleVegetables = totalMoneySaleVegetables
+  res.totalMoneySaleVegetables1 = totalMoneySaleVegetables1
+  res.totalMoneySaleRice = totalMoneySaleRice
+  res.totalMoneySaleIngredient = totalMoneySaleIngredient
+  res.totalMoneySaleIngredient1 = totalMoneySaleIngredient1
+  res.other = other
+
+  return res
+}
+
 export default {
   createStore,
   getDetailStore,
   getListStore,
   updateStore,
   deleteStore,
+  getStatistical
 }

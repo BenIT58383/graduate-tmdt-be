@@ -87,10 +87,25 @@ const deleteStore = async (req, res, next) => {
     })
 }
 
+const getStatistical = async (req, res, next) => {
+  const { storeId, startDate, endDate } = req.query
+  service
+    .getStatistical(storeId, startDate, endDate)
+    .then((data) => {
+      return new APISuccess(res, {
+        data: data,
+      })
+    })
+    .catch((err) => {
+      next(err)
+    })
+}
+
 export default {
   createStore,
   getDetailStore,
   getListStore,
   updateStore,
   deleteStore,
+  getStatistical
 }

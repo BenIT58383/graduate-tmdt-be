@@ -101,7 +101,7 @@ const login = async (userNamePhone, email, password) => {
     role: user.role,
   }
 
-  const token = jwt.sign(dataForAccessToken, 'ben$author', {
+  const token = jwt.sign(dataForAccessToken, config.ACCESS_TOKEN_SECRET, {
     expiresIn: '120d',
   })
 
@@ -113,6 +113,9 @@ const login = async (userNamePhone, email, password) => {
     avatar: user.avatar,
     name: user.name,
     birthDay: user.birthDay,
+    image1: user.image1,
+    image2: user.image2,
+    image3: user.image3,
     token: token
   }
 
@@ -175,6 +178,7 @@ const createUser = async (
     image3,
     name,
     dateOfBirth,
+    status: ACTIVE_STATUS.ACTIVE,
     createdBy: userId,
     createdAt: new Date(),
   })
@@ -187,7 +191,7 @@ const getDetailUser = async (id) => {
   let res = {}
 
   let queryString = `SELECT us.id, us.user_name as userName, us.phone, us.email, us.role, us.image1, us.image2, us.image3, us.name,
-  us.date_of_birth as dateOfBirth, us.status, us.is_online as isOnline,
+  us.date_of_birth as dateOfBirth, us.status,
   us.created_at as createdAt, us.updated_at as updatedAt,
   st.id as storeId, st.name as storeName
   from user us
@@ -226,7 +230,7 @@ const getListUsers = async (page, size, search, status, startDate, endDate) => {
   let offset = (page - 1) * size
 
   let queryString = `SELECT id, user_name as userName, phone, email, role, image1, image2, image3, name,
-  date_of_birth as dateOfBirth, status, is_online as isOnline,
+  date_of_birth as dateOfBirth, status,
   created_at as createdAt, updated_at as updatedAt
   from user
   where true `
@@ -274,26 +278,32 @@ const updateUser = async (
   id, userName, phone, email, role, name, image1, image2, image3, dateOfBirth, status, isOnline, userId, password
 ) => {
   let res = {}
+  let pass = ''
 
-  const userExist = await UserModel.findOne({ where: { id } })
+  const userExist = await UserModel.findOne({ where: { id: id } })
+
   if (!userExist) {
     throw new APIError(MESSAGE_THROW_ERROR.USER_NOT_FOUND, httpStatus.NOT_FOUND)
   }
 
+  if (password) {
+    pass = bcrypt.hashSync(password, 10)
+  }
+
   const data = await UserModel.update(
     {
-      userName,
-      phone,
-      email,
-      role,
-      name,
-      image1,
-      image2,
-      image3,
-      dateOfBirth,
-      status,
-      isOnline,
-      password,
+      userName: userName ? userName : userExist.userName,
+      phone: phone ? phone : userExist.phone,
+      email: email ? email : userExist.email,
+      role: role ? role : userExist.role,
+      name: name ? name : userExist.name,
+      image1: image1 ? image1 : userExist.image1,
+      image2: image2 ? image2 : userExist.image2,
+      image3: image3 ? image3 : userExist.image3,
+      dateOfBirth: dateOfBirth ? dateOfBirth : userExist.dateOfBirth,
+      status: status ? status : userExist.status,
+      isOnline: isOnline ? isOnline : userExist.isOnline,
+      password: pass ? pass : userExist.password,
       updatedBy: userId,
       updatedAt: new Date()
     },

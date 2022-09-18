@@ -47,7 +47,7 @@ const createOrder = async (userId, products, addressId, note, createdBy) => {
     )
 
     //create logs
-    await LogsModel.create({ orderId: data.id }, { transaction: tran })
+    // await LogsModel.create({ orderId: data.id }, { transaction: tran })
 
     //handle products
     for (let product of products) {
@@ -121,7 +121,7 @@ const createOrderV1 = async (body, createdBy) => {
       )
 
       //create logs
-      await LogsModel.create({ orderId: data.id }, { transaction: tran })
+      // await LogsModel.create({ orderId: data.id }, { transaction: tran })
 
       //handle products
       for (let product of order.products) {
@@ -197,10 +197,13 @@ const getDetailOrder = async (id) => {
 
   let queryString = `SELECT od.id, od.code, od.user_id as userId, od.status, od.note,
   od.created_at as createdAt, od.created_by as createdBy, od.updated_at as updatedAt, od.updated_by as updatedBy,
-  us.name as userName, 
+  us1.name as userName, us.phone as phone_store,
   od.address_id as addressId, ad.customer_name as customerName, ad.phone as customerPhone, ad.location
   FROM graduate.order od 
-  JOIN graduate.user us ON us.id = od.user_id
+  JOIN graduate.order_detail odd ON odd.order_id = od.id
+  JOIN graduate.store st ON st.id = odd.store_id
+  JOIN graduate.user us ON us.id = st.user_id
+  JOIN graduate.user us1 ON us1.id = od.user_id
   JOIN graduate.address ad ON ad.id = od.address_id
   WHERE od.id = '${id}'`
 
@@ -214,11 +217,14 @@ const getDetailOrder = async (id) => {
       httpStatus.NOT_FOUND
     )
   }
+
   data[0].products = dataOrderDetail
   data[0].totalPrice = totalPrice
   data[0].store_id = dataOrderDetail[0].store_id
   data[0].image_store = dataOrderDetail[0].image_store
   data[0].name_store = dataOrderDetail[0].name_store
+  data[0].createdAt = dayjs(data[0].createdAt).format('DD/MM/YYYY HH:mm:ss')
+  data[0].updatedAt = dayjs(data[0].updatedAt).format('DD/MM/YYYY HH:mm:ss')
 
   res.order = data[0]
   return res
@@ -314,7 +320,7 @@ const updateOrder = async (id, addressId, status, userId, userRole) => {
     }
 
     //create logs
-    await LogsModel.create({ orderId: id }, { transaction: tran })
+    // await LogsModel.create({ orderId: id }, { transaction: tran })
 
     //check order status
     if (
@@ -409,5 +415,5 @@ export default {
   getDetailOrder,
   getListOrder,
   updateOrder,
-  getTotalOrder
+  getTotalOrder,
 }

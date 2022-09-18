@@ -6,6 +6,43 @@ import validation from './validation'
 const { uploadImage } = require("../../express/middleware/upload-img");
 
 const router = Router()
+/**
+ * @swagger
+ * /stores/statistical:
+ *   get:
+ *     description: Get statistical.
+ *     tags:
+ *     - Store
+ *     parameters:
+ *       - name: storeId
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: startDate
+ *         in: query
+ *         schema:
+ *           type: string
+ *       - name: endDate
+ *         in: query
+ *         schema:
+ *           type: string
+ *     responses:
+ *       allOf:
+ *         - $ref: '#/components/responses/CommonChartErrorResponse'
+ *       200:
+ *         description: Get statistical.
+ *         content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              $ref: '#/components/schemas/banners'
+ */
+router
+  .route('/stores/statistical')
+  .get(
+    validateContentType,
+    controller.getStatistical
+  )
 
 /**
  * @swagger

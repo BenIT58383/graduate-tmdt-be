@@ -93,7 +93,7 @@ const getDetailProduct = async (id) => {
   return res
 }
 
-const getListProduct = async (page, size, name, categoryId, storeId, description) => {
+const getListProduct = async (page, size, name, categoryId, storeId, description, status) => {
   let res = {}
   let offset = (page - 1) * size
 
@@ -123,6 +123,10 @@ const getListProduct = async (page, size, name, categoryId, storeId, description
 
   if (description) {
     queryString += ` and pd.description = '${description}' `
+  }
+
+  if (status) {
+    queryString += ` and pd.status = ${status} `
   }
 
   queryString += ` order by pd.created_at desc`

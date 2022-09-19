@@ -56,10 +56,10 @@ const getDetailProduct = async (req, res, next) => {
 }
 
 const getListProduct = async (req, res, next) => {
-  const { page, size, name, categoryId, storeId, description } = req.query
+  const { page, size, name, categoryId, storeId, description, status } = req.query
   const user = await CommonHelper.getUserFromRequest(req)
   service
-    .getListProduct(page, size, name, categoryId, storeId, description)
+    .getListProduct(page, size, name, categoryId, storeId, description, status)
     .then((data) => {
       return new APISuccess(res, {
         data: data,

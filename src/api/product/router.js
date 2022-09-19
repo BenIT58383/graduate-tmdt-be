@@ -131,6 +131,10 @@ router
  *         in: query
  *         schema:
  *           type: string
+ *       - name: status
+ *         in: query
+ *         schema:
+ *           type: number
  *     responses:
  *       allOf:
  *         - $ref: '#/components/responses/CommonChartErrorResponse'

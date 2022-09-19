@@ -78,6 +78,10 @@ const getDetailStore = async (id) => {
     )
   }
 
+  //handle time
+  data[0].createdAt = dayjs(data[0].createdAt).format('DD/MM/YYYY HH:mm:ss')
+  data[0].updatedAt = dayjs(data[0].updatedAt).format('DD/MM/YYYY HH:mm:ss')
+
   res.store = data[0]
   return res
 }
@@ -144,7 +148,7 @@ const updateStore = async (id, userId, name, image1, image2, image3, description
 
     const data = await StoreModel.update(
       {
-        userId: userId ? userId : updatedBy,
+        userId: userId ? userId : storeExist.userId,
         name: name ? name : storeExist.name,
         image1: image1 ? image1 : storeExist.image1,
         image2: image2 ? image2 : storeExist.image2,
@@ -223,6 +227,14 @@ const getStatistical = async (storeId, startDate, endDate) => {
   join graduate.order_detail odd on odd.order_id = od.id
   where odd.store_id = '${storeId}' and od.status = ${CONFIG_ORDER_STATUS.FINISHED}`
 
+  if (startDate) {
+    queryTotalBenefit += ` and od.updated_at >= '${startDate} ${CONFIG_TIME.START_TIME}'`
+  }
+
+  if (endDate) {
+    queryTotalBenefit += ` and od.updated_at <= '${endDate} ${CONFIG_TIME.END_TIME}'`
+  }
+
   const totalBenefit = await Sequelize.query(queryTotalBenefit, {
     type: Sequelize.QueryTypes.SELECT,
   })
@@ -237,14 +249,15 @@ const getStatistical = async (storeId, startDate, endDate) => {
     type: Sequelize.QueryTypes.SELECT,
   })
 
-
-  let totalMoneySaleSeed = 0
+  let totalMoneySaleFlowers = 0
+  let totalMoneySaleCoffee = 0
+  let totalMoneySaleRice = 0
+  let totalMoneySalePepper = 0
+  let totalMoneySaleTea = 0
+  let totalMoneySaleCashew = 0
   let totalMoneySaleFruit = 0
   let totalMoneySaleVegetables = 0
-  let totalMoneySaleVegetables1 = 0
-  let totalMoneySaleRice = 0
-  let totalMoneySaleIngredient = 0
-  let totalMoneySaleIngredient1 = 0
+  let totalMoneySaleTree = 0
   let other = 0
 
   for (let category of list_category) {
@@ -255,45 +268,61 @@ const getStatistical = async (storeId, startDate, endDate) => {
     join graduate.product pd on pd.id = odd.product_id
     where odd.store_id = '${storeId}' and od.status = ${CONFIG_ORDER_STATUS.FINISHED} and pd.category_id = '${category.id}'`
 
+    if (startDate) {
+      sqlTotalBenefitByCategory += ` and od.updated_at >= '${startDate} ${CONFIG_TIME.START_TIME}'`
+    }
+
+    if (endDate) {
+      sqlTotalBenefitByCategory += ` and od.updated_at <= '${endDate} ${CONFIG_TIME.END_TIME}'`
+    }
+
     const totalBenefitByCategory = await Sequelize.query(sqlTotalBenefitByCategory, {
       type: Sequelize.QueryTypes.SELECT,
     })
 
     switch (category.name) {
-      case 'Hạt':
-        totalMoneySaleSeed = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+      case 'Hoa':
+        totalMoneySaleFlowers = totalBenefitByCategory[0].total ? totalBenefitByCategory[0].total : 0
         break;
-      case 'Rau củ':
-        totalMoneySaleVegetables = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+      case 'Cà phê':
+        totalMoneySaleCoffee = totalBenefitByCategory[0].total ? totalBenefitByCategory[0].total : 0
+        break;
+      case 'Lúa gạo':
+        totalMoneySaleRice = totalBenefitByCategory[0].total ? totalBenefitByCategory[0].total : 0
+        break;
+      case 'Hồ tiêu':
+        totalMoneySalePepper = totalBenefitByCategory[0].total ? totalBenefitByCategory[0].total : 0
+        break;
+      case 'Chè':
+        totalMoneySaleTea = totalBenefitByCategory[0].total ? totalBenefitByCategory[0].total : 0
+        break;
+      case 'Hạt điều':
+        totalMoneySaleCashew = totalBenefitByCategory[0].total ? totalBenefitByCategory[0].total : 0
         break;
       case 'Trái cây':
-        totalMoneySaleFruit = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+        totalMoneySaleFruit = totalBenefitByCategory[0].total ? totalBenefitByCategory[0].total : 0
         break;
-      case 'Rau xanh':
-        totalMoneySaleVegetables1 = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+      case 'Rau củ':
+        totalMoneySaleVegetables = totalBenefitByCategory[0].total ? totalBenefitByCategory[0].total : 0
         break;
-      case 'Gạo':
-        totalMoneySaleRice = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
-        break;
-      case 'Nguyên liệu':
-        totalMoneySaleIngredient = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
-        break;
-      case 'Gia vị':
-        totalMoneySaleIngredient1 = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+      case 'Cây':
+        totalMoneySaleTree = totalBenefitByCategory[0].total ? totalBenefitByCategory[0].total : 0
         break;
       default:
-        other = totalBenefitByCategory[0] ? totalBenefitByCategory[0].total : 0
+        other = totalBenefitByCategory[0].total ? totalBenefitByCategory[0].total : 0
     }
   }
 
-  res.totalBenefit = totalBenefit[0].total
-  res.totalMoneySaleSeed = totalMoneySaleSeed
+  res.totalMoney = totalBenefit[0].total ? totalBenefit[0].total : 0
+  res.totalMoneySaleFlowers = totalMoneySaleFlowers
+  res.totalMoneySaleCoffee = totalMoneySaleCoffee
+  res.totalMoneySaleRice = totalMoneySaleRice
+  res.totalMoneySalePepper = totalMoneySalePepper
+  res.totalMoneySaleTea = totalMoneySaleTea
+  res.totalMoneySaleCashew = totalMoneySaleCashew
   res.totalMoneySaleFruit = totalMoneySaleFruit
   res.totalMoneySaleVegetables = totalMoneySaleVegetables
-  res.totalMoneySaleVegetables1 = totalMoneySaleVegetables1
-  res.totalMoneySaleRice = totalMoneySaleRice
-  res.totalMoneySaleIngredient = totalMoneySaleIngredient
-  res.totalMoneySaleIngredient1 = totalMoneySaleIngredient1
+  res.totalMoneySaleTree = totalMoneySaleTree
   res.other = other
 
   return res
